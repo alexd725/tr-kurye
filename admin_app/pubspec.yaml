@@ -1,0 +1,147 @@
+name: mightydelivery_admin_app
+description: A new Flutter project.
+
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.15.1 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.5
+
+  # BASE
+  intl: ^0.18.0
+  html: ^0.15.1
+  shared_preferences: ^2.0.17
+  google_fonts: ^4.0.1
+  flutter_vector_icons: ^2.0.0
+  month_year_picker: ^0.2.0+3
+
+  # CONNECTIVITY
+  http: ^0.13.5
+  connectivity_plus: ^3.0.3
+
+  # STATE MANAGEMENT
+  mobx: ^2.1.4
+  flutter_mobx: ^2.0.6+5
+
+  # TOAST
+  fluttertoast: ^8.1.3
+
+  # IMAGE
+  cached_network_image: ^3.2.3
+  image_picker: ^0.8.6+1
+
+  # UI
+  lottie: ^2.2.0
+  fl_chart: ^0.60.0
+  #charts_flutter: ^0.12.0
+  syncfusion_flutter_charts: ^20.3.48
+  flutter_switch: ^0.3.2
+
+  # COUNTRY
+  country_code_picker: ^2.0.2
+
+  # PACKAGE INFO
+  package_info_plus: ^3.0.3
+
+  # LUNCH URL
+  url_launcher: ^6.1.9
+
+  # LAUNCH GOOGLE MAP
+  maps_launcher: ^2.2.0
+  google_maps_place_picker_mb: ^3.0.1
+
+  # FIREBASE
+  firebase_core: ^2.6.0
+  firebase_crashlytics: ^3.0.13
+  firebase_auth: ^4.2.7
+  cloud_firestore: ^4.4.1
+  #base_core: ^2.6.0
+  #firebase_messaging: ^14.2.0
+  #firebase_analytics: ^10.0.8
+  #firebase_crashlytics: ^3.0.13
+
+  #PDF
+  #pdf: any
+  #path_provider: any
+  syncfusion_flutter_datepicker: ^20.4.38
+  #open_filex:
+  flutter_pdfview: ^1.2.1
+  permission_handler: ^9.2.0
+  dio: ^4.0.6
+
+  #table
+  data_table_2: ^2.3.10
+
+  # TIMELINE
+  timeline_tile: ^2.0.0
+
+  line_icons: ^2.0.1
+
+  # DATETIME PICKER
+  date_time_picker: ^2.1.0
+
+  # PUSH NOTIFICATION
+  onesignal_flutter: ^3.5.0
+
+  # CURRENCY PICKER
+  currency_picker: ^2.0.15
+
+  # contracts PICKER
+  contacts_service: ^0.6.3
+
+  # dialogs
+  #fialogs: ^2.0.4
+
+  # READ MORE LESS
+  readmore: ^2.2.0
+
+  # DOWNLOAD INVOICE PDF
+  pdf: ^3.9.0
+  path_provider: ^2.0.12
+  open_file: ^3.2.1
+  printing: ^5.10.1
+
+  #multiple_selection:
+  multi_select_flutter: ^4.1.3
+
+  flutter_localizations:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  build_runner: ^2.3.3
+  mobx_codegen: ^2.1.1
+
+dependency_overrides:
+  #modal_bottom_sheet: ^3.0.0-pre
+  firebase_core_platform_interface: ^4.5.2
+  google_maps_place_picker_mb: ^2.0.0-mb.22
+  package_info_plus: ^1.4.2
+  firebase_core: ^2.4.1
+  firebase_crashlytics: ^3.0.11
+  firebase_auth: ^4.2.5
+  cloud_firestore: ^4.3.1
+  intl: ^0.17.0
+  modal_bottom_sheet:
+    git:
+      url: https://github.com/danReynolds/modal_bottom_sheet.git
+      path: modal_bottom_sheet
+  #flutter packages pub run build_runner build --delete-conflicting-outputs
+
+# The following section is specific to Flutter.
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/icons/
+    - assets/flag/

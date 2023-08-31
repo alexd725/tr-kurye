@@ -1,0 +1,111 @@
+{
+  "app_name": "Mighty Delivery",
+  "company_name": "Meet Mighty",
+  "create_order_description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+  "app_ss_image": "assets/ic_mobile.png",
+  "delivery_man_image": "assets/ic_delivery_man.png",
+  "download_text": "Fast, Simple & Delightful.\nAll it takes is 30 seconds to Download.",
+  "play_store_link": "https://play.google.com/store/apps/details?id=com.mighty.delivery",
+  "app_store_link": "https://play.google.com/store/apps/details?id=com.mighty.delivery",
+  "download_footer_content": "Download the app by clicking \nthe link below",
+  "term_and_condition": "At MeetMighty, accessible from https://meetmighty.com/mighty/, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by MeetMighty and how we use it. If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us. This Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in MeetMighty. This policy is not applicable to any information collected offline or via channels other than this website. If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.\n\nThis Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in MeetMighty. This policy is not applicable to any information collected offline or via channels other than this website.",
+  "privacy_policy": "At MeetMighty, accessible from https://meetmighty.com/mighty/, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by MeetMighty and how we use it. If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us. This Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in MeetMighty. This policy is not applicable to any information collected offline or via channels other than this website. If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us.\n\nThis Privacy Policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in MeetMighty. This policy is not applicable to any information collected offline or via channels other than this website.",
+  "help_and_support": "support.meetmighty.com",
+  "purchase_url": "https://codecanyon.net/user/meetmighty/portfolio/",
+  "contact_number": "+91 123456789",
+  "contact_email": "hello@meetmighty.com",
+  "address": "25 S Eubank Avenue, Tatum,nm, 88263  United States",
+  "instagram_url": "https://www.instagram.com/meetmighty/",
+  "facebook_url": "https://www.facebook.com/MightyThemes/",
+  "linkedin_url": "https://www.linkedin.com/in/meetmighty-it-solutions-85906924a",
+  "twitter_url": "https://twitter.com/MeetMighty?s=20&t=5lEl1mUJWAtAYTsbhecJBQ",
+  "about_us": {
+    "sort_des": "You now have the power to move things",
+    "long_des": "You might be an artist who would like to introduce yourself and your work here or maybe you’re a business with a mission to describe.\n \nLorem Ipsum is simply dummy text of the printing and typesetting industry.\n\nLorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+    "download_title": "Save the \nexcuses and time.",
+    "download_subtitle": "You now have the power to move things",
+    "about_us_app_ss": "assets/ic_aboutUs.png"
+  },
+  "contact_us": {
+    "contact_title": "Save the \nexcuses and time.",
+    "contact_subtitle": "You now have the power to move things",
+    "contact_us_app_ss": "assets/ic_aboutUs.png"
+  },
+  "delivery_partner": {
+    "title": "Become a delivery superhero and start earning",
+    "subtitle": "you can have flexible working hours and help us make deliveries in your city.",
+    "image": "assets/ic_deliveryboy.png",
+    "benefits": [
+      {
+        "title": "You’re in charge",
+        "image": "assets/partener/ic_img1.png",
+        "subtitle": "There is no one to report to,\n you are your own boss"
+      },
+      {
+        "title": "You pick the time",
+        "image": "assets/partener/ic_img2.png",
+        "subtitle": "Log in and log out anytime you \nwant. We are live 24x7"
+      },
+      {
+        "title": "Your ride, your city",
+        "image": "assets/partener/ic_img3.png",
+        "subtitle": "All deliveries will be\n made within city limits"
+      },
+      {
+        "title": "Earn as you go",
+        "image": "assets/partener/ic_img4.png",
+        "subtitle": "We offer one of the best compensations in the market"
+      },
+      {
+        "title": "You’ll be far from bored",
+        "image": "assets/partener/ic_img5.png",
+        "subtitle": "Run different orders ranging from deliveries to rides"
+      },
+      {
+        "title": "Join the movement",
+        "image": "assets/partener/ic_img6.png",
+        "subtitle": "Be a part of the fastest growing delivery startup"
+      }
+    ]
+  },
+  "why_choose": {
+    "description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.",
+    "data": [
+      {
+        "image": "assets/ic_why_delivery1.jpg",
+        "title": "You're in charge",
+        "subtitle": "There is no one to report to, you are your own boss"
+      },
+      {
+        "image": "assets/ic_why_delivery2.jpg",
+        "title": "You pick the time",
+        "subtitle": "Log in and log out anytime you want. We are live 24x7"
+      },
+      {
+        "image": "assets/ic_why_delivery3.jpg",
+        "title": "Your ride, your city",
+        "subtitle": "All deliveries will be made within city limits"
+      }
+    ]
+  },
+  "clients_review": [
+    {
+      "image": "assets/profile_image.jpg",
+      "name": "John Smith",
+      "email": "JohnSmith@gmail.com",
+      "review": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+    },
+    {
+      "image": "assets/profile_image.jpg",
+      "name": "Lee Smith",
+      "email": "lee@gmail.com",
+      "review": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+    },
+    {
+      "image": "assets/profile_image.jpg",
+      "name": "Jack",
+      "email": "jack@gmail.com",
+      "review": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+    }
+  ]
+}
