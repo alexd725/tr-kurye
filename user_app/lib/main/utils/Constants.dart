@@ -5,9 +5,10 @@ const mHelpAndSupport = 'ADD_YOUR_HELP_AND_SUPPORT_URL';
 const mContactPref = 'ADD_YOUR_CONTACT_PREFERENCE';
 const mCodeCanyonURL = 'ADD_YOUR_PURCHASE_URL';
 
-const mBaseUrl = "http://10.10.18.72:8000/api/";
+const mBaseUrl = "http://127.0.0.1:8000/api/";
+// const mBaseUrl = "http://10.10.18.72:8000/api/";
 
-const mTestMode = true;
+const mTestMode = false;
 
 const googleMapAPIKey = 'AIzaSyDQDmiPg45vvSyOfOO2euQSiqOeNGjiFXo';
 const mOneSignalAppId = 'ADD_YOUR_ONE_SIGNAL_APP_ID';
