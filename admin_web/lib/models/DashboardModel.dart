@@ -115,8 +115,14 @@ class DashboardModel {
     todayCourierArrivedOrder = json['today_courier_arrived_order'];
     todayCompletedOrder = json['today_completed_order'];
     todayFailedOrder = json['today_failed_order'];
-    appSetting = json['app_setting'] != null ? new AppSetting.fromJson(json['app_setting']) : null;
-    upcomingOrder = json['upcoming_order'] != null ? (json['upcoming_order'] as List).map((i) => OrderModel.fromJson(i)).toList() : null;
+    appSetting = json['app_setting'] != null
+        ? new AppSetting.fromJson(json['app_setting'])
+        : null;
+    upcomingOrder = json['upcoming_order'] != null
+        ? (json['upcoming_order'] as List)
+            .map((i) => OrderModel.fromJson(i))
+            .toList()
+        : null;
 
     if (json['recent_order'] != null) {
       recentOrder = <RecentOrder>[];
@@ -143,7 +149,11 @@ class DashboardModel {
         weeklyOrderCount!.add(new WeeklyOrderCount.fromJson(v));
       });
     }
-    userWeeklyCount = json['user_weekly_count'] != null ? (json['user_weekly_count'] as List).map((i) => WeeklyOrderCount.fromJson(i)).toList() : null;
+    userWeeklyCount = json['user_weekly_count'] != null
+        ? (json['user_weekly_count'] as List)
+            .map((i) => WeeklyOrderCount.fromJson(i))
+            .toList()
+        : null;
 
     allUnreadCount = json['all_unread_count'];
     if (json['weekly_payment_report'] != null) {
@@ -162,13 +172,15 @@ class DashboardModel {
     if (json['monthly_payment_completed_report'] != null) {
       monthlyPaymentCompletedReport = <MonthlyPaymentCompletedReport>[];
       json['monthly_payment_completed_report'].forEach((v) {
-        monthlyPaymentCompletedReport!.add(new MonthlyPaymentCompletedReport.fromJson(v));
+        monthlyPaymentCompletedReport!
+            .add(new MonthlyPaymentCompletedReport.fromJson(v));
       });
     }
     if (json['monthly_payment_cancelled_report'] != null) {
       monthlyPaymentCancelledReport = <MonthlyPaymentCompletedReport>[];
       json['monthly_payment_cancelled_report'].forEach((v) {
-        monthlyPaymentCancelledReport!.add(new MonthlyPaymentCompletedReport.fromJson(v));
+        monthlyPaymentCancelledReport!
+            .add(new MonthlyPaymentCompletedReport.fromJson(v));
       });
     }
   }
@@ -206,41 +218,50 @@ class DashboardModel {
       data['app_setting'] = this.appSetting!.toJson();
     }
     if (this.upcomingOrder != null) {
-      data['upcoming_order'] = this.upcomingOrder!.map((v) => v.toJson()).toList();
+      data['upcoming_order'] =
+          this.upcomingOrder!.map((v) => v.toJson()).toList();
     }
     if (this.recentOrder != null) {
       data['recent_order'] = this.recentOrder!.map((v) => v.toJson()).toList();
     }
     if (this.recentClient != null) {
-      data['recent_client'] = this.recentClient!.map((v) => v.toJson()).toList();
+      data['recent_client'] =
+          this.recentClient!.map((v) => v.toJson()).toList();
     }
     if (this.recentDeliveryMan != null) {
-      data['recent_delivery_man'] = this.recentDeliveryMan!.map((v) => v.toJson()).toList();
+      data['recent_delivery_man'] =
+          this.recentDeliveryMan!.map((v) => v.toJson()).toList();
     }
     if (this.week != null) {
       data['week'] = this.week!.toJson();
     }
     if (this.weeklyOrderCount != null) {
-      data['weekly_order_count'] = this.weeklyOrderCount!.map((v) => v.toJson()).toList();
+      data['weekly_order_count'] =
+          this.weeklyOrderCount!.map((v) => v.toJson()).toList();
     }
     if (this.userWeeklyCount != null) {
-      data['user_weekly_count'] = this.userWeeklyCount!.map((v) => v.toJson()).toList();
+      data['user_weekly_count'] =
+          this.userWeeklyCount!.map((v) => v.toJson()).toList();
     }
     data['all_unread_count'] = this.allUnreadCount;
     if (this.weeklyPaymentReport != null) {
-      data['weekly_payment_report'] = this.weeklyPaymentReport!.map((v) => v.toJson()).toList();
+      data['weekly_payment_report'] =
+          this.weeklyPaymentReport!.map((v) => v.toJson()).toList();
     }
     if (this.month != null) {
       data['month'] = this.month!.toJson();
     }
     if (this.monthlyOrderCount != null) {
-      data['monthly_order_count'] = this.monthlyOrderCount!.map((v) => v.toJson()).toList();
+      data['monthly_order_count'] =
+          this.monthlyOrderCount!.map((v) => v.toJson()).toList();
     }
     if (this.monthlyPaymentCompletedReport != null) {
-      data['monthly_payment_completed_report'] = this.monthlyPaymentCompletedReport!.map((v) => v.toJson()).toList();
+      data['monthly_payment_completed_report'] =
+          this.monthlyPaymentCompletedReport!.map((v) => v.toJson()).toList();
     }
     if (this.monthlyPaymentCancelledReport != null) {
-      data['monthly_payment_cancelled_report'] = this.monthlyPaymentCancelledReport!.map((v) => v.toJson()).toList();
+      data['monthly_payment_cancelled_report'] =
+          this.monthlyPaymentCancelledReport!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -304,7 +325,9 @@ class AppSetting {
     instagramUrl = json['instagram_url'];
     supportNumber = json['support_number'];
     supportEmail = json['support_email'];
-    notificationSettings = json['notification_settings'] != null ? new NotificationSettings.fromJson(json['notification_settings']) : null;
+    notificationSettings = json['notification_settings'] != null
+        ? new NotificationSettings.fromJson(json['notification_settings'])
+        : null;
     autoAssign = json['auto_assign'];
     distanceUnit = json['distance_unit'];
     distance = json['distance'];
@@ -374,18 +397,38 @@ class NotificationSettings {
       this.paymentStatusMessage});
 
   NotificationSettings.fromJson(Map<String, dynamic> json) {
-    active = json['active'] != null ? new Active.fromJson(json['active']) : null;
-    create = json['create'] != null ? new Active.fromJson(json['create']) : null;
-    failed = json['failed'] != null ? new Active.fromJson(json['failed']) : null;
-    delayed = json['delayed'] != null ? new Active.fromJson(json['delayed']) : null;
-    cancelled = json['cancelled'] != null ? new Active.fromJson(json['cancelled']) : null;
-    completed = json['completed'] != null ? new Active.fromJson(json['completed']) : null;
-    courierArrived = json['courier_arrived'] != null ? new Active.fromJson(json['courier_arrived']) : null;
-    courierAssigned = json['courier_assigned'] != null ? new Active.fromJson(json['courier_assigned']) : null;
-    courierDeparted = json['courier_departed'] != null ? new Active.fromJson(json['courier_departed']) : null;
-    courierTransfer = json['courier_transfer'] != null ? new Active.fromJson(json['courier_transfer']) : null;
-    courierPickedUp = json['courier_picked_up'] != null ? new Active.fromJson(json['courier_picked_up']) : null;
-    paymentStatusMessage = json['payment_status_message'] != null ? new Active.fromJson(json['payment_status_message']) : null;
+    active =
+        json['active'] != null ? new Active.fromJson(json['active']) : null;
+    create =
+        json['create'] != null ? new Active.fromJson(json['create']) : null;
+    failed =
+        json['failed'] != null ? new Active.fromJson(json['failed']) : null;
+    delayed =
+        json['delayed'] != null ? new Active.fromJson(json['delayed']) : null;
+    cancelled = json['cancelled'] != null
+        ? new Active.fromJson(json['cancelled'])
+        : null;
+    completed = json['completed'] != null
+        ? new Active.fromJson(json['completed'])
+        : null;
+    courierArrived = json['courier_arrived'] != null
+        ? new Active.fromJson(json['courier_arrived'])
+        : null;
+    courierAssigned = json['courier_assigned'] != null
+        ? new Active.fromJson(json['courier_assigned'])
+        : null;
+    courierDeparted = json['courier_departed'] != null
+        ? new Active.fromJson(json['courier_departed'])
+        : null;
+    courierTransfer = json['courier_transfer'] != null
+        ? new Active.fromJson(json['courier_transfer'])
+        : null;
+    courierPickedUp = json['courier_picked_up'] != null
+        ? new Active.fromJson(json['courier_picked_up'])
+        : null;
+    paymentStatusMessage = json['payment_status_message'] != null
+        ? new Active.fromJson(json['payment_status_message'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -457,6 +500,7 @@ class RecentOrder {
   String? readableDate;
   PickupPoint? pickupPoint;
   PickupPoint? deliveryPoint;
+  List<PickupPoint>? deliveryPoints;
   int? countryId;
   String? countryName;
   int? cityId;
@@ -537,8 +581,16 @@ class RecentOrder {
     clientName = json['client_name'];
     date = json['date'];
     readableDate = json['readable_date'];
-    pickupPoint = json['pickup_point'] != null ? new PickupPoint.fromJson(json['pickup_point']) : null;
-    deliveryPoint = json['delivery_point'] != null ? new PickupPoint.fromJson(json['delivery_point']) : null;
+    pickupPoint = json['pickup_point'] != null
+        ? new PickupPoint.fromJson(json['pickup_point'])
+        : null;
+    if (json['delivery_point'] != null) {
+      deliveryPoints = <PickupPoint>[];
+      json['delivery_point'].forEach((v) {
+        deliveryPoints!.add(new PickupPoint.fromJson(v));
+      });
+      if (deliveryPoints!.length > 0) deliveryPoint = deliveryPoints![0];
+    }
     countryId = json['country_id'];
     countryName = json['country_name'];
     cityId = json['city_id'];
@@ -617,7 +669,8 @@ class RecentOrder {
     data['delivery_man_name'] = this.deliveryManName;
     data['fixed_charges'] = this.fixedCharges;
     if (this.extraCharges != null) {
-      data['extra_charges'] = this.extraCharges!.map((v) => v.toJson()).toList();
+      data['extra_charges'] =
+          this.extraCharges!.map((v) => v.toJson()).toList();
     }
     data['total_amount'] = this.totalAmount;
     data['total_parcel'] = this.totalParcel;
@@ -646,7 +699,14 @@ class PickupPoint {
   String? description;
   String? contactNumber;
 
-  PickupPoint({this.address, this.endTime, this.latitude, this.longitude, this.startTime, this.description, this.contactNumber});
+  PickupPoint(
+      {this.address,
+      this.endTime,
+      this.latitude,
+      this.longitude,
+      this.startTime,
+      this.description,
+      this.contactNumber});
 
   PickupPoint.fromJson(Map<String, dynamic> json) {
     address = json['address'];
@@ -885,7 +945,9 @@ class RecentDeliveryMan {
     lastNotificationSeen = json['last_notification_seen'];
     isVerifiedDeliveryMan = json['is_verified_delivery_man'];
     deletedAt = json['deleted_at'];
-    userBankAccount = json['user_bank_account'] != null ? new UserBankAccount.fromJson(json['user_bank_account']) : null;
+    userBankAccount = json['user_bank_account'] != null
+        ? new UserBankAccount.fromJson(json['user_bank_account'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -932,7 +994,16 @@ class UserBankAccount {
   String? updatedAt;
   String? deletedAt;
 
-  UserBankAccount({this.id, this.userId, this.bankName, this.bankCode, this.accountHolderName, this.accountNumber, this.createdAt, this.updatedAt, this.deletedAt});
+  UserBankAccount(
+      {this.id,
+      this.userId,
+      this.bankName,
+      this.bankCode,
+      this.accountHolderName,
+      this.accountNumber,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt});
 
   UserBankAccount.fromJson(Map<String, dynamic> json) {
     id = json['id'];

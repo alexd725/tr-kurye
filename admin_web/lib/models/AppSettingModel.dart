@@ -21,7 +21,7 @@ class AppSettingModel {
   String? currencyCode;
   String? currencyPosition;
   int? isVehicleInOrder;
-  String? carryPackagesCharge;
+  num? carryPackagesCharge;
 
   AppSettingModel({
     this.created_at,
@@ -120,9 +120,7 @@ class AppSettingModel {
     if (this.twitter_url != null) {
       data['twitter_url'] = this.twitter_url;
     }
-    if (this.carryPackagesCharge != null) {
-      data['carry_packages_charge'] = this.carryPackagesCharge;
-    }
+    data['carry_packages_charge'] = this.carryPackagesCharge;
     data['auto_assign'] = this.autoAssign;
     data['distance_unit'] = this.distanceUnit;
     data['distance'] = this.distance;

@@ -687,6 +687,7 @@ Future<void> sendMultiPartRequest(MultipartRequest multiPartRequest,
   if (response.statusCode >= 200 && response.statusCode <= 206) {
     onSuccess?.call(jsonDecode(response.body));
   } else {
+    log('=======Error D==========');
     onError?.call(language.somethingWentWrong);
   }
 }

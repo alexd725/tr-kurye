@@ -154,12 +154,12 @@ class SettingFragmentState extends State<SettingFragment> {
                 settingWidget(language.parcelType, () {
                   launchScreen(context, ParcelTypeScreen());
                 }),
-                settingWidget("All Drivers Invoices", () {
-                  launchScreen(context, DriversInvoices());
-                }),
-                settingWidget("All Users Invoices", () {
-                  launchScreen(context, UsersInvoices());
-                }),
+                // settingWidget("All Drivers Invoices", () {
+                //   launchScreen(context, DriversInvoices());
+                // }),
+                // settingWidget("All Users Invoices", () {
+                //   launchScreen(context, UsersInvoices());
+                // }),
                 settingWidget(language.paymentGateway, () {
                   launchScreen(context, PaymentGatewayScreen());
                 }),

@@ -73,7 +73,7 @@ class AppSettingScreenState extends State<AppSettingScreen> {
       currencySymbol = value.currency;
       selectedCurrencyPosition =
           value.currencyPosition ?? CURRENCY_POSITION_LEFT;
-      chargeController.text = value.carryPackagesCharge!;
+      chargeController.text = value.carryPackagesCharge.toString();
       appStore.isShowVehicle = value.isVehicleInOrder!;
       appStore.setLoading(false);
       setState(() {});
@@ -470,37 +470,37 @@ class AppSettingScreenState extends State<AppSettingScreen> {
             ),
           ),
           SizedBox(height: 16),
-          Observer(builder: (context) {
-            return Container(
-              decoration: BoxDecoration(
-                  color: appStore.isDarkMode ? scaffoldColorDark : Colors.white,
-                  borderRadius: BorderRadius.circular(defaultRadius),
-                  boxShadow: commonBoxShadow()),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SwitchListTile(
-                    // value: appStore.isShowVehicle,
-                    value: appStore.isShowVehicle == 1,
-                    onChanged: (value) {
-                      // appStore.isShowVehicle;
-                      if (value)
-                        appStore.isShowVehicle = 1;
-                      else
-                        appStore.isShowVehicle = 0;
-                      print(appStore.isShowVehicle);
+          // Observer(builder: (context) {
+          //   return Container(
+          //     decoration: BoxDecoration(
+          //         color: appStore.isDarkMode ? scaffoldColorDark : Colors.white,
+          //         borderRadius: BorderRadius.circular(defaultRadius),
+          //         boxShadow: commonBoxShadow()),
+          //     child: Column(
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         SwitchListTile(
+          //           // value: appStore.isShowVehicle,
+          //           value: appStore.isShowVehicle == 1,
+          //           onChanged: (value) {
+          //             // appStore.isShowVehicle;
+          //             if (value)
+          //               appStore.isShowVehicle = 1;
+          //             else
+          //               appStore.isShowVehicle = 0;
+          //             print(appStore.isShowVehicle);
 
-                      setState(() {});
-                    },
-                    title: Text(language.vehicle, style: primaryTextStyle()),
-                    controlAffinity: ListTileControlAffinity.trailing,
-                    inactiveTrackColor:
-                        appStore.isDarkMode ? Colors.white12 : Colors.black12,
-                  ),
-                ],
-              ),
-            );
-          })
+          //             setState(() {});
+          //           },
+          //           title: Text(language.vehicle, style: primaryTextStyle()),
+          //           controlAffinity: ListTileControlAffinity.trailing,
+          //           inactiveTrackColor:
+          //               appStore.isDarkMode ? Colors.white12 : Colors.black12,
+          //         ),
+          //       ],
+          //     ),
+          //   );
+          // })
         ],
       );
     }

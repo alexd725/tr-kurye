@@ -85,7 +85,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('staticdata-save', [App\Http\Controllers\StaticDataController::class, 'store']);
     Route::post('staticdata-delete/{id}', [App\Http\Controllers\StaticDataController::class, 'destroy']);
 
-    Route::get('order-list', [API\OrderController::class, 'getList']);
+    Route::get('order-list', [API\OrderController::class, 'getList']); 
     Route::get('order-detail', [API\OrderController::class, 'getDetail']);
     Route::post('order-save', [App\Http\Controllers\OrderController::class, 'store']);
     Route::post('order-update/{id}', [App\Http\Controllers\OrderController::class, 'update']);

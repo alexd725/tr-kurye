@@ -149,7 +149,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                     ),
                   ),
                   SizedBox(width: 16),
-                  Text('${printAmount(widget.carryPackagesCharge!)}',
+                  Text('${printAmount(widget.carryPackagesCharge ?? 0)}',
                       style: primaryTextStyle()),
                 ],
               ),

@@ -86,7 +86,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
           16.height,
           Row(
             children: [
-              Text("Choose your truck", style: primaryTextStyle()),
+              Text('Vehicle Type', style: primaryTextStyle()),
             ],
           ),
           8.height,

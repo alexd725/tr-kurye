@@ -2,7 +2,7 @@ var errorThisFieldRequired = 'This field is required';
 const currencySymbolDefault = '₹';
 const currencyCodeDefault = 'INR';
 
-const mBaseUrl = "http://192.168.8.100/laravel_admin/api/";
+const mBaseUrl = "http://10.10.18.72:8000/api/";
 
 const googleMapAPIKey = 'AIzaSyDQDmiPg45vvSyOfOO2euQSiqOeNGjiFXo';
 

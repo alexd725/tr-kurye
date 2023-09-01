@@ -46,6 +46,11 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> init() async {
+    mIsCheck = getBoolAsync(REMEMBER_ME, defaultValue: false);
+    if (mIsCheck) {
+      emailController.text = getStringAsync(USER_EMAIL);
+      passController.text = getStringAsync(USER_PASSWORD);
+    }
     setStatusBarColor(
         appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,
         statusBarIconBrightness: Brightness.light);
@@ -53,11 +58,6 @@ class LoginScreenState extends State<LoginScreen> {
       await saveOneSignalPlayerId().then((value) {
         //
       });
-    }
-    mIsCheck = getBoolAsync(REMEMBER_ME, defaultValue: false);
-    if (mIsCheck) {
-      emailController.text = getStringAsync(USER_EMAIL);
-      passController.text = getStringAsync(USER_PASSWORD);
     }
   }
 
@@ -67,7 +67,6 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> loginApiCall() async {
-
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       hideKeyboard(context);
@@ -84,11 +83,8 @@ class LoginScreenState extends State<LoginScreen> {
           await setValue(REMEMBER_ME, mIsCheck);
           await setValue(USER_EMAIL, emailController.text);
           await setValue(USER_PASSWORD, passController.text);
-
         }
         await logInApi(req).then((v) async {
-
-
           appStore.setLoading(false);
 
           authService
@@ -98,10 +94,8 @@ class LoginScreenState extends State<LoginScreen> {
             if (v.data!.userType != CLIENT &&
                 v.data!.userType != DELIVERY_MAN &&
                 v.data!.userType != CORPORATE) {
-
               await logout(context, isFromLogin: true);
             } else {
-
               /*await logInApi(req).then((value) async {
           appStore.setLoading(false);
           if (value.data!.userType != CLIENT &&
@@ -110,7 +104,6 @@ class LoginScreenState extends State<LoginScreen> {
             await logout(context, isFromLogin: true);
           } else {*/
               if (getIntAsync(STATUS) == 1) {
-
                 setState(() {});
                 /*if (value.data!.countryId != null && value.data!.cityId != null) {
                 await getCountryDetailApiCall(value.data!.countryId.validate());
@@ -119,7 +112,6 @@ class LoginScreenState extends State<LoginScreen> {
                 if (v.data!.countryId != null && v.data!.cityId != null) {
                   await getCountryDetailApiCall(v.data!.countryId.validate());
                   getCityDetailApiCall(v.data!.cityId.validate());
-
                 } else {
                   UserCitySelectScreen().launch(context,
                       isNewTask: true,

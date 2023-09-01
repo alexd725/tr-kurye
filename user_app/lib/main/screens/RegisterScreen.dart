@@ -28,11 +28,11 @@ class RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   AuthServices authService = AuthServices();
 
-  String carOrMotor = "Car";
   String countryCode = defaultPhoneCode;
   TextEditingController idNumber = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
+  TextEditingController vehicleTypeController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passController = TextEditingController();
@@ -43,6 +43,8 @@ class RegisterScreenState extends State<RegisterScreen> {
 
   FocusNode nameFocus = FocusNode();
   FocusNode userNameFocus = FocusNode();
+  FocusNode vehicleTypeFocus = FocusNode();
+  FocusNode plateTypeFocus = FocusNode();
   FocusNode emailFocus = FocusNode();
   FocusNode phoneFocus = FocusNode();
   FocusNode passFocus = FocusNode();
@@ -69,41 +71,38 @@ class RegisterScreenState extends State<RegisterScreen> {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       if (isAcceptedTc) {
-      appStore.setLoading(true);
-      var request = {
+        appStore.setLoading(true);
+        var request = {
           "name": nameController.text,
           "username": userNameController.text,
           "id_no": idNumber.text.trim(),
-          "car_or_moto": carOrMotor,
+          "car_or_moto": vehicleTypeController.text,
           "user_type": widget.userType,
           "contact_number": '$countryCode ${phoneController.text.trim()}',
           "email": emailController.text.trim(),
           "password": passController.text.trim(),
           "player_id": getStringAsync(PLAYER_ID).validate(),
-        "plate_number": plateNumberController.text.trim(),
-
+          "plate_number": plateNumberController.text.trim(),
         };
         await signUpApi(request).then((res) async {
           authService
-          .signUpWithEmailPasswordDriver(context,
-              lName: res.data!.name,
-              userName: res.data!.username,
-              idNumber: idNumber.text.trim(),
-              carOrMotor: carOrMotor,
-              name: res.data!.name,
-              email: res.data!.email,
-              password: passController.text.trim(),
-              mobileNumber: res.data!.contactNumber,
-              userType: res.data!.userType,
-              plateNumber: plateNumberController.text.trim(),
-              userData: res
-          )
+              .signUpWithEmailPasswordDriver(context,
+                  lName: res.data!.name,
+                  userName: res.data!.username,
+                  idNumber: idNumber.text.trim(),
+                  carOrMotor: res.data!.carOrMotor,
+                  name: res.data!.name,
+                  email: res.data!.email,
+                  password: passController.text.trim(),
+                  mobileNumber: res.data!.contactNumber,
+                  userType: res.data!.userType,
+                  plateNumber: plateNumberController.text.trim(),
+                  userData: res)
               .then((res) async {
+            appStore.setLoading(false);
+            toast('Registration Successful');
 
-      appStore.setLoading(false);
-      toast('Registration Successful');
-
-    /*  authService
+            /*  authService
           .signUpWithEmailPasswordDriver(context,
               lName: nameController.text,
               userName: userNameController.text,
@@ -119,21 +118,21 @@ class RegisterScreenState extends State<RegisterScreen> {
           .then((res) async {
         print("Errorrrrrrrrrrrrrrrrr");
         appStore.setLoading(true);*/
-        }).catchError((e) {
+          }).catchError((e) {
             appStore.setLoading(false);
             print("Error1");
             log(e.toString());
             toast('Registration Successful');
             //toast(e.toString());
           });
-        //
-      }).catchError((e) {
-        appStore.setLoading(false);
-        toast(e.toString());
-        print("Error2");
-        log(e.toString());
+          //
+        }).catchError((e) {
+          appStore.setLoading(false);
+          toast(e.toString());
+          print("Error2");
+          log(e.toString());
           return;
-      });
+        });
       } else {
         toast(language.acceptTermService);
         print("Error3");
@@ -246,7 +245,6 @@ class RegisterScreenState extends State<RegisterScreen> {
   //   }
   // }
 
-
   int selectedIndex = 0;
 
   List<String> _buttons = ["User", "Corporate"];
@@ -326,7 +324,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                                               borderRadius:
                                                   BorderRadius.circular(15),
                                               color: selectedIndex == i
-                                                  ? Colors.purple
+                                                  ? colorPrimary
                                                   : Colors.black,
                                             ),
                                             child: Center(
@@ -499,8 +497,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                                   return null;
                                 },
                                 inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ],
                               ),
                               16.height,
                               Text(language.password,
@@ -517,41 +515,47 @@ class RegisterScreenState extends State<RegisterScreen> {
                                     language.passwordInvalid,
                               ),
                               8.height,
-                        CheckboxListTile(
-                          contentPadding: EdgeInsets.zero,
-                          controlAffinity: ListTileControlAffinity.leading,
-                          activeColor: colorPrimary,
-                          title: RichTextWidget(
-                            list: [
-                              TextSpan(text: '${language.iAgreeToThe}', style: secondaryTextStyle()),
-                              TextSpan(
-                                text: language.termOfService,
-                                style: boldTextStyle(color: colorPrimary, size: 14),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    commonLaunchUrl(mTermAndCondition);
-                                  },
+                              CheckboxListTile(
+                                contentPadding: EdgeInsets.zero,
+                                controlAffinity:
+                                    ListTileControlAffinity.leading,
+                                activeColor: colorPrimary,
+                                title: RichTextWidget(
+                                  list: [
+                                    TextSpan(
+                                        text: '${language.iAgreeToThe}',
+                                        style: secondaryTextStyle()),
+                                    TextSpan(
+                                      text: language.termOfService,
+                                      style: boldTextStyle(
+                                          color: colorPrimary, size: 14),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          commonLaunchUrl(mTermAndCondition);
+                                        },
+                                    ),
+                                    TextSpan(
+                                        text: ' & ',
+                                        style: secondaryTextStyle()),
+                                    TextSpan(
+                                      text: language.privacyPolicy,
+                                      style: boldTextStyle(
+                                          color: colorPrimary, size: 14),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          commonLaunchUrl(mPrivacyPolicy);
+                                        },
+                                    ),
+                                  ],
+                                ),
+                                value: isAcceptedTc,
+                                onChanged: (val) async {
+                                  isAcceptedTc = val!;
+                                  setState(() {});
+                                },
                               ),
-                              TextSpan(text: ' & ', style: secondaryTextStyle()),
-                              TextSpan(
-                                text: language.privacyPolicy,
-                                style: boldTextStyle(color: colorPrimary, size: 14),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    commonLaunchUrl(mPrivacyPolicy);
-                                  },
-                              ),
-                            ],
-                          ),
-                          value: isAcceptedTc,
-                          onChanged: (val) async {
-                            isAcceptedTc = val!;
-                            setState(() {});
-                          },
-                        ),
                               30.height,
-                              commonButton(
-                                  language.signUp, () {
+                              commonButton(language.signUp, () {
                                 registerApiCall();
                               }, width: context.width()),
                               16.height,
@@ -638,61 +642,35 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 controller: userNameController,
                                 textFieldType: TextFieldType.USERNAME,
                                 focus: userNameFocus,
-                                nextFocus: emailFocus,
+                                nextFocus: vehicleTypeFocus,
                                 decoration: commonInputDecoration(),
                                 errorThisFieldRequired:
                                     language.fieldRequiredMsg,
                                 errorInvalidUsername: language.usernameInvalid,
                               ),
                               16.height,
-                              Text("Choose your truck",
-                                  style: primaryTextStyle()),
+                              Text('Vehicle Type', style: primaryTextStyle()),
                               8.height,
-                              Container(
-                                height: 80,
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    DropdownButton<String>(
-                                      value: carOrMotor.isEmpty
-                                          ? "Car"
-                                          : carOrMotor,
-                                      items: <String>["Car", "Motor"]
-                                          .map((String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                      onChanged: (v) {
-                                        setState(() {
-                                          carOrMotor = v!;
-                                        });
-                                        print(carOrMotor);
-                                      },
-                                    ),
-                                    Container(
-                                      height: 100,
-                                      width: 140,
-                                      child: Column(
-                                        children: [
-                                          Expanded(
-                                            child: Text("Plate Number",
-                                                style: primaryTextStyle()),
-                                            //style: TextStyle(fontSize: 10)
-                                          ),
-                                          AppTextField(
-                                            controller: plateNumberController,
-                                            textFieldType: TextFieldType.NAME,
-                                            decoration: commonInputDecoration(),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
+                              AppTextField(
+                                controller: vehicleTypeController,
+                                textFieldType: TextFieldType.NAME,
+                                focus: vehicleTypeFocus,
+                                nextFocus: plateTypeFocus,
+                                decoration: commonInputDecoration(),
+                                errorThisFieldRequired:
+                                    language.fieldRequiredMsg,
+                              ),
+                              16.height,
+                              Text('Plate Number', style: primaryTextStyle()),
+                              8.height,
+                              AppTextField(
+                                controller: plateNumberController,
+                                textFieldType: TextFieldType.NAME,
+                                focus: plateTypeFocus,
+                                nextFocus: emailFocus,
+                                decoration: commonInputDecoration(),
+                                errorThisFieldRequired:
+                                    language.fieldRequiredMsg,
                               ),
                               16.height,
                               Text(language.email, style: primaryTextStyle()),
@@ -786,23 +764,30 @@ class RegisterScreenState extends State<RegisterScreen> {
                               ),
                               CheckboxListTile(
                                 contentPadding: EdgeInsets.zero,
-                                controlAffinity: ListTileControlAffinity.leading,
+                                controlAffinity:
+                                    ListTileControlAffinity.leading,
                                 activeColor: colorPrimary,
                                 title: RichTextWidget(
                                   list: [
-                                    TextSpan(text: '${language.iAgreeToThe}', style: secondaryTextStyle()),
+                                    TextSpan(
+                                        text: '${language.iAgreeToThe}',
+                                        style: secondaryTextStyle()),
                                     TextSpan(
                                       text: language.termOfService,
-                                      style: boldTextStyle(color: colorPrimary, size: 14),
+                                      style: boldTextStyle(
+                                          color: colorPrimary, size: 14),
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () {
                                           commonLaunchUrl(mTermAndCondition);
                                         },
                                     ),
-                                    TextSpan(text: ' & ', style: secondaryTextStyle()),
+                                    TextSpan(
+                                        text: ' & ',
+                                        style: secondaryTextStyle()),
                                     TextSpan(
                                       text: language.privacyPolicy,
-                                      style: boldTextStyle(color: colorPrimary, size: 14),
+                                      style: boldTextStyle(
+                                          color: colorPrimary, size: 14),
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () {
                                           commonLaunchUrl(mPrivacyPolicy);

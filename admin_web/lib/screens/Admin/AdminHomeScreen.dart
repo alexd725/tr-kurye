@@ -66,7 +66,8 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
     await getAppSetting().then((value) {
       appStore.setCurrencyCode(value.currencyCode ?? currencyCodeDefault);
       appStore.setCurrencySymbol(value.currency ?? currencySymbolDefault);
-      appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+      appStore.setCurrencyPosition(
+          value.currencyPosition ?? CURRENCY_POSITION_LEFT);
       appStore.isShowVehicle = value.isVehicleInOrder ?? 0;
 
       log('********************${appStore.isShowVehicle}');
@@ -89,8 +90,10 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
   void firebaseOnMessage() {
     FirebaseMessaging.onMessage.listen((event) async {
       ElegantNotification.info(
-        title: Text(event.notification!.title.validate(), style: boldTextStyle(color: primaryColor, size: 18)),
-        description: Text(event.notification!.body.validate(), style: primaryTextStyle(color: Colors.black, size: 16)),
+        title: Text(event.notification!.title.validate(),
+            style: boldTextStyle(color: primaryColor, size: 18)),
+        description: Text(event.notification!.body.validate(),
+            style: primaryTextStyle(color: Colors.black, size: 16)),
         notificationPosition: NotificationPosition.topCenter,
         autoDismiss: true,
         animation: AnimationType.fromTop,
@@ -113,7 +116,9 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
   }
 
   double? getChartWidth() {
-    return ResponsiveWidget.isSmallScreen(context) ? null : (getBodyWidth(context) - 40) * 0.5;
+    return ResponsiveWidget.isSmallScreen(context)
+        ? null
+        : (getBodyWidth(context) - 40) * 0.5;
   }
 
   @override
@@ -136,8 +141,9 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   userWeeklyCount = snapshot.data!.userWeeklyCount ?? [];
-                  weeklyOrderCount = snapshot.data!.weeklyOrderCount ?? [] ;
-                  weeklyPaymentReport = snapshot.data!.weeklyPaymentReport ?? [];
+                  weeklyOrderCount = snapshot.data!.weeklyOrderCount ?? [];
+                  weeklyPaymentReport =
+                      snapshot.data!.weeklyPaymentReport ?? [];
                   monthlyOrderCount = snapshot.data!.monthlyOrderCount ?? [];
                   monthlyCompletePaymentReport =
                       snapshot.data!.monthlyPaymentCompletedReport ?? [];
@@ -155,38 +161,90 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
                           spacing: 16,
                           runSpacing: 16,
                           children: [
-                            TotalUserWidget(title: language.total_order, totalCount: snapshot.data!.totalOrder, image: 'assets/icons/ic_orders.png'),
-                            TotalUserWidget(title: language.createdOrder, totalCount: snapshot.data!.totalCreateOrder, image: 'assets/icons/ic_orders.png'),
-                            TotalUserWidget(title: language.assignedOrder, totalCount: snapshot.data!.totalCourierAssignedOrder, image: 'assets/icons/ic_orders.png'),
-                            TotalUserWidget(title: language.acceptedOrder, totalCount: snapshot.data!.totalActiveOrder, image: 'assets/icons/ic_orders.png'),
-                            TotalUserWidget(title: language.arrivedOrder, totalCount: snapshot.data!.totalCourierArrivedOrder, image: 'assets/icons/ic_orders.png'),
-                            TotalUserWidget(title: language.pickedOrder, totalCount: snapshot.data!.totalCourierPickedUpOrder, image: 'assets/icons/ic_orders.png'),
-                            TotalUserWidget(title: language.departedOrder, totalCount: snapshot.data!.totalCourierDepartedOrder, image: 'assets/icons/ic_orders.png'),
-                            TotalUserWidget(title: language.deliveredOrder, totalCount: snapshot.data!.totalCompletedOrder, image: 'assets/icons/ic_orders.png'),
-                            TotalUserWidget(title: language.cancelledOrder, totalCount: snapshot.data!.totalCancelledOrder, image: 'assets/icons/ic_orders.png'),
-                            TotalUserWidget(title: language.total_user, totalCount: snapshot.data!.totalOrder, image: 'assets/icons/ic_users.png'),
-                            TotalUserWidget(title: language.total_delivery_person, totalCount: snapshot.data!.totalDeliveryMan, image: 'assets/icons/ic_users.png'),
+                            TotalUserWidget(
+                                title: language.total_order,
+                                totalCount: snapshot.data!.totalOrder,
+                                image: 'assets/icons/ic_orders.png'),
+                            TotalUserWidget(
+                                title: language.createdOrder,
+                                totalCount: snapshot.data!.totalCreateOrder,
+                                image: 'assets/icons/ic_orders.png'),
+                            TotalUserWidget(
+                                title: language.assignedOrder,
+                                totalCount:
+                                    snapshot.data!.totalCourierAssignedOrder,
+                                image: 'assets/icons/ic_orders.png'),
+                            TotalUserWidget(
+                                title: language.acceptedOrder,
+                                totalCount: snapshot.data!.totalActiveOrder,
+                                image: 'assets/icons/ic_orders.png'),
+                            TotalUserWidget(
+                                title: language.arrivedOrder,
+                                totalCount:
+                                    snapshot.data!.totalCourierArrivedOrder,
+                                image: 'assets/icons/ic_orders.png'),
+                            TotalUserWidget(
+                                title: language.pickedOrder,
+                                totalCount:
+                                    snapshot.data!.totalCourierPickedUpOrder,
+                                image: 'assets/icons/ic_orders.png'),
+                            TotalUserWidget(
+                                title: language.departedOrder,
+                                totalCount:
+                                    snapshot.data!.totalCourierDepartedOrder,
+                                image: 'assets/icons/ic_orders.png'),
+                            TotalUserWidget(
+                                title: language.deliveredOrder,
+                                totalCount: snapshot.data!.totalCompletedOrder,
+                                image: 'assets/icons/ic_orders.png'),
+                            TotalUserWidget(
+                                title: language.cancelledOrder,
+                                totalCount: snapshot.data!.totalCancelledOrder,
+                                image: 'assets/icons/ic_orders.png'),
+                            TotalUserWidget(
+                                title: language.total_user,
+                                totalCount: snapshot.data!.totalOrder,
+                                image: 'assets/icons/ic_users.png'),
+                            TotalUserWidget(
+                                title: language.total_delivery_person,
+                                totalCount: snapshot.data!.totalDeliveryMan,
+                                image: 'assets/icons/ic_users.png'),
                           ],
                         ),
                         SizedBox(height: 16),
                         ResponsiveWidget.isLargeScreen(context)
                             ? Row(
                                 children: [
-                                  Expanded(child: WeeklyOrderCountComponent(weeklyOrderCount: weeklyOrderCount)),
+                                  Expanded(
+                                      child: WeeklyOrderCountComponent(
+                                          weeklyOrderCount: weeklyOrderCount)),
                                   SizedBox(width: 16),
-                                  Expanded(child: MonthlyOrderCountComponent(monthlyCount: monthlyOrderCount, isPaymentType: false)),
+                                  Expanded(
+                                      child: MonthlyOrderCountComponent(
+                                          monthlyCount: monthlyOrderCount,
+                                          isPaymentType: false)),
                                 ],
                               )
                             : Wrap(
                                 spacing: 16,
                                 runSpacing: 16,
                                 children: [
-                                  SizedBox(width: getChartWidth(), child: WeeklyOrderCountComponent(weeklyOrderCount: weeklyOrderCount)),
-                                  SizedBox(width: getChartWidth(), child: MonthlyOrderCountComponent(monthlyCount: monthlyOrderCount)),
+                                  SizedBox(
+                                      width: getChartWidth(),
+                                      child: WeeklyOrderCountComponent(
+                                          weeklyOrderCount: weeklyOrderCount)),
+                                  SizedBox(
+                                      width: getChartWidth(),
+                                      child: MonthlyOrderCountComponent(
+                                          monthlyCount: monthlyOrderCount)),
                                 ],
                               ),
                         SizedBox(height: 16),
-                        MonthlyPaymentCountComponent(monthlyCompletePayment: monthlyCompletePaymentReport, monthlyCancelPayment: monthlyCancelPaymentReport, isPaymentType: true),
+                        MonthlyPaymentCountComponent(
+                            monthlyCompletePayment:
+                                monthlyCompletePaymentReport,
+                            monthlyCancelPayment: monthlyCancelPaymentReport,
+                            isPaymentType: true),
                         SizedBox(height: 16),
                         Wrap(
                           runSpacing: 16,
@@ -198,52 +256,120 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
                                     width: getTableWidth(context),
                                     child: SingleChildScrollView(
                                       controller: recentOrderController,
-                                      padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                                      padding:
+                                          EdgeInsets.fromLTRB(16, 16, 16, 0),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text(language.recent_order, style: boldTextStyle(color: primaryColor)),
+                                          Text(language.recent_order,
+                                              style: boldTextStyle(
+                                                  color: primaryColor)),
                                           RawScrollbar(
-                                            scrollbarOrientation: ScrollbarOrientation.bottom,
-                                            controller: recentOrderHorizontalController,
+                                            scrollbarOrientation:
+                                                ScrollbarOrientation.bottom,
+                                            controller:
+                                                recentOrderHorizontalController,
                                             thumbVisibility: true,
-                                            thumbColor: appStore.isDarkMode ? Colors.white12 : Colors.black12,
-                                            radius: Radius.circular(defaultRadius),
+                                            thumbColor: appStore.isDarkMode
+                                                ? Colors.white12
+                                                : Colors.black12,
+                                            radius:
+                                                Radius.circular(defaultRadius),
                                             child: SingleChildScrollView(
-                                              controller: recentOrderHorizontalController,
+                                              controller:
+                                                  recentOrderHorizontalController,
                                               scrollDirection: Axis.horizontal,
-                                              padding: EdgeInsets.only(bottom: 16, top: 16),
+                                              padding: EdgeInsets.only(
+                                                  bottom: 16, top: 16),
                                               child: ConstrainedBox(
-                                                constraints: BoxConstraints(minWidth: getTableWidth(context)),
+                                                constraints: BoxConstraints(
+                                                    minWidth:
+                                                        getTableWidth(context)),
                                                 child: DataTable(
-                                                  headingTextStyle: boldTextStyle(),
-                                                  dataTextStyle: primaryTextStyle(size: 15),
-                                                  headingRowColor: MaterialStateColor.resolveWith((states) => primaryColor.withOpacity(0.1)),
+                                                  headingTextStyle:
+                                                      boldTextStyle(),
+                                                  dataTextStyle:
+                                                      primaryTextStyle(
+                                                          size: 15),
+                                                  headingRowColor:
+                                                      MaterialStateColor
+                                                          .resolveWith((states) =>
+                                                              primaryColor
+                                                                  .withOpacity(
+                                                                      0.1)),
                                                   showCheckboxColumn: false,
                                                   dataRowHeight: 45,
                                                   headingRowHeight: 45,
                                                   horizontalMargin: 16,
                                                   columns: [
-                                                    DataColumn(label: Text(language.order_id)),
-                                                    DataColumn(label: Text(language.customer_name)),
-                                                    DataColumn(label: Text(language.delivery_person)),
-                                                    DataColumn(label: Text(language.pickup_date)),
-                                                    DataColumn(label: Text(language.created_date)),
-                                                    DataColumn(label: Text(language.status)),
+                                                    DataColumn(
+                                                        label: Text(
+                                                            language.order_id)),
+                                                    DataColumn(
+                                                        label: Text(language
+                                                            .customer_name)),
+                                                    DataColumn(
+                                                        label: Text(language
+                                                            .delivery_person)),
+                                                    DataColumn(
+                                                        label: Text(language
+                                                            .pickup_date)),
+                                                    DataColumn(
+                                                        label: Text(language
+                                                            .created_date)),
+                                                    DataColumn(
+                                                        label: Text(
+                                                            language.status)),
                                                   ],
-                                                  rows: snapshot.data!.recentOrder!.map((e) {
+                                                  rows: snapshot
+                                                      .data!.recentOrder!
+                                                      .map((e) {
                                                     return DataRow(
                                                       cells: [
-                                                        DataCell(Text('${e.id}')),
-                                                        DataCell(Text(e.clientName ?? "-")),
-                                                        DataCell(Text(e.deliveryManName ?? "-")),
-                                                        DataCell(Text(e.pickupPoint!.startTime != null ? printDate(e.pickupPoint!.startTime!) : '-')),
-                                                        DataCell(Text(e.readableDate.toString())),
+                                                        DataCell(
+                                                            Text('${e.id}')),
+                                                        DataCell(Text(
+                                                            e.clientName ??
+                                                                "-")),
+                                                        DataCell(Text(
+                                                            e.deliveryManName ??
+                                                                "-")),
+                                                        DataCell(Text(e
+                                                                    .pickupPoint!
+                                                                    .startTime !=
+                                                                null
+                                                            ? printDate(e
+                                                                .pickupPoint!
+                                                                .startTime!)
+                                                            : '-')),
+                                                        DataCell(Text(e
+                                                            .readableDate
+                                                            .toString())),
                                                         DataCell(
                                                           Container(
-                                                            padding: EdgeInsets.all(6),
-                                                            child: Text(orderStatus(e.status.validate()), style: boldTextStyle(color: statusColor(e.status ?? ""), size: 15)),
-                                                            decoration: BoxDecoration(color: statusColor(e.status ?? "").withOpacity(0.15), borderRadius: BorderRadius.circular(defaultRadius)),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    6),
+                                                            child: Text(
+                                                                orderStatus(e
+                                                                    .status
+                                                                    .validate()),
+                                                                style: boldTextStyle(
+                                                                    color: statusColor(
+                                                                        e.status ??
+                                                                            ""),
+                                                                    size: 15)),
+                                                            decoration: BoxDecoration(
+                                                                color: statusColor(
+                                                                        e.status ??
+                                                                            "")
+                                                                    .withOpacity(
+                                                                        0.15),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            defaultRadius)),
                                                           ),
                                                         ),
                                                       ],
@@ -258,8 +384,11 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
                                     ),
                                     decoration: BoxDecoration(
                                       boxShadow: commonBoxShadow(),
-                                      color: appStore.isDarkMode ? scaffoldColorDark : Colors.white,
-                                      borderRadius: BorderRadius.circular(defaultRadius),
+                                      color: appStore.isDarkMode
+                                          ? scaffoldColorDark
+                                          : Colors.white,
+                                      borderRadius:
+                                          BorderRadius.circular(defaultRadius),
                                     ),
                                   )
                                 : SizedBox(),
@@ -269,52 +398,120 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
                                     width: getTableWidth(context),
                                     child: SingleChildScrollView(
                                       controller: upcomingOrderController,
-                                      padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                                      padding:
+                                          EdgeInsets.fromLTRB(16, 16, 16, 0),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text(language.upcoming_order, style: boldTextStyle(color: primaryColor)),
+                                          Text(language.upcoming_order,
+                                              style: boldTextStyle(
+                                                  color: primaryColor)),
                                           RawScrollbar(
-                                            scrollbarOrientation: ScrollbarOrientation.bottom,
-                                            controller: upcomingOrderHorizontalController,
+                                            scrollbarOrientation:
+                                                ScrollbarOrientation.bottom,
+                                            controller:
+                                                upcomingOrderHorizontalController,
                                             thumbVisibility: true,
-                                            thumbColor: appStore.isDarkMode ? Colors.white12 : Colors.black12,
-                                            radius: Radius.circular(defaultRadius),
+                                            thumbColor: appStore.isDarkMode
+                                                ? Colors.white12
+                                                : Colors.black12,
+                                            radius:
+                                                Radius.circular(defaultRadius),
                                             child: SingleChildScrollView(
-                                              controller: upcomingOrderHorizontalController,
+                                              controller:
+                                                  upcomingOrderHorizontalController,
                                               scrollDirection: Axis.horizontal,
-                                              padding: EdgeInsets.only(bottom: 16, top: 16),
+                                              padding: EdgeInsets.only(
+                                                  bottom: 16, top: 16),
                                               child: ConstrainedBox(
-                                                constraints: BoxConstraints(minWidth: getTableWidth(context)),
+                                                constraints: BoxConstraints(
+                                                    minWidth:
+                                                        getTableWidth(context)),
                                                 child: DataTable(
-                                                  headingTextStyle: boldTextStyle(),
-                                                  dataTextStyle: primaryTextStyle(size: 15),
-                                                  headingRowColor: MaterialStateColor.resolveWith((states) => primaryColor.withOpacity(0.1)),
+                                                  headingTextStyle:
+                                                      boldTextStyle(),
+                                                  dataTextStyle:
+                                                      primaryTextStyle(
+                                                          size: 15),
+                                                  headingRowColor:
+                                                      MaterialStateColor
+                                                          .resolveWith((states) =>
+                                                              primaryColor
+                                                                  .withOpacity(
+                                                                      0.1)),
                                                   showCheckboxColumn: false,
                                                   dataRowHeight: 45,
                                                   headingRowHeight: 45,
                                                   horizontalMargin: 16,
                                                   columns: [
-                                                    DataColumn(label: Text(language.order_id)),
-                                                    DataColumn(label: Text(language.customer_name)),
-                                                    DataColumn(label: Text(language.delivery_person)),
-                                                    DataColumn(label: Text(language.pickup_date)),
-                                                    DataColumn(label: Text(language.created_date)),
-                                                    DataColumn(label: Text(language.status)),
+                                                    DataColumn(
+                                                        label: Text(
+                                                            language.order_id)),
+                                                    DataColumn(
+                                                        label: Text(language
+                                                            .customer_name)),
+                                                    DataColumn(
+                                                        label: Text(language
+                                                            .delivery_person)),
+                                                    DataColumn(
+                                                        label: Text(language
+                                                            .pickup_date)),
+                                                    DataColumn(
+                                                        label: Text(language
+                                                            .created_date)),
+                                                    DataColumn(
+                                                        label: Text(
+                                                            language.status)),
                                                   ],
-                                                  rows: snapshot.data!.upcomingOrder!.map((e) {
+                                                  rows: snapshot
+                                                      .data!.upcomingOrder!
+                                                      .map((e) {
                                                     return DataRow(
                                                       cells: [
-                                                        DataCell(Text('${e.id}')),
-                                                        DataCell(Text(e.clientName ?? "-")),
-                                                        DataCell(Text(e.deliveryManName ?? "-")),
-                                                        DataCell(Text(e.pickupPoint!.startTime != null ? printDate(e.pickupPoint!.startTime!) : '-')),
-                                                        DataCell(Text(e.readableDate.toString())),
+                                                        DataCell(
+                                                            Text('${e.id}')),
+                                                        DataCell(Text(
+                                                            e.clientName ??
+                                                                "-")),
+                                                        DataCell(Text(
+                                                            e.deliveryManName ??
+                                                                "-")),
+                                                        DataCell(Text(e
+                                                                    .pickupPoint!
+                                                                    .startTime !=
+                                                                null
+                                                            ? printDate(e
+                                                                .pickupPoint!
+                                                                .startTime!)
+                                                            : '-')),
+                                                        DataCell(Text(e
+                                                            .readableDate
+                                                            .toString())),
                                                         DataCell(
                                                           Container(
-                                                            padding: EdgeInsets.all(6),
-                                                            child: Text(orderStatus(e.status.validate()), style: boldTextStyle(color: statusColor(e.status ?? ""), size: 15)),
-                                                            decoration: BoxDecoration(color: statusColor(e.status ?? "").withOpacity(0.15), borderRadius: BorderRadius.circular(defaultRadius)),
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    6),
+                                                            child: Text(
+                                                                orderStatus(e
+                                                                    .status
+                                                                    .validate()),
+                                                                style: boldTextStyle(
+                                                                    color: statusColor(
+                                                                        e.status ??
+                                                                            ""),
+                                                                    size: 15)),
+                                                            decoration: BoxDecoration(
+                                                                color: statusColor(
+                                                                        e.status ??
+                                                                            "")
+                                                                    .withOpacity(
+                                                                        0.15),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            defaultRadius)),
                                                           ),
                                                         ),
                                                       ],
@@ -329,8 +526,11 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
                                     ),
                                     decoration: BoxDecoration(
                                       boxShadow: commonBoxShadow(),
-                                      color: appStore.isDarkMode ? scaffoldColorDark : Colors.white,
-                                      borderRadius: BorderRadius.circular(defaultRadius),
+                                      color: appStore.isDarkMode
+                                          ? scaffoldColorDark
+                                          : Colors.white,
+                                      borderRadius:
+                                          BorderRadius.circular(defaultRadius),
                                     ),
                                   )
                                 : SizedBox(),
@@ -340,33 +540,54 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
                                     width: getTableWidth(context),
                                     child: SingleChildScrollView(
                                       controller: userController,
-                                      padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                                      padding:
+                                          EdgeInsets.fromLTRB(16, 16, 16, 0),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(language.recent_user, style: boldTextStyle(color: primaryColor)),
+                                              Text(language.recent_user,
+                                                  style: boldTextStyle(
+                                                      color: primaryColor)),
                                               TextButton(
                                                 onPressed: () {
-                                                  Navigator.pushNamed(context, UsersScreen.route);
+                                                  Navigator.pushNamed(context,
+                                                      UsersScreen.route);
                                                 },
-                                                child: Text(language.view_all, style: boldTextStyle(color: primaryColor)),
+                                                child: Text(language.view_all,
+                                                    style: boldTextStyle(
+                                                        color: primaryColor)),
                                               ),
                                             ],
                                           ),
                                           RawScrollbar(
-                                            scrollbarOrientation: ScrollbarOrientation.bottom,
-                                            controller: userHorizontalController,
+                                            scrollbarOrientation:
+                                                ScrollbarOrientation.bottom,
+                                            controller:
+                                                userHorizontalController,
                                             thumbVisibility: true,
-                                            thumbColor: appStore.isDarkMode ? Colors.white12 : Colors.black12,
-                                            radius: Radius.circular(defaultRadius),
+                                            thumbColor: appStore.isDarkMode
+                                                ? Colors.white12
+                                                : Colors.black12,
+                                            radius:
+                                                Radius.circular(defaultRadius),
                                             child: SingleChildScrollView(
-                                              controller: userHorizontalController,
+                                              controller:
+                                                  userHorizontalController,
                                               scrollDirection: Axis.horizontal,
-                                              padding: EdgeInsets.only(bottom: 16, top: 16),
-                                              child: ConstrainedBox(constraints: BoxConstraints(minWidth: getTableWidth(context)), child: HomeWidgetUserList(userModel: snapshot.data!.recentClient!)),
+                                              padding: EdgeInsets.only(
+                                                  bottom: 16, top: 16),
+                                              child: ConstrainedBox(
+                                                  constraints: BoxConstraints(
+                                                      minWidth: getTableWidth(
+                                                          context)),
+                                                  child: HomeWidgetUserList(
+                                                      userModel: snapshot.data!
+                                                          .recentClient!)),
                                             ),
                                           ),
                                         ],
@@ -374,8 +595,11 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
                                     ),
                                     decoration: BoxDecoration(
                                       boxShadow: commonBoxShadow(),
-                                      color: appStore.isDarkMode ? scaffoldColorDark : Colors.white,
-                                      borderRadius: BorderRadius.circular(defaultRadius),
+                                      color: appStore.isDarkMode
+                                          ? scaffoldColorDark
+                                          : Colors.white,
+                                      borderRadius:
+                                          BorderRadius.circular(defaultRadius),
                                     ),
                                   )
                                 : SizedBox(),
@@ -385,33 +609,54 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
                                     width: getTableWidth(context),
                                     child: SingleChildScrollView(
                                       controller: deliveryBoyController,
-                                      padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                                      padding:
+                                          EdgeInsets.fromLTRB(16, 16, 16, 0),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(language.recent_delivery, style: boldTextStyle(color: primaryColor)),
+                                              Text(language.recent_delivery,
+                                                  style: boldTextStyle(
+                                                      color: primaryColor)),
                                               TextButton(
                                                 onPressed: () {
-                                                  Navigator.pushNamed(context, DeliveryBoyScreen.route);
+                                                  Navigator.pushNamed(context,
+                                                      DeliveryBoyScreen.route);
                                                 },
-                                                child: Text(language.view_all, style: boldTextStyle(color: primaryColor)),
+                                                child: Text(language.view_all,
+                                                    style: boldTextStyle(
+                                                        color: primaryColor)),
                                               )
                                             ],
                                           ),
                                           RawScrollbar(
-                                            scrollbarOrientation: ScrollbarOrientation.bottom,
-                                            controller: deliveryBoyHorizontalController,
+                                            scrollbarOrientation:
+                                                ScrollbarOrientation.bottom,
+                                            controller:
+                                                deliveryBoyHorizontalController,
                                             thumbVisibility: true,
-                                            thumbColor: appStore.isDarkMode ? Colors.white12 : Colors.black12,
-                                            radius: Radius.circular(defaultRadius),
+                                            thumbColor: appStore.isDarkMode
+                                                ? Colors.white12
+                                                : Colors.black12,
+                                            radius:
+                                                Radius.circular(defaultRadius),
                                             child: SingleChildScrollView(
-                                              controller: deliveryBoyHorizontalController,
+                                              controller:
+                                                  deliveryBoyHorizontalController,
                                               scrollDirection: Axis.horizontal,
-                                              padding: EdgeInsets.only(bottom: 16, top: 16),
-                                              child: ConstrainedBox(constraints: BoxConstraints(minWidth: getTableWidth(context)), child: HomeWidgetUserList(userModel: snapshot.data!.recentDeliveryMan!)),
+                                              padding: EdgeInsets.only(
+                                                  bottom: 16, top: 16),
+                                              child: ConstrainedBox(
+                                                  constraints: BoxConstraints(
+                                                      minWidth: getTableWidth(
+                                                          context)),
+                                                  child: HomeWidgetUserList(
+                                                      userModel: snapshot.data!
+                                                          .recentDeliveryMan!)),
                                             ),
                                           ),
                                         ],
@@ -419,8 +664,11 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
                                     ),
                                     decoration: BoxDecoration(
                                       boxShadow: commonBoxShadow(),
-                                      color: appStore.isDarkMode ? scaffoldColorDark : Colors.white,
-                                      borderRadius: BorderRadius.circular(defaultRadius),
+                                      color: appStore.isDarkMode
+                                          ? scaffoldColorDark
+                                          : Colors.white,
+                                      borderRadius:
+                                          BorderRadius.circular(defaultRadius),
                                     ),
                                   )
                                 : SizedBox(),
@@ -431,7 +679,8 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
                     ),
                   );
                 } else if (snapshot.hasError) {
-                  print('Error occurred at line ${StackTrace.current}: ${snapshot.error}');
+                  print(
+                      'Error occurred at line ${StackTrace.current}: ${snapshot.error}');
                   print('Error is _____: ${snapshot.error}');
 
                   return emptyWidget();
@@ -439,7 +688,9 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
                 return loaderWidget();
               },
             ),
-            Observer(builder: (context) => Visibility(visible: appStore.isLoading, child: loaderWidget())),
+            Observer(
+                builder: (context) => Visibility(
+                    visible: appStore.isLoading, child: loaderWidget())),
           ],
         ),
       ),

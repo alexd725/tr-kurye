@@ -66,6 +66,7 @@ Future<Response> buildHttpResponse(String endPoint,
 
       return response;
     } catch (e) {
+      log("=======Error C========== ${e}");
       throw language.somethingWentWrong;
     }
   } else {
@@ -92,6 +93,7 @@ Future handleResponse(Response response, [bool? avoidTokenError]) async {
         throw TokenException(e);
       });
     } else {
+      log('=======Error A==========');
       throw language.somethingWentWrong;
     }
   }
@@ -104,6 +106,7 @@ Future handleResponse(Response response, [bool? avoidTokenError]) async {
       throw parseHtmlString(body['message']);
     } on Exception catch (e) {
       log(e);
+      log('=======Error B========== ${e}');
       throw language.somethingWentWrong;
     }
   }

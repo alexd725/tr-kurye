@@ -247,9 +247,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   getAppSettingApiCall() async {
     await getAppSetting().then((value) {
-      carryPackagesCharge = num.parse(value.carryPackagesCharge! != null
-          ? value.carryPackagesCharge!
-          : '0');
+      carryPackagesCharge = value.carryPackagesCharge;
       print("------------>carryPackagesCharge $carryPackagesCharge");
       // appStore.setCurrencyCode(value.currencyCode ?? currencyCodeDefault);
       print(value);

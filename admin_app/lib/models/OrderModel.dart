@@ -46,7 +46,7 @@ class OrderModel {
   num? chargePerAddress;
   num? carryPackagesCharge;
   List<dynamic>? deliveryPointsList;
-  String? courierWillCarry;
+  num? courierWillCarry;
   String? deliveryReceiverName;
   int? vehicleId;
   VehicleData? vehicleData;
@@ -156,11 +156,11 @@ class OrderModel {
     deliveryPointsList = json['delivery_point'];
     courierWillCarry = json['courier_will_carry'];
     deliveryReceiverName = json['delivery_receiver_name'];
-    vehicleId = json['vehicle_id'];
+    // vehicleId = json['vehicle_id'];
     vehicleData = json['vehicle_data'] != null
         ? new VehicleData.fromJson(json['vehicle_data'])
         : null;
-    vehicleImage = json['vehicle_image'];
+    // vehicleImage = json['vehicle_image'];
   }
 
   Map<String, dynamic> toJson() {

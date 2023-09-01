@@ -162,7 +162,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   List<Predictions> pickPredictionList = [];
   List<Predictions> deliverPredictionList = [];
 
-  int? selectedVehicle ;
+  int? selectedVehicle;
   List<VehicleData> vehicleList = [];
   VehicleData? vehicleData;
 
@@ -265,18 +265,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       vehicles_list.clear();
       delivery_list.clear();
       delivery_list_car.clear();
-      vehicles_list.clear();
 
       cityData_list.forEach((element) {
         // print(element.name);
         // print(cityData!.name);
 
         if (element.name == cityData!.name) {
-
-           vehicles_list.add(element.vehicle_type);
-          if (vehicles_list.isEmpty) {
+          vehicles_list.add(element.vehicle_type);
+          if (vehicles_list.isNotEmpty) {
             print("vehicles_list ${vehicles_list[0]}");
-           vehicle = vehicles_list[0].toString();
+            vehicle = vehicles_list[0].toString();
             setState(() {});
           }
         }
@@ -288,7 +286,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           if (vehicle == "Bike") {
             isBike = true;
             delivery = delivery_list[0];
-
           } else {
             isBike = false;
             delivery = delivery_list_car[0];
@@ -316,10 +313,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
   //*************************88
 
-
   //************************8
 
   Future<void> init() async {
+    minWeight = 1;
+    maxWeight = 1;
     await getAppSettingApiCall();
     await getCityDetailApiCall(getIntAsync(CITY_ID));
     getParcelTypeListApiCall();
@@ -566,9 +564,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   getAppSettingApiCall() async {
     await getAppSetting().then((value) {
-      carryPackagesCharge = num.parse(value.carryPackagesCharges! != null
-          ? value.carryPackagesCharges!
-          : '0');
+      carryPackagesCharge = value.carryPackagesCharges!;
       print("------------>carryPackagesCharge $carryPackagesCharge");
       // appStore.setCurrencyCode(value.currencyCode ?? currencyCodeDefault);
       print(value);
@@ -591,6 +587,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       toast(error.toString());
     });
   }
+
 //*************************************
   getVehicleApiCall({String? name}) async {
     appStore.setLoading(true);
@@ -599,11 +596,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       vehicleList.clear();
       vehicles_list.clear();
       vehicleList = value.data!;
-      if (value.data!.isNotEmpty)
-        selectedVehicle = value.data![0].id;
-      setState(() {
-
-      });
+      if (value.data!.isNotEmpty) selectedVehicle = value.data![0].id;
+      setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);
       toast(error);
@@ -618,18 +612,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       // vehicleList.clear();
       //vehicles_list.clear();
       vehicleList = value.data!;
-      if (value.data!.isNotEmpty)
-        selectedVehicle = value.data![0].id;
+      if (value.data!.isNotEmpty) selectedVehicle = value.data![0].id;
       setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);
       toast(error);
     });
   }
-
-
-
-
 
 //   Future<void> getVehicleApiCall({String? name}) async {
 //     appStore.setLoading(true);
@@ -1050,637 +1039,620 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   Widget createOrderWidget1() {
-    return
-
-     Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              scheduleOptionWidget(context, isDeliverNow,
-                      'assets/icons/ic_clock.png', language.deliveryNow)
-                  .onTap(() {
-                isDeliverNow = true;
-                setState(() {});
-              }).expand(),
-              16.width,
-              scheduleOptionWidget(context, !isDeliverNow,
-                      'assets/icons/ic_schedule.png', language.schedule)
-                  .onTap(() {
-                isDeliverNow = false;
-                setState(() {});
-              }).expand(),
-            ],
-          ),
-          16.height,
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(language.pickTime, style: boldTextStyle()),
-              16.height,
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                  borderRadius: BorderRadius.circular(defaultRadius),
-                ),
-                child: Column(
-                  children: [
-                    DateTimePicker(
-                      controller: pickDateController,
-                      type: DateTimePickerType.date,
-                      firstDate: DateTime.now(),
-                      lastDate: DateTime(2050),
-                      onChanged: (value) {
-                        pickDate = DateTime.parse(value);
-                        deliverDate = null;
-                        deliverDateController.clear();
-                        setState(() {});
-                      },
-                      validator: (value) {
-                        if (value!.isEmpty) return errorThisFieldRequired;
-                        return null;
-                      },
-                      decoration: commonInputDecoration(
-                          suffixIcon: Icons.calendar_today,
-                          hintText: language.date),
-                    ),
-                    16.height,
-                    Row(
-                      children: [
-                        DateTimePicker(
-                          controller: pickFromTimeController,
-                          type: DateTimePickerType.time,
-                          onChanged: (value) {
-                            pickFromTime = TimeOfDay.fromDateTime(
-                                DateFormat('hh:mm').parse(value));
-                            setState(() {});
-                          },
-                          validator: (value) {
-                            if (value.validate().isEmpty)
-                              return errorThisFieldRequired;
-                            return null;
-                          },
-                          decoration: commonInputDecoration(
-                              suffixIcon: Icons.access_time,
-                              hintText: language.from),
-                        ).expand(),
-                        16.width,
-                        DateTimePicker(
-                          controller: pickToTimeController,
-                          type: DateTimePickerType.time,
-                          onChanged: (value) {
-                            pickToTime = TimeOfDay.fromDateTime(
-                                DateFormat('hh:mm').parse(value));
-                            setState(() {});
-                          },
-                          validator: (value) {
-                            if (value.validate().isEmpty)
-                              return errorThisFieldRequired;
-                            double fromTimeInHour =
-                                pickFromTime!.hour + pickFromTime!.minute / 60;
-                            double toTimeInHour =
-                                pickToTime!.hour + pickToTime!.minute / 60;
-                            double difference = toTimeInHour - fromTimeInHour;
-                            if (difference <= 0) {
-                              return language.endTimeValidationMsg;
-                            }
-                            return null;
-                          },
-                          decoration: commonInputDecoration(
-                              suffixIcon: Icons.access_time,
-                              hintText: language.to),
-                        ).expand()
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              16.height,
-              Text(language.deliverTime, style: boldTextStyle()),
-              16.height,
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                  borderRadius: BorderRadius.circular(defaultRadius),
-                ),
-                child: Column(
-                  children: [
-                    DateTimePicker(
-                      controller: deliverDateController,
-                      type: DateTimePickerType.date,
-                      initialDate: pickDate ?? DateTime.now(),
-                      firstDate: pickDate ?? DateTime.now(),
-                      lastDate: DateTime(2050),
-                      onChanged: (value) {
-                        deliverDate = DateTime.parse(value);
-                        setState(() {});
-                      },
-                      validator: (value) {
-                        if (value!.isEmpty) return errorThisFieldRequired;
-                        return null;
-                      },
-                      decoration: commonInputDecoration(
-                          suffixIcon: Icons.calendar_today,
-                          hintText: language.date),
-                    ),
-                    16.height,
-                    Row(
-                      children: [
-                        DateTimePicker(
-                          controller: deliverFromTimeController,
-                          type: DateTimePickerType.time,
-                          onChanged: (value) {
-                            deliverFromTime = TimeOfDay.fromDateTime(
-                                DateFormat('hh:mm').parse(value));
-                            setState(() {});
-                          },
-                          validator: (value) {
-                            if (value.validate().isEmpty)
-                              return errorThisFieldRequired;
-                            return null;
-                          },
-                          decoration: commonInputDecoration(
-                              suffixIcon: Icons.access_time,
-                              hintText: language.from),
-                        ).expand(),
-                        16.width,
-                        DateTimePicker(
-                          controller: deliverToTimeController,
-                          type: DateTimePickerType.time,
-                          onChanged: (value) {
-                            deliverToTime = TimeOfDay.fromDateTime(
-                                DateFormat('hh:mm').parse(value));
-                            setState(() {});
-                          },
-                          validator: (value) {
-                            if (value!.isEmpty) return errorThisFieldRequired;
-                            double fromTimeInHour = deliverFromTime!.hour +
-                                deliverFromTime!.minute / 60;
-                            double toTimeInHour = deliverToTime!.hour +
-                                deliverToTime!.minute / 60;
-                            double difference = toTimeInHour - fromTimeInHour;
-                            if (difference < 0) {
-                              return language.endTimeValidationMsg;
-                            }
-                            return null;
-                          },
-                          decoration: commonInputDecoration(
-                              suffixIcon: Icons.access_time,
-                              hintText: language.to),
-                        ).expand()
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ).visible(!isDeliverNow),
-          16.height,
-          ///////////////SHEIKH////////////////
-
-          Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              SizedBox(height: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Vehicle Type', style: boldTextStyle()),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  /////////// SHEIKH HERE
-
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    child: DropdownButtonFormField<String>(
-                      value: vehicle,
-                      decoration: commonInputDecoration(),
-                      items: vehicles_list
-                          .toSet()
-                          .map<DropdownMenuItem<String>>((item) {
-                        return DropdownMenuItem(
-                          value: item,
-                          child: Text(item ?? ''),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        // getVehicleApiCall();
-                        getVehicleApiCall2();
-                        print("++++++++++++++++++++++++++++++++++$vehicle");
-
-                        setState(() {
-                          vehicle = value!;
-                          if (vehicle == "Bike") {
-                            isBike = true;
-                            delivery = delivery_list[0];
-                            appStore.isVehicleOrder = 0;
-                          //  weightController= cityData!.minWeight as TextEditingController;
-                          } else {
-                            isBike = false;
-                           delivery = delivery_list_car[0];
-                           appStore.isVehicleOrder = 1;
-                          //  weightController= cityData!.minWeight as TextEditingController;
-                          }
-                        });
-                      },
-                      validator: (value) {
-                        if (vehicle == null)
-                          return errorThisFieldRequired;
-                        return null;
-                      },
-                    ),
-                  ),
-
-                  // SizedBox(
-                  //   width: MediaQuery.of(context).size.width * 0.4,
-                  //   child: DropdownButtonFormField<String>(
-                  //     isExpanded: true,
-                  //     value: vehicle,
-                  //     dropdownColor: Theme.of(context).cardColor,
-                  //     style: primaryTextStyle(),
-                  //     decoration: commonInputDecoration(),
-                  //     items: [
-                  //       DropdownMenuItem(value: "Bike", child: Text("Bike", style: primaryTextStyle(), maxLines: 1)),
-                  //       DropdownMenuItem(value: "Car", child: Text("Car", style: primaryTextStyle(), maxLines: 1)),
-                  //
-                  //     ],
-                  //     onChanged: (value) {
-                  //       vehicle = value!;
-                  //       print(vehicle);
-                  //       setState(() {
-                  //         if(vehicle == "Bike"){
-                  //           isBike = true;
-                  //         }
-                  //         else{
-                  //           isBike  = false;
-                  //         }
-                  //       });
-                  //     },
-                  //   ),
-                  // ),
-
-                  //////// SHEIKH HERE
-                ],
-              ),
-              SizedBox(width: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Delivery Type', style: boldTextStyle()),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  // isBike ?
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.46,
-                    child: DropdownButtonFormField<String>(
-                      value: delivery,
-                      decoration: commonInputDecoration(),
-                      items: isBike
-                          ? (delivery_list
-                              .toSet()
-                              .map<DropdownMenuItem<String>>((itemD) {
-                              return DropdownMenuItem(
-                                value: itemD,
-                                child: Text(itemD ?? ''),
-                              );
-                            }).toList())
-                          : (delivery_list_car
-                              .toSet()
-                              .map<DropdownMenuItem<String>>((itemD) {
-                              return DropdownMenuItem(
-                                value: itemD,
-                                child: Text(itemD ?? ''),
-                              );
-                            }).toList()),
-                      onChanged: (valueD) {
-
-                        delivery = valueD!;
-                        getCityApiCall();
-                        setState(() {
-                          if (double.tryParse(weightController.text)! <
-                                  minWeight!.toDouble() ||
-                              double.tryParse(weightController.text)! >
-                                  maxWeight!.toDouble()) {
-                            print(true);
-                            setState(() {
-                              weightController.text =
-                                  minWeight.toString();
-                            });
-                          }
-                        });
-                      },
-                      // validator: (value) {
-                      //   if (selectedCountry == null)
-                      //     return errorThisFieldRequired;
-                      //   return null;
-                      // },
-                    ),
-                  )
-                  // SizedBox(
-                  //   width: MediaQuery.of(context).size.width * 0.45,
-                  //   child: DropdownButtonFormField<String>(
-                  //     value: delivery1,
-                  //     decoration: commonInputDecoration(),
-                  //     items: delivery_list_car.toSet()
-                  //         .map<DropdownMenuItem<String>>((itemT) {
-                  //       return DropdownMenuItem(
-                  //         value: itemT,
-                  //         child: Text(itemT ?? ''),
-                  //       );
-                  //     }).toList(),
-                  //     onChanged: (valueT) {
-                  //       vehicle = valueT!;
-                  //       setState(() {
-                  //         delivery1= valueT!;
-                  //         setState(() {});
-                  //       });
-                  //     },
-                  //     // validator: (value) {
-                  //     //   if (selectedCountry == null)
-                  //     //     return errorThisFieldRequired;
-                  //     //   return null;
-                  //     // },
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   width: MediaQuery.of(context).size.width * 0.4,
-                  //   child: DropdownButtonFormField<String>(
-                  //     isExpanded: true,
-                  //     value: delivery,
-                  //     dropdownColor: Theme.of(context).cardColor,
-                  //     style: primaryTextStyle(),
-                  //     decoration: commonInputDecoration(),
-                  //     items: [
-                  //       DropdownMenuItem(value: "In-Day Delivery", child: Text("In-Day Delivery", style: primaryTextStyle(), maxLines: 1)),
-                  //       DropdownMenuItem(value: "Express Delivery", child: Text("Express Delivery", style: primaryTextStyle(), maxLines: 1)),
-                  //       DropdownMenuItem(value: "Vip Delivery", child: Text("Vip Delivery", style: primaryTextStyle(), maxLines: 1)),
-                  //     ],
-                  //     onChanged: (value) {
-                  //       delivery = value!;
-                  //       setState(() {});
-                  //     },
-                  //   ),
-                  // ) :
-                  // SizedBox(
-                  //   width: MediaQuery.of(context).size.width * 0.4,
-                  //   child: DropdownButtonFormField<String>(
-                  //     isExpanded: true,
-                  //     value: delivery1,
-                  //     dropdownColor: Theme.of(context).cardColor,
-                  //     style: primaryTextStyle(),
-                  //     decoration: commonInputDecoration(),
-                  //     items: [
-                  //       DropdownMenuItem(value: "Express Delivery", child: Text("Express Delivery", style: primaryTextStyle(), maxLines: 1)),
-                  //       DropdownMenuItem(value: "Vip Delivery", child: Text("Vip Delivery", style: primaryTextStyle(), maxLines: 1)),
-                  //     ],
-                  //     onChanged: (value) {
-                  //       delivery1 = value!;
-                  //       setState(() {});
-                  //     },
-                  //   ),
-                  // ),
-                ],
-              )
-            ],
-          ),
-          16.height,
-          ////////////////////////// SHEIKH
-          Text(language.weight, style: boldTextStyle()),
-          8.height,
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(
-                    color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                borderRadius: BorderRadius.circular(defaultRadius)),
-            child: IntrinsicHeight(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(language.weight, style: primaryTextStyle())
-                      .paddingAll(12)
-                      .expand(),
-                  VerticalDivider(thickness: 1),
-                  Icon(Icons.remove,
-                          color:
-                              appStore.isDarkMode ? Colors.white : Colors.grey)
-                      .paddingAll(12)
-                      .onTap(() {
-                    if (weightController.text.toDouble() > 1) {
-                      weightController.text =
-                          (weightController.text.toDouble() - 1).toString();
-                    }
-                    if (double.tryParse(weightController.text)! < minWeight!) {
-                      weightController.text = minWeight!.toString();
-                      showAlertDialog2(context);
-                    }
-
-                  }),
-                  VerticalDivider(thickness: 1),
-                  Container(
-                    width: 50,
-                    child: AppTextField(
-                      controller: weightController,
-                      textAlign: TextAlign.center,
-                      maxLength: 5,
-                      textFieldType: TextFieldType.PHONE,
-                      validator: (value) {
-                        print("${value} Pal");
-                        // iamrafehdev
-                        if (double.tryParse(value!)! < minWeight!.toDouble() ||
-                            double.tryParse(value)! > maxWeight!.toDouble())
-                          return language.fieldRequiredMsg;
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        counterText: '',
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: colorPrimary)),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  VerticalDivider(thickness: 1),
-                  Icon(Icons.add,
-                          color:
-                              appStore.isDarkMode ? Colors.white : Colors.grey)
-                      .paddingAll(12)
-                      .onTap(() {
-                    weightController.text =
-                        (weightController.text.toDouble() + 1).toString();
-                    if (double.tryParse(weightController.text)! > maxWeight!) {
-                      weightController.text = maxWeight!.toString();
-                      showAlertDialog(context);
-                    }
-                    if (double.tryParse(weightController.text)! < minWeight!) {
-                      weightController.text = minWeight!.toString();
-                      // showAlertDialog2(context);
-                    }
-                  }),
-                ],
-              ),
-            ),
-          ),
-          16.height,
-          Text(language.numberOfParcels, style: boldTextStyle()),
-          8.height,
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(
-                    color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                borderRadius: BorderRadius.circular(defaultRadius)),
-            child: IntrinsicHeight(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(language.numberOfParcels, style: primaryTextStyle())
-                      .paddingAll(12)
-                      .expand(),
-                  VerticalDivider(thickness: 1),
-                  Icon(Icons.remove,
-                          color:
-                              appStore.isDarkMode ? Colors.white : Colors.grey)
-                      .paddingAll(12)
-                      .onTap(() {
-                    if (totalParcelController.text.toInt() > 1) {
-                      totalParcelController.text =
-                          (totalParcelController.text.toInt() - 1).toString();
-                    }
-                  }),
-                  VerticalDivider(thickness: 1),
-                  Container(
-                    width: 50,
-                    child: AppTextField(
-                      controller: totalParcelController,
-                      textAlign: TextAlign.center,
-                      maxLength: 2,
-                      textFieldType: TextFieldType.PHONE,
-                      decoration: InputDecoration(
-                        counterText: '',
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: colorPrimary)),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  VerticalDivider(thickness: 1),
-                  Icon(Icons.add,
-                          color:
-                              appStore.isDarkMode ? Colors.white : Colors.grey)
-                      .paddingAll(12)
-                      .onTap(() {
-                    totalParcelController.text =
-                        (totalParcelController.text.toInt() + 1).toString();
-                  }),
-                ],
-              ),
-            ),
-          ),
-          16.height,
-          Text(language.parcelType, style: boldTextStyle()),
-          8.height,
-          AppTextField(
-            controller: parcelTypeCont,
-            textFieldType: TextFieldType.OTHER,
-            decoration: commonInputDecoration(),
-            validator: (value) {
-              if (value!.isEmpty) return language.fieldRequiredMsg;
-              return null;
-            },
-          ),
-          8.height,
-
-          Wrap(
-            spacing: 8,
-            runSpacing: 0,
-            children: parcelTypeList.map((item) {
-              return Chip(
-                backgroundColor: context.scaffoldBackgroundColor,
-                label: Text(item.label!),
-                elevation: 0,
-                labelStyle: primaryTextStyle(color: Colors.grey),
-                padding: EdgeInsets.zero,
-                labelPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(defaultRadius),
-                  side: BorderSide(
-                      color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                ),
-              ).onTap(() {
-                parcelTypeCont.text = item.label!;
-                setState(() {});
-              });
-            }).toList(),
-          ),
-          16.height,
-          SwitchListTile(
-            value: isCarry,
-            onChanged: (value) {
-              isCarry = value;
-              print(isCarry);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            scheduleOptionWidget(context, isDeliverNow,
+                    'assets/icons/ic_clock.png', language.deliveryNow)
+                .onTap(() {
+              isDeliverNow = true;
               setState(() {});
-            },
-            title:
-                Text("Courier will carry packages", style: primaryTextStyle()),
-            controlAffinity: ListTileControlAffinity.trailing,
-            inactiveTrackColor:
-                appStore.isDarkMode ? Colors.white12 : Colors.black12,
-            activeColor: Colors.deepPurple,
-          ),
-          16.height,
+            }).expand(),
+            16.width,
+            scheduleOptionWidget(context, !isDeliverNow,
+                    'assets/icons/ic_schedule.png', language.schedule)
+                .onTap(() {
+              isDeliverNow = false;
+              setState(() {});
+            }).expand(),
+          ],
+        ),
+        16.height,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(language.pickTime, style: boldTextStyle()),
+            16.height,
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                borderRadius: BorderRadius.circular(defaultRadius),
+              ),
+              child: Column(
+                children: [
+                  DateTimePicker(
+                    controller: pickDateController,
+                    type: DateTimePickerType.date,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2050),
+                    onChanged: (value) {
+                      pickDate = DateTime.parse(value);
+                      deliverDate = null;
+                      deliverDateController.clear();
+                      setState(() {});
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) return errorThisFieldRequired;
+                      return null;
+                    },
+                    decoration: commonInputDecoration(
+                        suffixIcon: Icons.calendar_today,
+                        hintText: language.date),
+                  ),
+                  16.height,
+                  Row(
+                    children: [
+                      DateTimePicker(
+                        controller: pickFromTimeController,
+                        type: DateTimePickerType.time,
+                        onChanged: (value) {
+                          pickFromTime = TimeOfDay.fromDateTime(
+                              DateFormat('hh:mm').parse(value));
+                          setState(() {});
+                        },
+                        validator: (value) {
+                          if (value.validate().isEmpty)
+                            return errorThisFieldRequired;
+                          return null;
+                        },
+                        decoration: commonInputDecoration(
+                            suffixIcon: Icons.access_time,
+                            hintText: language.from),
+                      ).expand(),
+                      16.width,
+                      DateTimePicker(
+                        controller: pickToTimeController,
+                        type: DateTimePickerType.time,
+                        onChanged: (value) {
+                          pickToTime = TimeOfDay.fromDateTime(
+                              DateFormat('hh:mm').parse(value));
+                          setState(() {});
+                        },
+                        validator: (value) {
+                          if (value.validate().isEmpty)
+                            return errorThisFieldRequired;
+                          double fromTimeInHour =
+                              pickFromTime!.hour + pickFromTime!.minute / 60;
+                          double toTimeInHour =
+                              pickToTime!.hour + pickToTime!.minute / 60;
+                          double difference = toTimeInHour - fromTimeInHour;
+                          if (difference <= 0) {
+                            return language.endTimeValidationMsg;
+                          }
+                          return null;
+                        },
+                        decoration: commonInputDecoration(
+                            suffixIcon: Icons.access_time,
+                            hintText: language.to),
+                      ).expand()
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            16.height,
+            Text(language.deliverTime, style: boldTextStyle()),
+            16.height,
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                borderRadius: BorderRadius.circular(defaultRadius),
+              ),
+              child: Column(
+                children: [
+                  DateTimePicker(
+                    controller: deliverDateController,
+                    type: DateTimePickerType.date,
+                    initialDate: pickDate ?? DateTime.now(),
+                    firstDate: pickDate ?? DateTime.now(),
+                    lastDate: DateTime(2050),
+                    onChanged: (value) {
+                      deliverDate = DateTime.parse(value);
+                      setState(() {});
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) return errorThisFieldRequired;
+                      return null;
+                    },
+                    decoration: commonInputDecoration(
+                        suffixIcon: Icons.calendar_today,
+                        hintText: language.date),
+                  ),
+                  16.height,
+                  Row(
+                    children: [
+                      DateTimePicker(
+                        controller: deliverFromTimeController,
+                        type: DateTimePickerType.time,
+                        onChanged: (value) {
+                          deliverFromTime = TimeOfDay.fromDateTime(
+                              DateFormat('hh:mm').parse(value));
+                          setState(() {});
+                        },
+                        validator: (value) {
+                          if (value.validate().isEmpty)
+                            return errorThisFieldRequired;
+                          return null;
+                        },
+                        decoration: commonInputDecoration(
+                            suffixIcon: Icons.access_time,
+                            hintText: language.from),
+                      ).expand(),
+                      16.width,
+                      DateTimePicker(
+                        controller: deliverToTimeController,
+                        type: DateTimePickerType.time,
+                        onChanged: (value) {
+                          deliverToTime = TimeOfDay.fromDateTime(
+                              DateFormat('hh:mm').parse(value));
+                          setState(() {});
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) return errorThisFieldRequired;
+                          double fromTimeInHour = deliverFromTime!.hour +
+                              deliverFromTime!.minute / 60;
+                          double toTimeInHour =
+                              deliverToTime!.hour + deliverToTime!.minute / 60;
+                          double difference = toTimeInHour - fromTimeInHour;
+                          if (difference < 0) {
+                            return language.endTimeValidationMsg;
+                          }
+                          return null;
+                        },
+                        decoration: commonInputDecoration(
+                            suffixIcon: Icons.access_time,
+                            hintText: language.to),
+                      ).expand()
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ).visible(!isDeliverNow),
+        16.height,
+        ///////////////SHEIKH////////////////
 
-
-
-
-
-          Visibility(
-            visible: appStore.isVehicleOrder != 0,
-            child: Column(
+        Row(
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            SizedBox(height: 8),
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(language.select_vehicle, style: boldTextStyle()),
-                8.height,
-                DropdownButtonFormField<int>(
-                  isExpanded: true,
-                  value: selectedVehicle,
-                  decoration: commonInputDecoration(),
-                  dropdownColor: Theme.of(context).cardColor,
-                  style: primaryTextStyle(),
-                  items: vehicleList.map<DropdownMenuItem<int>>((item) {
-                    return DropdownMenuItem(
-                      value: item.id,
-                      child: Text(item.title ?? ''),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    selectedVehicle = value;
-                    //getVehicleApiCall2();
-                    print(selectedVehicle);
-                    print("dddddddddd");
+                Text('Vehicle Type', style: boldTextStyle()),
+                SizedBox(
+                  height: 8,
+                ),
+                /////////// SHEIKH HERE
+
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: DropdownButtonFormField<String>(
+                    value: vehicle,
+                    decoration: commonInputDecoration(),
+                    items: vehicles_list
+                        .toSet()
+                        .map<DropdownMenuItem<String>>((item) {
+                      return DropdownMenuItem(
+                        value: item,
+                        child: Text(item ?? ''),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      // getVehicleApiCall();
+                      getVehicleApiCall2();
+                      print("++++++++++++++++++++++++++++++++++$vehicle");
 
                       setState(() {
-                        weightController.text =
-                            cityData!.minWeight.toString();
-
-                    });
-                  },
-                  validator: (value) {
-                    if (selectedVehicle == null) return errorThisFieldRequired;
-                    return null;
-                  },
+                        vehicle = value!;
+                        if (vehicle == "Bike") {
+                          isBike = true;
+                          delivery = delivery_list[0];
+                          appStore.isVehicleOrder = 0;
+                          //  weightController= cityData!.minWeight as TextEditingController;
+                        } else {
+                          isBike = false;
+                          delivery = delivery_list_car[0];
+                          appStore.isVehicleOrder = 1;
+                          //  weightController= cityData!.minWeight as TextEditingController;
+                        }
+                      });
+                    },
+                    validator: (value) {
+                      if (vehicle == null) return errorThisFieldRequired;
+                      return null;
+                    },
+                  ),
                 ),
+
+                // SizedBox(
+                //   width: MediaQuery.of(context).size.width * 0.4,
+                //   child: DropdownButtonFormField<String>(
+                //     isExpanded: true,
+                //     value: vehicle,
+                //     dropdownColor: Theme.of(context).cardColor,
+                //     style: primaryTextStyle(),
+                //     decoration: commonInputDecoration(),
+                //     items: [
+                //       DropdownMenuItem(value: "Bike", child: Text("Bike", style: primaryTextStyle(), maxLines: 1)),
+                //       DropdownMenuItem(value: "Car", child: Text("Car", style: primaryTextStyle(), maxLines: 1)),
+                //
+                //     ],
+                //     onChanged: (value) {
+                //       vehicle = value!;
+                //       print(vehicle);
+                //       setState(() {
+                //         if(vehicle == "Bike"){
+                //           isBike = true;
+                //         }
+                //         else{
+                //           isBike  = false;
+                //         }
+                //       });
+                //     },
+                //   ),
+                // ),
+
+                //////// SHEIKH HERE
+              ],
+            ),
+            SizedBox(width: 8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Delivery Type', style: boldTextStyle()),
+                SizedBox(
+                  height: 8,
+                ),
+                // isBike ?
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.46,
+                  child: DropdownButtonFormField<String>(
+                    value: delivery,
+                    decoration: commonInputDecoration(),
+                    items: isBike
+                        ? (delivery_list
+                            .toSet()
+                            .map<DropdownMenuItem<String>>((itemD) {
+                            return DropdownMenuItem(
+                              value: itemD,
+                              child: Text(itemD ?? ''),
+                            );
+                          }).toList())
+                        : (delivery_list_car
+                            .toSet()
+                            .map<DropdownMenuItem<String>>((itemD) {
+                            return DropdownMenuItem(
+                              value: itemD,
+                              child: Text(itemD ?? ''),
+                            );
+                          }).toList()),
+                    onChanged: (valueD) {
+                      delivery = valueD!;
+                      getCityApiCall();
+                      setState(() {
+                        if (double.tryParse(weightController.text)! <
+                                minWeight!.toDouble() ||
+                            double.tryParse(weightController.text)! >
+                                maxWeight!.toDouble()) {
+                          print(true);
+                          setState(() {
+                            weightController.text = minWeight.toString();
+                          });
+                        }
+                      });
+                    },
+                    // validator: (value) {
+                    //   if (selectedCountry == null)
+                    //     return errorThisFieldRequired;
+                    //   return null;
+                    // },
+                  ),
+                )
+                // SizedBox(
+                //   width: MediaQuery.of(context).size.width * 0.45,
+                //   child: DropdownButtonFormField<String>(
+                //     value: delivery1,
+                //     decoration: commonInputDecoration(),
+                //     items: delivery_list_car.toSet()
+                //         .map<DropdownMenuItem<String>>((itemT) {
+                //       return DropdownMenuItem(
+                //         value: itemT,
+                //         child: Text(itemT ?? ''),
+                //       );
+                //     }).toList(),
+                //     onChanged: (valueT) {
+                //       vehicle = valueT!;
+                //       setState(() {
+                //         delivery1= valueT!;
+                //         setState(() {});
+                //       });
+                //     },
+                //     // validator: (value) {
+                //     //   if (selectedCountry == null)
+                //     //     return errorThisFieldRequired;
+                //     //   return null;
+                //     // },
+                //   ),
+                // ),
+                // SizedBox(
+                //   width: MediaQuery.of(context).size.width * 0.4,
+                //   child: DropdownButtonFormField<String>(
+                //     isExpanded: true,
+                //     value: delivery,
+                //     dropdownColor: Theme.of(context).cardColor,
+                //     style: primaryTextStyle(),
+                //     decoration: commonInputDecoration(),
+                //     items: [
+                //       DropdownMenuItem(value: "In-Day Delivery", child: Text("In-Day Delivery", style: primaryTextStyle(), maxLines: 1)),
+                //       DropdownMenuItem(value: "Express Delivery", child: Text("Express Delivery", style: primaryTextStyle(), maxLines: 1)),
+                //       DropdownMenuItem(value: "Vip Delivery", child: Text("Vip Delivery", style: primaryTextStyle(), maxLines: 1)),
+                //     ],
+                //     onChanged: (value) {
+                //       delivery = value!;
+                //       setState(() {});
+                //     },
+                //   ),
+                // ) :
+                // SizedBox(
+                //   width: MediaQuery.of(context).size.width * 0.4,
+                //   child: DropdownButtonFormField<String>(
+                //     isExpanded: true,
+                //     value: delivery1,
+                //     dropdownColor: Theme.of(context).cardColor,
+                //     style: primaryTextStyle(),
+                //     decoration: commonInputDecoration(),
+                //     items: [
+                //       DropdownMenuItem(value: "Express Delivery", child: Text("Express Delivery", style: primaryTextStyle(), maxLines: 1)),
+                //       DropdownMenuItem(value: "Vip Delivery", child: Text("Vip Delivery", style: primaryTextStyle(), maxLines: 1)),
+                //     ],
+                //     onChanged: (value) {
+                //       delivery1 = value!;
+                //       setState(() {});
+                //     },
+                //   ),
+                // ),
+              ],
+            )
+          ],
+        ),
+        16.height,
+        ////////////////////////// SHEIKH
+        Text(language.weight, style: boldTextStyle()),
+        8.height,
+        Container(
+          decoration: BoxDecoration(
+              border: Border.all(
+                  color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+              borderRadius: BorderRadius.circular(defaultRadius)),
+          child: IntrinsicHeight(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(language.weight, style: primaryTextStyle())
+                    .paddingAll(12)
+                    .expand(),
+                VerticalDivider(thickness: 1),
+                Icon(Icons.remove,
+                        color: appStore.isDarkMode ? Colors.white : Colors.grey)
+                    .paddingAll(12)
+                    .onTap(() {
+                  if (weightController.text.toDouble() > 1) {
+                    weightController.text =
+                        (weightController.text.toDouble() - 1).toString();
+                  }
+                  if (double.tryParse(weightController.text)! < minWeight!) {
+                    weightController.text = minWeight!.toString();
+                    showAlertDialog2(context);
+                  }
+                }),
+                VerticalDivider(thickness: 1),
+                Container(
+                  width: 50,
+                  child: AppTextField(
+                    controller: weightController,
+                    textAlign: TextAlign.center,
+                    maxLength: 5,
+                    textFieldType: TextFieldType.PHONE,
+                    validator: (value) {
+                      print("${value} Pal");
+                      print('minWeight =======> $minWeight');
+                      print('maxWeight =======> $maxWeight');
+                      // iamrafehdev
+                      if (double.tryParse(value!)! < minWeight!.toDouble() ||
+                          double.tryParse(value)! > maxWeight!.toDouble())
+                        return language.fieldRequiredMsg;
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      counterText: '',
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: colorPrimary)),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                VerticalDivider(thickness: 1),
+                Icon(Icons.add,
+                        color: appStore.isDarkMode ? Colors.white : Colors.grey)
+                    .paddingAll(12)
+                    .onTap(() {
+                  weightController.text =
+                      (weightController.text.toDouble() + 1).toString();
+                  if (double.tryParse(weightController.text)! > maxWeight!) {
+                    weightController.text = maxWeight!.toString();
+                    showAlertDialog(context);
+                  }
+                  if (double.tryParse(weightController.text)! < minWeight!) {
+                    weightController.text = minWeight!.toString();
+                    // showAlertDialog2(context);
+                  }
+                }),
               ],
             ),
           ),
-        ],
-      );
+        ),
+        16.height,
+        Text(language.numberOfParcels, style: boldTextStyle()),
+        8.height,
+        Container(
+          decoration: BoxDecoration(
+              border: Border.all(
+                  color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+              borderRadius: BorderRadius.circular(defaultRadius)),
+          child: IntrinsicHeight(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(language.numberOfParcels, style: primaryTextStyle())
+                    .paddingAll(12)
+                    .expand(),
+                VerticalDivider(thickness: 1),
+                Icon(Icons.remove,
+                        color: appStore.isDarkMode ? Colors.white : Colors.grey)
+                    .paddingAll(12)
+                    .onTap(() {
+                  if (totalParcelController.text.toInt() > 1) {
+                    totalParcelController.text =
+                        (totalParcelController.text.toInt() - 1).toString();
+                  }
+                }),
+                VerticalDivider(thickness: 1),
+                Container(
+                  width: 50,
+                  child: AppTextField(
+                    controller: totalParcelController,
+                    textAlign: TextAlign.center,
+                    maxLength: 2,
+                    textFieldType: TextFieldType.PHONE,
+                    decoration: InputDecoration(
+                      counterText: '',
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: colorPrimary)),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                VerticalDivider(thickness: 1),
+                Icon(Icons.add,
+                        color: appStore.isDarkMode ? Colors.white : Colors.grey)
+                    .paddingAll(12)
+                    .onTap(() {
+                  totalParcelController.text =
+                      (totalParcelController.text.toInt() + 1).toString();
+                }),
+              ],
+            ),
+          ),
+        ),
+        16.height,
+        Text(language.parcelType, style: boldTextStyle()),
+        8.height,
+        AppTextField(
+          controller: parcelTypeCont,
+          textFieldType: TextFieldType.OTHER,
+          decoration: commonInputDecoration(),
+          validator: (value) {
+            if (value!.isEmpty) return language.fieldRequiredMsg;
+            return null;
+          },
+        ),
+        8.height,
 
+        Wrap(
+          spacing: 8,
+          runSpacing: 0,
+          children: parcelTypeList.map((item) {
+            return Chip(
+              backgroundColor: context.scaffoldBackgroundColor,
+              label: Text(item.label!),
+              elevation: 0,
+              labelStyle: primaryTextStyle(color: Colors.grey),
+              padding: EdgeInsets.zero,
+              labelPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(defaultRadius),
+                side: BorderSide(
+                    color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+              ),
+            ).onTap(() {
+              parcelTypeCont.text = item.label!;
+              setState(() {});
+            });
+          }).toList(),
+        ),
+        16.height,
+        SwitchListTile(
+          value: isCarry,
+          onChanged: (value) {
+            isCarry = value;
+            print(isCarry);
+            setState(() {});
+          },
+          title: Text("Courier will carry packages", style: primaryTextStyle()),
+          controlAffinity: ListTileControlAffinity.trailing,
+          inactiveTrackColor:
+              appStore.isDarkMode ? Colors.white12 : Colors.black12,
+          activeColor: Colors.deepPurple,
+        ),
+        16.height,
 
+        Visibility(
+          visible: appStore.isVehicleOrder != 0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(language.select_vehicle, style: boldTextStyle()),
+              8.height,
+              DropdownButtonFormField<int>(
+                isExpanded: true,
+                value: selectedVehicle,
+                decoration: commonInputDecoration(),
+                dropdownColor: Theme.of(context).cardColor,
+                style: primaryTextStyle(),
+                items: vehicleList.map<DropdownMenuItem<int>>((item) {
+                  return DropdownMenuItem(
+                    value: item.id,
+                    child: Text(item.title ?? ''),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  selectedVehicle = value;
+                  //getVehicleApiCall2();
+                  print(selectedVehicle);
+                  print("dddddddddd");
+
+                  setState(() {
+                    weightController.text = cityData!.minWeight.toString();
+                  });
+                },
+                validator: (value) {
+                  if (selectedVehicle == null) return errorThisFieldRequired;
+                  return null;
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Widget createOrderWidget2() {
@@ -1697,15 +1669,18 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textInputAction: TextInputAction.next,
           nextFocus: pickPhoneFocus,
           textFieldType: TextFieldType.ADDRESS,
-          decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          decoration:
+              commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
+            // if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
             return null;
           },
           onTap: () {
             showModalBottomSheet(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(defaultRadius))),
               context: context,
               builder: (context) {
                 return PickAddressBottomSheet(
@@ -1856,130 +1831,130 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         //     );
         //   },
         // ),
-    //     AppTextField(
-    //       controller: pickAddressCont,
-    //       textInputAction: TextInputAction.next,
-    //       readOnly: true,
-    //       nextFocus: pickPhoneFocus,
-    //       textFieldType: TextFieldType.ADDRESS,
-    //       decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
-    //       validator: (value) {
-    //         if (value!.isEmpty) return language.fieldRequiredMsg;
-    //         if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
-    //         return null;
-    //       },
-    //       onTap: () {
-    //         showModalBottomSheet(
-    //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
-    //           context: context,
-    //           builder: (context) {
-    //             return PickAddressBottomSheet(
-    //               onPick: (address) {
-    //                 deliverAddressCont.text = address.placeAddress ?? "";
-    //                 deliverLat = address.latitude.toString();
-    //                 deliverLong = address.longitude.toString();
-    //                 /*onChanged: (val) async {
-    //     deliverMsg = '';
-    //     deliverLat = null;
-    //     deliverLong = null;
-    //     if (val.isNotEmpty) {
-    //       if (val.length < 3) {
-    //         deliverMsg = language.selectedAddressValidation;
-    //         deliverPredictionList.clear();*/
-    //                 setState(() {});
-    //                 /*} else {
-    //         deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
-    //         setState(() {});
-    //       }
-    //     } else {
-    //       deliverPredictionList.clear();
-    //       setState(() {});
-    //     }*/
-    //               },
-    //               isPickup: false,
-    //             );
-    //             /*),
-    // if (deliverMsg != null && deliverMsg!.isNotEmpty)
-    //   Padding(
-    //       padding: EdgeInsets.only(top: 8, left: 8),
-    //       child: Text(
-    //         deliverMsg ?? "",
-    //         style: secondaryTextStyle(color: Colors.red),
-    //       )),
-    // if (deliverPredictionList.isNotEmpty)
-    //   ListView.builder(
-    //       physics: NeverScrollableScrollPhysics(),
-    //       controller: ScrollController(),
-    //       shrinkWrap: true,
-    //       padding: EdgeInsets.only(top: 16, bottom: 16),
-    //       itemCount: deliverPredictionList.length,
-    //       itemBuilder: (context, index) {
-    //         Predictions mData = deliverPredictionList[index];
-    //         return ListTile(
-    //           leading: Icon(Icons.location_pin, color: primaryColor),
-    //           title: Text(mData.description ?? "", style: primaryTextStyle()),
-    //           onTap: () async {
-    //             PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-    //             if (response != null) {
-    //               deliverAddressCont.text = mData.description ?? "";
-    //               deliverLat = response.result!.geometry!.location!.lat.toString();
-    //               deliverLong = response.result!.geometry!.location!.lng.toString();
-    //               deliverPredictionList.clear();
-    //               setState(() {});
-    //             }*/
-    //           },
-    //         );
-    //       },
-    //       onChanged: (val) async {
-    //         pickMsg = '';
-    //         pickLat = null;
-    //         pickLong = null;
-    //         if (val.isNotEmpty) {
-    //           if (val.length < 3) {
-    //             pickMsg = language.selectedAddressValidation;
-    //             pickPredictionList.clear();
-    //             setState(() {});
-    //           } else {
-    //             pickPredictionList = await getPlaceAutoCompleteApiCall(val);
-    //             setState(() {});
-    //           }
-    //         } else {
-    //           pickPredictionList.clear();
-    //           setState(() {});
-    //         }
-    //       },
-    //     ),
-    //     if (pickMsg != null && pickMsg!.isNotEmpty)
-    //       Padding(
-    //           padding: EdgeInsets.only(top: 8, left: 8),
-    //           child: Text(
-    //             pickMsg ?? "",
-    //             style: secondaryTextStyle(color: Colors.red),
-    //           )),
-    //     if (pickPredictionList.isNotEmpty)
-    //       ListView.builder(
-    //           physics: NeverScrollableScrollPhysics(),
-    //           controller: ScrollController(),
-    //           shrinkWrap: true,
-    //           padding: EdgeInsets.only(top: 16, bottom: 16),
-    //           itemCount: pickPredictionList.length,
-    //           itemBuilder: (context, index) {
-    //             Predictions mData = pickPredictionList[index];
-    //             return ListTile(
-    //               leading: Icon(Icons.location_pin),
-    //               title: Text(mData.description ?? "", style: primaryTextStyle()),
-    //               onTap: () async {
-    //                 PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-    //                 if (response != null) {
-    //                   pickAddressCont.text = mData.description ?? "";
-    //                   pickLat = response.result!.geometry!.location!.lat.toString();
-    //                   pickLong = response.result!.geometry!.location!.lng.toString();
-    //                   pickPredictionList.clear();
-    //                   setState(() {});
-    //                 }
-    //               },
-    //             );
-    //           }),
+        //     AppTextField(
+        //       controller: pickAddressCont,
+        //       textInputAction: TextInputAction.next,
+        //       readOnly: true,
+        //       nextFocus: pickPhoneFocus,
+        //       textFieldType: TextFieldType.ADDRESS,
+        //       decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+        //       validator: (value) {
+        //         if (value!.isEmpty) return language.fieldRequiredMsg;
+        //         if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
+        //         return null;
+        //       },
+        //       onTap: () {
+        //         showModalBottomSheet(
+        //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+        //           context: context,
+        //           builder: (context) {
+        //             return PickAddressBottomSheet(
+        //               onPick: (address) {
+        //                 deliverAddressCont.text = address.placeAddress ?? "";
+        //                 deliverLat = address.latitude.toString();
+        //                 deliverLong = address.longitude.toString();
+        //                 /*onChanged: (val) async {
+        //     deliverMsg = '';
+        //     deliverLat = null;
+        //     deliverLong = null;
+        //     if (val.isNotEmpty) {
+        //       if (val.length < 3) {
+        //         deliverMsg = language.selectedAddressValidation;
+        //         deliverPredictionList.clear();*/
+        //                 setState(() {});
+        //                 /*} else {
+        //         deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
+        //         setState(() {});
+        //       }
+        //     } else {
+        //       deliverPredictionList.clear();
+        //       setState(() {});
+        //     }*/
+        //               },
+        //               isPickup: false,
+        //             );
+        //             /*),
+        // if (deliverMsg != null && deliverMsg!.isNotEmpty)
+        //   Padding(
+        //       padding: EdgeInsets.only(top: 8, left: 8),
+        //       child: Text(
+        //         deliverMsg ?? "",
+        //         style: secondaryTextStyle(color: Colors.red),
+        //       )),
+        // if (deliverPredictionList.isNotEmpty)
+        //   ListView.builder(
+        //       physics: NeverScrollableScrollPhysics(),
+        //       controller: ScrollController(),
+        //       shrinkWrap: true,
+        //       padding: EdgeInsets.only(top: 16, bottom: 16),
+        //       itemCount: deliverPredictionList.length,
+        //       itemBuilder: (context, index) {
+        //         Predictions mData = deliverPredictionList[index];
+        //         return ListTile(
+        //           leading: Icon(Icons.location_pin, color: primaryColor),
+        //           title: Text(mData.description ?? "", style: primaryTextStyle()),
+        //           onTap: () async {
+        //             PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+        //             if (response != null) {
+        //               deliverAddressCont.text = mData.description ?? "";
+        //               deliverLat = response.result!.geometry!.location!.lat.toString();
+        //               deliverLong = response.result!.geometry!.location!.lng.toString();
+        //               deliverPredictionList.clear();
+        //               setState(() {});
+        //             }*/
+        //           },
+        //         );
+        //       },
+        //       onChanged: (val) async {
+        //         pickMsg = '';
+        //         pickLat = null;
+        //         pickLong = null;
+        //         if (val.isNotEmpty) {
+        //           if (val.length < 3) {
+        //             pickMsg = language.selectedAddressValidation;
+        //             pickPredictionList.clear();
+        //             setState(() {});
+        //           } else {
+        //             pickPredictionList = await getPlaceAutoCompleteApiCall(val);
+        //             setState(() {});
+        //           }
+        //         } else {
+        //           pickPredictionList.clear();
+        //           setState(() {});
+        //         }
+        //       },
+        //     ),
+        //     if (pickMsg != null && pickMsg!.isNotEmpty)
+        //       Padding(
+        //           padding: EdgeInsets.only(top: 8, left: 8),
+        //           child: Text(
+        //             pickMsg ?? "",
+        //             style: secondaryTextStyle(color: Colors.red),
+        //           )),
+        //     if (pickPredictionList.isNotEmpty)
+        //       ListView.builder(
+        //           physics: NeverScrollableScrollPhysics(),
+        //           controller: ScrollController(),
+        //           shrinkWrap: true,
+        //           padding: EdgeInsets.only(top: 16, bottom: 16),
+        //           itemCount: pickPredictionList.length,
+        //           itemBuilder: (context, index) {
+        //             Predictions mData = pickPredictionList[index];
+        //             return ListTile(
+        //               leading: Icon(Icons.location_pin),
+        //               title: Text(mData.description ?? "", style: primaryTextStyle()),
+        //               onTap: () async {
+        //                 PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+        //                 if (response != null) {
+        //                   pickAddressCont.text = mData.description ?? "";
+        //                   pickLat = response.result!.geometry!.location!.lat.toString();
+        //                   pickLong = response.result!.geometry!.location!.lng.toString();
+        //                   pickPredictionList.clear();
+        //                   setState(() {});
+        //                 }
+        //               },
+        //             );
+        //           }),
         // AppTextField(
         //   controller: pickAddressCont,
         //   textInputAction: TextInputAction.next,
@@ -2020,42 +1995,34 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         // ),
         if (!pickMsg.isEmptyOrNull)
           Padding(
-              padding:
-              EdgeInsets.only(top: 8, left: 8),
+              padding: EdgeInsets.only(top: 8, left: 8),
               child: Text(
                 pickMsg.validate(),
-                style: secondaryTextStyle(
-                    color: Colors.red),
+                style: secondaryTextStyle(color: Colors.red),
               )),
         if (pickPredictionList.isNotEmpty)
           ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               controller: ScrollController(),
-              padding: EdgeInsets.only(
-                  top: 16, bottom: 16),
+              padding: EdgeInsets.only(top: 16, bottom: 16),
               shrinkWrap: true,
               itemCount: pickPredictionList.length,
               itemBuilder: (context, index) {
-                Predictions mData =
-                pickPredictionList[index];
+                Predictions mData = pickPredictionList[index];
                 return ListTile(
-                  leading: Icon(Icons.location_pin,
-                      ),
-                  title:
-                  Text(mData.description ?? ""),
+                  leading: Icon(
+                    Icons.location_pin,
+                  ),
+                  title: Text(mData.description ?? ""),
                   onTap: () async {
                     PlaceIdDetailModel? response =
-                    await getPlaceIdDetailApiCall(
-                        placeId: mData.placeId!);
+                        await getPlaceIdDetailApiCall(placeId: mData.placeId!);
                     if (response != null) {
-                      pickAddressCont.text =
-                          mData.description ?? "";
-                      pickLat = response.result!
-                          .geometry!.location!.lat
-                          .toString();
-                      pickLong = response.result!
-                          .geometry!.location!.lng
-                          .toString();
+                      pickAddressCont.text = mData.description ?? "";
+                      pickLat =
+                          response.result!.geometry!.location!.lat.toString();
+                      pickLong =
+                          response.result!.geometry!.location!.lng.toString();
                       pickPredictionList.clear();
                       setState(() {});
                     }
@@ -2154,15 +2121,19 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textInputAction: TextInputAction.next,
           nextFocus: deliverPhoneFocus,
           textFieldType: TextFieldType.ADDRESS,
-          decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          decoration:
+              commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+            if (!mTestMode) if (deliverLat == null || deliverLong == null)
+              return language.pleaseSelectValidAddress;
             return null;
           },
           onTap: () {
             showModalBottomSheet(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(defaultRadius))),
               context: context,
               builder: (context) {
                 return PickAddressBottomSheet(
@@ -2259,13 +2230,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 Predictions mData = deliverPredictionList[index];
                 return ListTile(
                   leading: Icon(Icons.location_pin),
-                  title: Text(mData.description ?? "", style: primaryTextStyle()),
+                  title:
+                      Text(mData.description ?? "", style: primaryTextStyle()),
                   onTap: () async {
-                    PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+                    PlaceIdDetailModel? response =
+                        await getPlaceIdDetailApiCall(placeId: mData.placeId!);
                     if (response != null) {
                       deliverAddressCont.text = mData.description ?? "";
-                      deliverLat = response.result!.geometry!.location!.lat.toString();
-                      deliverLong = response.result!.geometry!.location!.lng.toString();
+                      deliverLat =
+                          response.result!.geometry!.location!.lat.toString();
+                      deliverLong =
+                          response.result!.geometry!.location!.lng.toString();
                       deliverPredictionList.clear();
                       setState(() {});
                     }
@@ -2539,20 +2514,25 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textInputAction: TextInputAction.next,
           nextFocus: deliverPhoneFocus,
           textFieldType: TextFieldType.ADDRESS,
-          decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          decoration:
+              commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+            if (!mTestMode) if (deliverLat == null || deliverLong == null)
+              return language.pleaseSelectValidAddress;
             return null;
           },
           onTap: () {
             showModalBottomSheet(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(defaultRadius))),
               context: context,
               builder: (context) {
                 return PickAddressBottomSheet(
                   onPick: (address) {
-                    anotherDeliverAddress2Cont.text = address.placeAddress ?? "";
+                    anotherDeliverAddress2Cont.text =
+                        address.placeAddress ?? "";
                     deliverLat = address.latitude.toString();
                     deliverLong = address.longitude.toString();
                     /*onChanged: (val) async {
@@ -2644,13 +2624,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 Predictions mData = deliverPredictionList[index];
                 return ListTile(
                   leading: Icon(Icons.location_pin),
-                  title: Text(mData.description ?? "", style: primaryTextStyle()),
+                  title:
+                      Text(mData.description ?? "", style: primaryTextStyle()),
                   onTap: () async {
-                    PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+                    PlaceIdDetailModel? response =
+                        await getPlaceIdDetailApiCall(placeId: mData.placeId!);
                     if (response != null) {
                       anotherDeliverAddress2Cont.text = mData.description ?? "";
-                      deliverLat = response.result!.geometry!.location!.lat.toString();
-                      deliverLong = response.result!.geometry!.location!.lng.toString();
+                      deliverLat =
+                          response.result!.geometry!.location!.lat.toString();
+                      deliverLong =
+                          response.result!.geometry!.location!.lng.toString();
                       deliverPredictionList.clear();
                       setState(() {});
                     }
@@ -2833,20 +2817,25 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textInputAction: TextInputAction.next,
           nextFocus: deliverPhoneFocus,
           textFieldType: TextFieldType.ADDRESS,
-          decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          decoration:
+              commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+            if (!mTestMode) if (deliverLat == null || deliverLong == null)
+              return language.pleaseSelectValidAddress;
             return null;
           },
           onTap: () {
             showModalBottomSheet(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(defaultRadius))),
               context: context,
               builder: (context) {
                 return PickAddressBottomSheet(
                   onPick: (address) {
-                    anotherDeliverAddress3Cont.text = address.placeAddress ?? "";
+                    anotherDeliverAddress3Cont.text =
+                        address.placeAddress ?? "";
                     deliverLat = address.latitude.toString();
                     deliverLong = address.longitude.toString();
                     /*onChanged: (val) async {
@@ -2938,13 +2927,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 Predictions mData = deliverPredictionList[index];
                 return ListTile(
                   leading: Icon(Icons.location_pin),
-                  title: Text(mData.description ?? "", style: primaryTextStyle()),
+                  title:
+                      Text(mData.description ?? "", style: primaryTextStyle()),
                   onTap: () async {
-                    PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+                    PlaceIdDetailModel? response =
+                        await getPlaceIdDetailApiCall(placeId: mData.placeId!);
                     if (response != null) {
                       anotherDeliverAddress3Cont.text = mData.description ?? "";
-                      deliverLat = response.result!.geometry!.location!.lat.toString();
-                      deliverLong = response.result!.geometry!.location!.lng.toString();
+                      deliverLat =
+                          response.result!.geometry!.location!.lat.toString();
+                      deliverLong =
+                          response.result!.geometry!.location!.lng.toString();
                       deliverPredictionList.clear();
                       setState(() {});
                     }
@@ -3058,20 +3051,25 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textInputAction: TextInputAction.next,
           nextFocus: deliverPhoneFocus,
           textFieldType: TextFieldType.ADDRESS,
-          decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          decoration:
+              commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+            if (!mTestMode) if (deliverLat == null || deliverLong == null)
+              return language.pleaseSelectValidAddress;
             return null;
           },
           onTap: () {
             showModalBottomSheet(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(defaultRadius))),
               context: context,
               builder: (context) {
                 return PickAddressBottomSheet(
                   onPick: (address) {
-                    anotherDeliverAddress4Cont.text = address.placeAddress ?? "";
+                    anotherDeliverAddress4Cont.text =
+                        address.placeAddress ?? "";
                     deliverLat = address.latitude.toString();
                     deliverLong = address.longitude.toString();
                     /*onChanged: (val) async {
@@ -3163,13 +3161,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 Predictions mData = deliverPredictionList[index];
                 return ListTile(
                   leading: Icon(Icons.location_pin),
-                  title: Text(mData.description ?? "", style: primaryTextStyle()),
+                  title:
+                      Text(mData.description ?? "", style: primaryTextStyle()),
                   onTap: () async {
-                    PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+                    PlaceIdDetailModel? response =
+                        await getPlaceIdDetailApiCall(placeId: mData.placeId!);
                     if (response != null) {
                       anotherDeliverAddress4Cont.text = mData.description ?? "";
-                      deliverLat = response.result!.geometry!.location!.lat.toString();
-                      deliverLong = response.result!.geometry!.location!.lng.toString();
+                      deliverLat =
+                          response.result!.geometry!.location!.lat.toString();
+                      deliverLong =
+                          response.result!.geometry!.location!.lng.toString();
                       deliverPredictionList.clear();
                       setState(() {});
                     }
@@ -3283,20 +3285,25 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textInputAction: TextInputAction.next,
           nextFocus: deliverPhoneFocus,
           textFieldType: TextFieldType.ADDRESS,
-          decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          decoration:
+              commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+            if (!mTestMode) if (deliverLat == null || deliverLong == null)
+              return language.pleaseSelectValidAddress;
             return null;
           },
           onTap: () {
             showModalBottomSheet(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(defaultRadius))),
               context: context,
               builder: (context) {
                 return PickAddressBottomSheet(
                   onPick: (address) {
-                    anotherDeliverAddress5Cont.text = address.placeAddress ?? "";
+                    anotherDeliverAddress5Cont.text =
+                        address.placeAddress ?? "";
                     deliverLat = address.latitude.toString();
                     deliverLong = address.longitude.toString();
                     /*onChanged: (val) async {
@@ -3388,13 +3395,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 Predictions mData = deliverPredictionList[index];
                 return ListTile(
                   leading: Icon(Icons.location_pin),
-                  title: Text(mData.description ?? "", style: primaryTextStyle()),
+                  title:
+                      Text(mData.description ?? "", style: primaryTextStyle()),
                   onTap: () async {
-                    PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+                    PlaceIdDetailModel? response =
+                        await getPlaceIdDetailApiCall(placeId: mData.placeId!);
                     if (response != null) {
                       anotherDeliverAddress5Cont.text = mData.description ?? "";
-                      deliverLat = response.result!.geometry!.location!.lat.toString();
-                      deliverLong = response.result!.geometry!.location!.lng.toString();
+                      deliverLat =
+                          response.result!.geometry!.location!.lat.toString();
+                      deliverLong =
+                          response.result!.geometry!.location!.lng.toString();
                       deliverPredictionList.clear();
                       setState(() {});
                     }

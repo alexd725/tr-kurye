@@ -119,11 +119,11 @@ List<MenuItemModel> getMenuItems() {
       imagePath: 'assets/icons/ic_notification_setting.png',
       title: "Drivers Invoice",
       route: DriverInvoices.route));
-  list.add(MenuItemModel(
-      index: USER_INVOICES,
-      imagePath: 'assets/icons/ic_notification_setting.png',
-      title: "Users Invoice",
-      route: UsersInvoices.route));
+  // list.add(MenuItemModel(
+  //     index: USER_INVOICES,
+  //     imagePath: 'assets/icons/ic_notification_setting.png',
+  //     title: "Users Invoice",
+  //     route: UsersInvoices.route));
   list.add(MenuItemModel(
       index: WITHDRAW_INDEX,
       imagePath: 'assets/icons/ic_document.png',
