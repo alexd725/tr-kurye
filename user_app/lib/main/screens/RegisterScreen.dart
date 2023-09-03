@@ -32,7 +32,6 @@ class RegisterScreenState extends State<RegisterScreen> {
   TextEditingController idNumber = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
-  TextEditingController vehicleTypeController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passController = TextEditingController();
@@ -43,7 +42,6 @@ class RegisterScreenState extends State<RegisterScreen> {
 
   FocusNode nameFocus = FocusNode();
   FocusNode userNameFocus = FocusNode();
-  FocusNode vehicleTypeFocus = FocusNode();
   FocusNode plateTypeFocus = FocusNode();
   FocusNode emailFocus = FocusNode();
   FocusNode phoneFocus = FocusNode();
@@ -51,15 +49,36 @@ class RegisterScreenState extends State<RegisterScreen> {
 
   bool isAcceptedTc = false;
 
+  List vehicles_list = [];
+  String? vehicle;
+
   @override
   void initState() {
     super.initState();
-    init();
+
+    getCityApiCall();
   }
 
-  Future<void> init() async {
-    print("userrrrrrrr");
-    log(widget.userType);
+  getCityApiCall() async {
+    appStore.setLoading(true);
+    await getCityList(countryId: 0, name: '').then((value) {
+      appStore.setLoading(false);
+
+      value.data!.forEach((element) {
+        // print(element.name);
+        // print(cityData!.name);
+
+        vehicles_list.add(element.vehicle_type);
+        if (vehicles_list.isNotEmpty) {
+          print("vehicles_list ${vehicles_list[0]}");
+          vehicle = vehicles_list[0].toString();
+          setState(() {});
+        }
+      });
+    }).catchError((error) {
+      appStore.setLoading(false);
+      log(error);
+    });
   }
 
   @override
@@ -76,7 +95,7 @@ class RegisterScreenState extends State<RegisterScreen> {
           "name": nameController.text,
           "username": userNameController.text,
           "id_no": idNumber.text.trim(),
-          "car_or_moto": vehicleTypeController.text,
+          "car_or_moto": vehicle,
           "user_type": widget.userType,
           "contact_number": '$countryCode ${phoneController.text.trim()}',
           "email": emailController.text.trim(),
@@ -642,7 +661,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 controller: userNameController,
                                 textFieldType: TextFieldType.USERNAME,
                                 focus: userNameFocus,
-                                nextFocus: vehicleTypeFocus,
+                                nextFocus: plateTypeFocus,
                                 decoration: commonInputDecoration(),
                                 errorThisFieldRequired:
                                     language.fieldRequiredMsg,
@@ -651,14 +670,28 @@ class RegisterScreenState extends State<RegisterScreen> {
                               16.height,
                               Text('Vehicle Type', style: primaryTextStyle()),
                               8.height,
-                              AppTextField(
-                                controller: vehicleTypeController,
-                                textFieldType: TextFieldType.NAME,
-                                focus: vehicleTypeFocus,
-                                nextFocus: plateTypeFocus,
-                                decoration: commonInputDecoration(),
-                                errorThisFieldRequired:
-                                    language.fieldRequiredMsg,
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: DropdownButtonFormField<String>(
+                                  value: vehicle,
+                                  decoration: commonInputDecoration(),
+                                  items: vehicles_list
+                                      .toSet()
+                                      .map<DropdownMenuItem<String>>((item) {
+                                    return DropdownMenuItem(
+                                      value: item,
+                                      child: Text(item ?? ''),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    vehicle = value;
+                                  },
+                                  validator: (value) {
+                                    if (vehicle == null)
+                                      return language.fieldRequiredMsg;
+                                    return null;
+                                  },
+                                ),
                               ),
                               16.height,
                               Text('Plate Number', style: primaryTextStyle()),
