@@ -43,7 +43,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   Future<void> init() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      currentCity = prefs.getString('currentCity')!;
+      currentCity = getStringAsync(CITY_NAME);
     });
 
     print("================> $currentCity");

@@ -52,7 +52,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     chatMessageService = ChatMessageService();
     chatMessageService.setUnReadStatusToTrue(
-        senderId: sender.uid!, receiverId: widget.userData!.uid!);
+        senderId: sender.uid!, receiverId: widget.userData!.id.toString());
     setState(() {});
   }
 
@@ -64,13 +64,13 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     }
     ChatMessageModel data = ChatMessageModel();
-    data.receiverId = widget.userData!.uid.validate();
+    data.receiverId = widget.userData!.id.toString().validate();
     data.senderId = sender.uid.validate();
     data.message = messageCont.text;
     data.isMessageRead = false;
     data.createdAt = DateTime.now().millisecondsSinceEpoch;
 
-    if (widget.userData!.uid == getStringAsync(UID)) {
+    if (widget.userData!.id.toString() == getStringAsync(UID)) {
       //
     }
     if (result != null) {
@@ -110,7 +110,7 @@ class _ChatScreenState extends State<ChatScreen> {
           .collection(USER_COLLECTION)
           .doc(getIntAsync(USER_ID).toString())
           .collection(CONTACT_COLLECTION)
-          .doc(widget.userData!.uid)
+          .doc(widget.userData!.id.toString())
           .update({
         'lastMessageTime': DateTime.now().millisecondsSinceEpoch
       }).catchError((e) {
@@ -118,7 +118,7 @@ class _ChatScreenState extends State<ChatScreen> {
       });
       userService.fireStore
           .collection(USER_COLLECTION)
-          .doc(widget.userData!.uid)
+          .doc(widget.userData!.id.toString())
           .collection(CONTACT_COLLECTION)
           .doc(getIntAsync(USER_ID).toString())
           .update({
@@ -131,12 +131,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log(widget.userData!.uid);
+    log(widget.userData!.id.toString());
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         // title: StreamBuilder<UserData>(
-        //   stream: UserService().singleUser(widget.userData!.uid),
+        //   stream: UserService().singleUser(widget.userData!.id.toString()),
         //   builder: (context, snap) {
         //     if (snap.hasData) {
         //       return Row(
@@ -164,23 +164,23 @@ class _ChatScreenState extends State<ChatScreen> {
         // ),
         //****************************************88
         title: Row(
-      children: [
-      Icon(Icons.arrow_back, color: whiteColor)
-          .paddingSymmetric(vertical: 16)
-          .onTap(() => finish(context)),
-      10.width,
-      CircleAvatar(
-          backgroundColor: context.cardColor,
-          backgroundImage: NetworkImage(
-              widget.userData!.profileImage.validate()),
-          minRadius: 20),
-      10.width,
-      Text(widget.userData!.name.validate(),
-          style: TextStyle(color: whiteColor))
-          .paddingSymmetric(vertical: 16)
-          .expand(),
-      ],
-    ),
+          children: [
+            Icon(Icons.arrow_back, color: whiteColor)
+                .paddingSymmetric(vertical: 16)
+                .onTap(() => finish(context)),
+            10.width,
+            CircleAvatar(
+                backgroundColor: context.cardColor,
+                backgroundImage:
+                    NetworkImage(widget.userData!.profileImage.validate()),
+                minRadius: 20),
+            10.width,
+            Text(widget.userData!.name.validate(),
+                    style: TextStyle(color: whiteColor))
+                .paddingSymmetric(vertical: 16)
+                .expand(),
+          ],
+        ),
         //*********************************************
         backgroundColor: context.primaryColor,
       ),
@@ -198,10 +198,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 padding: EdgeInsets.only(left: 8, top: 8, right: 8, bottom: 0),
                 physics: BouncingScrollPhysics(),
                 query: chatMessageService.chatMessagesWithPagination(
-                    currentUserId:getStringAsync(UID),
-                     receiverUserId:
-                     widget.userData!.uid.validate()
-                    ),
+                    currentUserId: getStringAsync(UID),
+                    receiverUserId: widget.userData!.id.toString().validate()),
                 itemsPerPage: PER_PAGE_CHAT_COUNT,
                 shrinkWrap: true,
                 onEmpty: Offstage(),

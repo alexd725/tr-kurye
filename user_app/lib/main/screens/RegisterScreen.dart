@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/other_widgets/fialogs/src/widgets.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -700,6 +701,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 controller: plateNumberController,
                                 textFieldType: TextFieldType.NAME,
                                 focus: plateTypeFocus,
+                                textCapitalization:
+                                    TextCapitalization.characters,
                                 nextFocus: emailFocus,
                                 decoration: commonInputDecoration(),
                                 errorThisFieldRequired:

@@ -47,7 +47,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        if($request->has('vehicle_id') && request('vehicle_id') != null) {
+        if ($request->has('vehicle_id') && request('vehicle_id') != null) {
             $data['vehicle_data'] = Vehicle::where('id', request('vehicle_id'))->first() ?? null;
         }
 
@@ -146,19 +146,19 @@ class OrderController extends Controller
         try {
             DB::beginTransaction();
 
-        $order->fill($request->all())->update();
-        $payment = Payment::where('order_id',$id)->first();
+            $order->fill($request->all())->update();
+            $payment = Payment::where('order_id', $id)->first();
 
-            if( $payment != null && $payment->payment_status == 'paid' && $order->status == 'completed' ) {
+            if ($payment != null && $payment->payment_status == 'paid' && $order->status == 'completed') {
                 $this->walletTransactionCompleted($order->id);
             }
-            if( $order->status == 'cancelled' ) {
+            if ($order->status == 'cancelled') {
                 $this->walletTransactionCancelled($order->id);
             }
             DB::commit();
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            \Log::info('error-'.$e);
+            \Log::info('error-' . $e);
             return json_custom_response($e);
         }
 

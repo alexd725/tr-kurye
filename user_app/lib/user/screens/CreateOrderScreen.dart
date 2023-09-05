@@ -293,15 +293,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           setState(() {});
         }
 
-        if (element.vehicle_type == vehicle &&
-            element.name == cityData!.name &&
-            element.order_type == delivery) {
-          print(element.maxWeight);
-          print(element.minWeight);
-          maxWeight = element.maxWeight;
-          minWeight = element.minWeight;
-        }
+        // if (element.vehicle_type == vehicle &&
+        //     element.name == cityData!.name &&
+        //     element.order_type == delivery) {
+        //   print(element.maxWeight);
+        //   print(element.minWeight);
+        //   maxWeight = element.maxWeight;
+        //   minWeight = element.minWeight;
+        // }
       });
+      maxWeight = cityData!.maxWeight;
+      minWeight = cityData!.minWeight;
       chargePerAddress = value.data![0].chargePerAddress != null
           ? value.data![0].chargePerAddress
           : 0;
@@ -319,14 +321,15 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     minWeight = 1;
     maxWeight = 1;
     await getAppSettingApiCall();
+    log('CITY_ID =====> ${getIntAsync(CITY_ID)}');
     await getCityDetailApiCall(getIntAsync(CITY_ID));
     getParcelTypeListApiCall();
     extraChargesList();
     getVehicleList(cityID: cityData!.id);
     getCityApiCall();
-    List<dynamic> deliveryPointsList =
-        widget.orderData!.deliveryPointsList ?? [];
     if (widget.orderData != null) {
+      List<dynamic> deliveryPointsList =
+          widget.orderData!.deliveryPointsList ?? [];
       if (widget.orderData!.totalWeight != 0)
         weightController.text = widget.orderData!.totalWeight!.toString();
       if (widget.orderData!.totalParcel != null)

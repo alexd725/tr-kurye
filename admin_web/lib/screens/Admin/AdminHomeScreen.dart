@@ -203,7 +203,7 @@ class AdminHomeScreenState extends State<AdminHomeScreen> {
                                 image: 'assets/icons/ic_orders.png'),
                             TotalUserWidget(
                                 title: language.total_user,
-                                totalCount: snapshot.data!.totalOrder,
+                                totalCount: snapshot.data!.totalClient,
                                 image: 'assets/icons/ic_users.png'),
                             TotalUserWidget(
                                 title: language.total_delivery_person,

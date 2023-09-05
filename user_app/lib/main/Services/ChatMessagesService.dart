@@ -21,6 +21,9 @@ class ChatMessageService extends BaseService {
   }
   Query chatMessagesWithPagination(
       {String? currentUserId, required String receiverUserId}) {
+    if (currentUserId!.isEmpty) {
+      throw ArgumentError('currentUserId must be a non-empty string');
+    }
     if (receiverUserId.isEmpty) {
       throw ArgumentError('receiverUserId must be a non-empty string');
     }
@@ -29,13 +32,11 @@ class ChatMessageService extends BaseService {
         .collection(receiverUserId)
         .orderBy("createdAt", descending: true);
   }
-    // return ref!
-    //     .doc(currentUserId)
-    //     .collection(receiverUserId)
-    //     .orderBy("createdAt", descending: true);
+  // return ref!
+  //     .doc(currentUserId)
+  //     .collection(receiverUserId)
+  //     .orderBy("createdAt", descending: true);
   //}
-
-
 
   Future<DocumentReference> addMessage(ChatMessageModel data) async {
     var doc = await ref!

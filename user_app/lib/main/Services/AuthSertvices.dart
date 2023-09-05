@@ -457,7 +457,7 @@ class AuthServices {
 
       appStore.setLoading(true);
       //Login Details to SharedPreferences
-      setValue(UID, userModel.uid.validate());
+      setValue(UID, userModel.id.validate());
       setValue(USER_EMAIL, userModel.email.validate());
       setValue(IS_LOGGED_IN, true);
       setValue(TAX_NUMBER, userModel.taxNumber.validate());
