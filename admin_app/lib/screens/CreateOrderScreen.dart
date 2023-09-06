@@ -147,6 +147,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   List<CountryData> countryList = [];
   List<CityData> cityList = [];
+  num? maxWeight;
+  num? minWeight;
 
   List<Predictions> pickPredictionList = [];
   List<Predictions> deliverPredictionList = [];
@@ -171,10 +173,15 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   @override
   void initState() {
     super.initState();
-    init();
+    afterBuildCreated(() {
+      init();
+      weightController.text = '1';
+    });
   }
 
   void init() async {
+    minWeight = 1;
+    maxWeight = 1;
     appStore.isShowVehicle = 0;
     await getAppSettingApiCall();
     await getParcelTypeListApiCall();
@@ -322,10 +329,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         if (cityList.isNotEmpty) {
           selectedCity = cityList[0].id!;
           cityData = cityList[0];
+          maxWeight = cityData!.maxWeight;
+          minWeight = cityData!.minWeight;
           setState(() {
             showohiddenoption = 1;
             getVehicleApiCall();
-            weightController.text = cityData!.minWeight.toString();
+            weightController.text = minWeight.toString();
           });
         } else {
           setState(() {
@@ -410,7 +419,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     totalChargePerAddress = 0;
 
     /// calculate weight Charge
-    if (double.tryParse(weightController.text)! >= cityData!.minWeight!) {
+    if (double.tryParse(weightController.text)! >= minWeight!) {
       weightCharge = double.parse(((double.tryParse(weightController.text)!) *
               cityData!.perWeightCharges!)
           .toStringAsFixed(digitAfterDecimal));
@@ -465,7 +474,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     extraChargeList.add(ExtraChargeRequestModel(
         key: MIN_DISTANCE, value: cityData!.minDistance, valueType: ""));
     extraChargeList.add(ExtraChargeRequestModel(
-        key: MIN_WEIGHT, value: cityData!.minWeight, valueType: ""));
+        key: MIN_WEIGHT, value: minWeight, valueType: ""));
     extraChargeList.add(ExtraChargeRequestModel(
         key: PER_DISTANCE_CHARGE,
         value: cityData!.perDistanceCharges,
@@ -1128,7 +1137,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     getCityDetailApiCall();
                     getVehicleApiCall();
                     setState(() {
-                      weightController.text = cityData!.minWeight.toString();
+                      weightController.text = minWeight.toString();
                     });
                   },
                   validator: (value) {
@@ -1208,8 +1217,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                                 .toString();
                       }
                       if (double.tryParse(weightController.text)! <
-                          cityData!.minWeight!) {
-                        weightController.text = cityData!.minWeight.toString();
+                          minWeight!) {
+                        weightController.text = minWeight.toString();
                         showAlertDialog2(context);
                       }
                     },
@@ -1245,13 +1254,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       weightController.text =
                           (double.parse(weightController.text) + 1).toString();
                       if (double.tryParse(weightController.text)! >
-                          cityData!.maxWeight!) {
-                        weightController.text = cityData!.maxWeight.toString();
+                          maxWeight!) {
+                        weightController.text = maxWeight.toString();
                         showAlertDialog(context);
                       }
                       if (double.tryParse(weightController.text)! <
-                          cityData!.minWeight!) {
-                        weightController.text = cityData!.minWeight.toString();
+                          minWeight!) {
+                        weightController.text = minWeight.toString();
                         // showAlertDialog2(context);
                       }
                     },
