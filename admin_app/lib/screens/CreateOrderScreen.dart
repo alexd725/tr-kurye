@@ -47,7 +47,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   TextEditingController parcelTypeCont = TextEditingController();
   TextEditingController weightController = TextEditingController();
-  TextEditingController totalParcelController = TextEditingController(text: '1');
+  TextEditingController totalParcelController =
+      TextEditingController(text: '1');
 
   TextEditingController pickAddressCont = TextEditingController();
   TextEditingController pickPhoneCont = TextEditingController();
@@ -106,12 +107,25 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   int? selectedVehicle;
 
-  DateTime? pickFromDateTime, pickToDateTime, deliverFromDateTime, deliverToDateTime;
+  DateTime? pickFromDateTime,
+      pickToDateTime,
+      deliverFromDateTime,
+      deliverToDateTime;
   DateTime? pickDate, deliverDate;
   TimeOfDay? pickFromTime, pickToTime, deliverFromTime, deliverToTime;
 
-  String? pickLat, deliverLat, anotherDeliver2Lat, anotherDeliver3Lat, anotherDeliver4Lat, anotherDeliver5Lat;
-  String? pickLong, deliverLong, anotherDeliver2Long, anotherDeliver3Long, anotherDeliver4Long, anotherDeliver5Long;
+  String? pickLat,
+      deliverLat,
+      anotherDeliver2Lat,
+      anotherDeliver3Lat,
+      anotherDeliver4Lat,
+      anotherDeliver5Lat;
+  String? pickLong,
+      deliverLong,
+      anotherDeliver2Long,
+      anotherDeliver3Long,
+      anotherDeliver4Long,
+      anotherDeliver5Long;
 
   num totalDistance = 0;
   num totalAmount = 0;
@@ -137,7 +151,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   List<Predictions> pickPredictionList = [];
   List<Predictions> deliverPredictionList = [];
 
-  String? pickMsg, deliverMsg, anotherDeliver2Msg, anotherDeliver3Msg, anotherDeliver4Msg, anotherDeliver5Msg;
+  String? pickMsg,
+      deliverMsg,
+      anotherDeliver2Msg,
+      anotherDeliver3Msg,
+      anotherDeliver4Msg,
+      anotherDeliver5Msg;
 
   VehicleData? vehicleData;
 
@@ -145,7 +164,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   DateTime? currentBackPressTime;
   Contact? _contact;
   bool isCarry = true;
-  num? chargePerAddress= 200;
+  num? chargePerAddress = 200;
   num? totalChargePerAddress;
   num? carryPackagesCharge;
 
@@ -179,7 +198,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   Future<PermissionStatus> _getContactPermission() async {
     PermissionStatus permission = await Permission.contacts.status;
-    if (permission != PermissionStatus.granted && permission != PermissionStatus.permanentlyDenied) {
+    if (permission != PermissionStatus.granted &&
+        permission != PermissionStatus.permanentlyDenied) {
       PermissionStatus permissionStatus = await Permission.contacts.request();
       return permissionStatus;
     } else {
@@ -192,14 +212,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       final snackBar = SnackBar(content: Text('Access to contact data denied'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else if (permissionStatus == PermissionStatus.permanentlyDenied) {
-      final snackBar = SnackBar(content: Text('Contact data not available on device'));
+      final snackBar =
+          SnackBar(content: Text('Contact data not available on device'));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
   Future<void> _pickContact(int key) async {
     try {
-      final Contact? contact = await ContactsService.openDeviceContactPicker(iOSLocalizedLabels: iOSLocalizedLabels);
+      final Contact? contact = await ContactsService.openDeviceContactPicker(
+          iOSLocalizedLabels: iOSLocalizedLabels);
       setState(() {
         _contact = contact;
       });
@@ -267,6 +289,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       log(error);
     });
   }
+
   //****************
   // getCityApiCall({String? name}) async {
   //   appStore.setLoading(true);
@@ -307,17 +330,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         } else {
           setState(() {
             showohiddenoption = 0;
-
           });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('No Data available Select another Options'),
               duration: Duration(seconds: 1),
               backgroundColor: Colors.red,
-
             ),
           );
-
         }
       });
     } catch (error) {
@@ -326,6 +346,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       // Handle error case
     }
   }
+
   //****************
   getCityDetailApiCall() async {
     await getCityDetail(selectedCity ?? 0).then((value) async {
@@ -356,19 +377,18 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       vehicleList.clear();
       vehicleList = value.data!;
       if (vehicleList.isNotEmpty) selectedVehicle = vehicleList[0].id!;
-      setState(() {
-
-      });
-      if(vehicleList.isEmpty) showohiddenoption = 0;
+      setState(() {});
+      if (vehicleList.isEmpty) showohiddenoption = 0;
     }).catchError((error) {
       appStore.setLoading(false);
       log(error);
     });
   }
+
   //*********
   getAppSettingApiCall() async {
     await getAppSetting().then((value) {
-      carryPackagesCharge = num.parse(value.carryPackagesCharges! != null ? value.carryPackagesCharges! : '0');
+      carryPackagesCharge = value.carryPackagesCharges;
       print("------------>carryPackagesCharge $carryPackagesCharge");
       // appStore.setCurrencyCode(value.currencyCode ?? currencyCodeDefault);
       print(value);
@@ -378,8 +398,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   getTotalAmount() {
-    totalDistance =
-        calculateDistance(double.tryParse(pickLat!), double.tryParse(pickLong!), double.tryParse(deliverLat!), double.tryParse(deliverLong!));
+    totalDistance = calculateDistance(
+        double.tryParse(pickLat!),
+        double.tryParse(pickLong!),
+        double.tryParse(deliverLat!),
+        double.tryParse(deliverLong!));
     totalAmount = 0;
     weightCharge = 0;
     distanceCharge = 0;
@@ -388,12 +411,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
     /// calculate weight Charge
     if (double.tryParse(weightController.text)! >= cityData!.minWeight!) {
-      weightCharge = double.parse(((double.tryParse(weightController.text)!) * cityData!.perWeightCharges!).toStringAsFixed(digitAfterDecimal));
+      weightCharge = double.parse(((double.tryParse(weightController.text)!) *
+              cityData!.perWeightCharges!)
+          .toStringAsFixed(digitAfterDecimal));
     }
 
     /// calculate distance Charge
     if (totalDistance > cityData!.minDistance!) {
-      distanceCharge = double.parse(((totalDistance - cityData!.minDistance!) * cityData!.perDistanceCharges!).toStringAsFixed(digitAfterDecimal));
+      distanceCharge = double.parse(((totalDistance - cityData!.minDistance!) *
+              cityData!.perDistanceCharges!)
+          .toStringAsFixed(digitAfterDecimal));
     }
 
     /// total amount
@@ -401,7 +428,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
     /// calculate extra charges
     cityData!.extraCharges!.forEach((element) {
-      totalExtraCharge += countExtraCharge(totalAmount: totalAmount, charges: element.charges!, chargesType: element.chargesType!);
+      totalExtraCharge += countExtraCharge(
+          totalAmount: totalAmount,
+          charges: element.charges!,
+          chargesType: element.chargesType!);
     });
 
     if (anotherDeliverAddress5Cont.text.isNotEmpty) {
@@ -420,21 +450,35 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     print("totalCarryPackagesCharge $totalCarryPackagesCharge");
 
     /// All Charges
-    totalAmount =
-        double.parse((totalAmount + totalExtraCharge + totalChargePerAddress! + totalCarryPackagesCharge!).toStringAsFixed(digitAfterDecimal));
+    totalAmount = double.parse((totalAmount +
+            totalExtraCharge +
+            totalChargePerAddress! +
+            totalCarryPackagesCharge!)
+        .toStringAsFixed(digitAfterDecimal));
     print("12345 $totalAmount");
   }
 
   extraChargesList() {
     extraChargeList.clear();
-    extraChargeList.add(ExtraChargeRequestModel(key: FIXED_CHARGES, value: cityData!.fixedCharges, valueType: ""));
-    extraChargeList.add(ExtraChargeRequestModel(key: MIN_DISTANCE, value: cityData!.minDistance, valueType: ""));
-    extraChargeList.add(ExtraChargeRequestModel(key: MIN_WEIGHT, value: cityData!.minWeight, valueType: ""));
-    extraChargeList.add(ExtraChargeRequestModel(key: PER_DISTANCE_CHARGE, value: cityData!.perDistanceCharges, valueType: ""));
-    extraChargeList.add(ExtraChargeRequestModel(key: PER_WEIGHT_CHARGE, value: cityData!.perWeightCharges, valueType: ""));
+    extraChargeList.add(ExtraChargeRequestModel(
+        key: FIXED_CHARGES, value: cityData!.fixedCharges, valueType: ""));
+    extraChargeList.add(ExtraChargeRequestModel(
+        key: MIN_DISTANCE, value: cityData!.minDistance, valueType: ""));
+    extraChargeList.add(ExtraChargeRequestModel(
+        key: MIN_WEIGHT, value: cityData!.minWeight, valueType: ""));
+    extraChargeList.add(ExtraChargeRequestModel(
+        key: PER_DISTANCE_CHARGE,
+        value: cityData!.perDistanceCharges,
+        valueType: ""));
+    extraChargeList.add(ExtraChargeRequestModel(
+        key: PER_WEIGHT_CHARGE,
+        value: cityData!.perWeightCharges,
+        valueType: ""));
     cityData!.extraCharges!.forEach((element) {
-      extraChargeList.add(
-          ExtraChargeRequestModel(key: element.title!.toLowerCase().replaceAll(' ', "_"), value: element.charges, valueType: element.chargesType));
+      extraChargeList.add(ExtraChargeRequestModel(
+          key: element.title!.toLowerCase().replaceAll(' ', "_"),
+          value: element.charges,
+          valueType: element.chargesType));
     });
   }
 
@@ -450,8 +494,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "charge_per_address": totalChargePerAddress,
       "carry_packages_charge": isCarry == true ? carryPackagesCharge : 0,
       "pickup_point": {
-        "start_time": (!isDeliverNow && pickFromDateTime != null) ? pickFromDateTime.toString() : DateTime.now().toString(),
-        "end_time": (!isDeliverNow && pickToDateTime != null) ? pickToDateTime.toString() : null,
+        "start_time": (!isDeliverNow && pickFromDateTime != null)
+            ? pickFromDateTime.toString()
+            : DateTime.now().toString(),
+        "end_time": (!isDeliverNow && pickToDateTime != null)
+            ? pickToDateTime.toString()
+            : null,
         "address": pickAddressCont.text,
         "latitude": pickLat,
         "longitude": pickLong,
@@ -460,103 +508,158 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       },
       "delivery_point": [
         {
-          "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
-          "end_time": (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
+          "start_time": (!isDeliverNow && deliverFromDateTime != null)
+              ? deliverFromDateTime.toString()
+              : null,
+          "end_time": (!isDeliverNow && deliverToDateTime != null)
+              ? deliverToDateTime.toString()
+              : null,
           "address": deliverAddressCont.text,
           "latitude": deliverLat,
           "longitude": deliverLong,
           "description": deliverDesCont.text,
-          "contact_number": '$deliverCountryCode ${deliverPhoneCont.text.trim()}',
+          "contact_number":
+              '$deliverCountryCode ${deliverPhoneCont.text.trim()}',
         },
         if (anotherDeliverAddress2Cont.text.isNotEmpty)
           {
-            "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
-            "end_time": (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
+            "start_time": (!isDeliverNow && deliverFromDateTime != null)
+                ? deliverFromDateTime.toString()
+                : null,
+            "end_time": (!isDeliverNow && deliverToDateTime != null)
+                ? deliverToDateTime.toString()
+                : null,
             "address": anotherDeliverAddress2Cont.text,
             "latitude": anotherDeliver2Lat,
             "longitude": anotherDeliver2Long,
             "description": anotherDeliver2DesCont.text,
-            "contact_number": '$anotherDeliver2CountryCode ${anotherDeliver2PhoneCont.text.trim()}',
+            "contact_number":
+                '$anotherDeliver2CountryCode ${anotherDeliver2PhoneCont.text.trim()}',
           },
         if (anotherDeliverAddress3Cont.text.isNotEmpty)
           {
-            "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
-            "end_time": (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
+            "start_time": (!isDeliverNow && deliverFromDateTime != null)
+                ? deliverFromDateTime.toString()
+                : null,
+            "end_time": (!isDeliverNow && deliverToDateTime != null)
+                ? deliverToDateTime.toString()
+                : null,
             "address": anotherDeliverAddress3Cont.text,
             "latitude": anotherDeliver3Lat,
             "longitude": anotherDeliver3Long,
             "description": anotherDeliver3DesCont.text,
-            "contact_number": '$anotherDeliver3CountryCode ${anotherDeliver3PhoneCont.text.trim()}',
+            "contact_number":
+                '$anotherDeliver3CountryCode ${anotherDeliver3PhoneCont.text.trim()}',
           },
         if (anotherDeliverAddress4Cont.text.isNotEmpty)
           {
-            "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
-            "end_time": (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
+            "start_time": (!isDeliverNow && deliverFromDateTime != null)
+                ? deliverFromDateTime.toString()
+                : null,
+            "end_time": (!isDeliverNow && deliverToDateTime != null)
+                ? deliverToDateTime.toString()
+                : null,
             "address": anotherDeliverAddress4Cont.text,
             "latitude": anotherDeliver4Lat,
             "longitude": anotherDeliver4Long,
             "description": anotherDeliver4DesCont.text,
-            "contact_number": '$anotherDeliver4CountryCode ${anotherDeliver4PhoneCont.text.trim()}',
+            "contact_number":
+                '$anotherDeliver4CountryCode ${anotherDeliver4PhoneCont.text.trim()}',
           },
         if (anotherDeliverAddress5Cont.text.isNotEmpty)
           {
-            "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
-            "end_time": (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
+            "start_time": (!isDeliverNow && deliverFromDateTime != null)
+                ? deliverFromDateTime.toString()
+                : null,
+            "end_time": (!isDeliverNow && deliverToDateTime != null)
+                ? deliverToDateTime.toString()
+                : null,
             "address": anotherDeliverAddress5Cont.text,
             "latitude": anotherDeliver5Lat,
             "longitude": anotherDeliver5Long,
             "description": anotherDeliver5DesCont.text,
-            "contact_number": '$anotherDeliver5CountryCode ${anotherDeliver5PhoneCont.text.trim()}',
+            "contact_number":
+                '$anotherDeliver5CountryCode ${anotherDeliver5PhoneCont.text.trim()}',
           },
       ],
       "selected_delivery_point": paymentCollectFrom == "on_another_delivery2"
           ? {
-              "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
-              "end_time": (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
+              "start_time": (!isDeliverNow && deliverFromDateTime != null)
+                  ? deliverFromDateTime.toString()
+                  : null,
+              "end_time": (!isDeliverNow && deliverToDateTime != null)
+                  ? deliverToDateTime.toString()
+                  : null,
               "address": anotherDeliverAddress2Cont.text,
               "latitude": anotherDeliver2Lat,
               "longitude": anotherDeliver2Long,
               "description": anotherDeliver2DesCont.text,
-              "contact_number": '$anotherDeliver2CountryCode ${anotherDeliver2PhoneCont.text.trim()}',
+              "contact_number":
+                  '$anotherDeliver2CountryCode ${anotherDeliver2PhoneCont.text.trim()}',
             }
           : paymentCollectFrom == "on_another_delivery3"
               ? {
-                  "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
-                  "end_time": (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
+                  "start_time": (!isDeliverNow && deliverFromDateTime != null)
+                      ? deliverFromDateTime.toString()
+                      : null,
+                  "end_time": (!isDeliverNow && deliverToDateTime != null)
+                      ? deliverToDateTime.toString()
+                      : null,
                   "address": anotherDeliverAddress3Cont.text,
                   "latitude": anotherDeliver3Lat,
                   "longitude": anotherDeliver3Long,
                   "description": anotherDeliver3DesCont.text,
-                  "contact_number": '$anotherDeliver3CountryCode ${anotherDeliver3PhoneCont.text.trim()}',
+                  "contact_number":
+                      '$anotherDeliver3CountryCode ${anotherDeliver3PhoneCont.text.trim()}',
                 }
               : paymentCollectFrom == "on_another_delivery4"
                   ? {
-                      "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
-                      "end_time": (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
+                      "start_time":
+                          (!isDeliverNow && deliverFromDateTime != null)
+                              ? deliverFromDateTime.toString()
+                              : null,
+                      "end_time": (!isDeliverNow && deliverToDateTime != null)
+                          ? deliverToDateTime.toString()
+                          : null,
                       "address": anotherDeliverAddress4Cont.text,
                       "latitude": anotherDeliver4Lat,
                       "longitude": anotherDeliver4Long,
                       "description": anotherDeliver4DesCont.text,
-                      "contact_number": '$anotherDeliver4CountryCode ${anotherDeliver4PhoneCont.text.trim()}',
+                      "contact_number":
+                          '$anotherDeliver4CountryCode ${anotherDeliver4PhoneCont.text.trim()}',
                     }
                   : paymentCollectFrom == "on_another_delivery5"
                       ? {
-                          "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
-                          "end_time": (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
+                          "start_time":
+                              (!isDeliverNow && deliverFromDateTime != null)
+                                  ? deliverFromDateTime.toString()
+                                  : null,
+                          "end_time":
+                              (!isDeliverNow && deliverToDateTime != null)
+                                  ? deliverToDateTime.toString()
+                                  : null,
                           "address": anotherDeliverAddress5Cont.text,
                           "latitude": anotherDeliver5Lat,
                           "longitude": anotherDeliver5Long,
                           "description": anotherDeliver5DesCont.text,
-                          "contact_number": '$anotherDeliver5CountryCode ${anotherDeliver5PhoneCont.text.trim()}',
+                          "contact_number":
+                              '$anotherDeliver5CountryCode ${anotherDeliver5PhoneCont.text.trim()}',
                         }
                       : {
-                          "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
-                          "end_time": (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
+                          "start_time":
+                              (!isDeliverNow && deliverFromDateTime != null)
+                                  ? deliverFromDateTime.toString()
+                                  : null,
+                          "end_time":
+                              (!isDeliverNow && deliverToDateTime != null)
+                                  ? deliverToDateTime.toString()
+                                  : null,
                           "address": deliverAddressCont.text,
                           "latitude": deliverLat,
                           "longitude": deliverLong,
                           "description": deliverDesCont.text,
-                          "contact_number": '$deliverCountryCode ${deliverPhoneCont.text.trim()}',
+                          "contact_number":
+                              '$deliverCountryCode ${deliverPhoneCont.text.trim()}',
                         },
       "extra_charges": extraChargeList,
       "parcel_type": parcelTypeCont.text,
@@ -589,7 +692,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   Future<List<Predictions>> getPlaceAutoCompleteApiCall(String text) async {
     List<Predictions> list = [];
-    await placeAutoCompleteApi(searchText: text, language: appStore.selectedLanguage, countryCode: countryData!.code ?? 'IN').then((value) {
+    await placeAutoCompleteApi(
+            searchText: text,
+            language: appStore.selectedLanguage,
+            countryCode: countryData!.code ?? 'IN')
+        .then((value) {
       list = value.predictions ?? [];
     }).catchError((e) {
       throw e.toString();
@@ -597,7 +704,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     return list;
   }
 
-  Future<PlaceIdDetailModel?> getPlaceIdDetailApiCall({required String placeId}) async {
+  Future<PlaceIdDetailModel?> getPlaceIdDetailApiCall(
+      {required String placeId}) async {
     PlaceIdDetailModel? detailModel;
     await getPlaceDetail(placeId: placeId).then((value) {
       detailModel = value;
@@ -646,7 +754,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                    border: Border.all(
+                        color: borderColor,
+                        width: appStore.isDarkMode ? 0.2 : 1),
                     borderRadius: BorderRadius.circular(defaultRadius),
                   ),
                   child: Column(
@@ -666,7 +776,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           if (value!.isEmpty) return errorThisFieldRequired;
                           return null;
                         },
-                        decoration: commonInputDecoration(suffixIcon: Icons.calendar_today, hintText: language.date),
+                        decoration: commonInputDecoration(
+                            suffixIcon: Icons.calendar_today,
+                            hintText: language.date),
                       ),
                       SizedBox(height: 16),
                       Row(
@@ -676,14 +788,18 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                               controller: pickFromTimeController,
                               type: DateTimePickerType.time,
                               onChanged: (value) {
-                                pickFromTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                                pickFromTime = TimeOfDay.fromDateTime(
+                                    DateFormat('hh:mm').parse(value));
                                 setState(() {});
                               },
                               validator: (value) {
-                                if (value!.isEmpty) return errorThisFieldRequired;
+                                if (value!.isEmpty)
+                                  return errorThisFieldRequired;
                                 return null;
                               },
-                              decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.from),
+                              decoration: commonInputDecoration(
+                                  suffixIcon: Icons.access_time,
+                                  hintText: language.from),
                             ),
                           ),
                           SizedBox(width: 16),
@@ -692,20 +808,27 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                               controller: pickToTimeController,
                               type: DateTimePickerType.time,
                               onChanged: (value) {
-                                pickToTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                                pickToTime = TimeOfDay.fromDateTime(
+                                    DateFormat('hh:mm').parse(value));
                                 setState(() {});
                               },
                               validator: (value) {
-                                if (value!.isEmpty) return errorThisFieldRequired;
-                                double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute / 60;
-                                double toTimeInHour = pickToTime!.hour + pickToTime!.minute / 60;
-                                double difference = toTimeInHour - fromTimeInHour;
+                                if (value!.isEmpty)
+                                  return errorThisFieldRequired;
+                                double fromTimeInHour = pickFromTime!.hour +
+                                    pickFromTime!.minute / 60;
+                                double toTimeInHour =
+                                    pickToTime!.hour + pickToTime!.minute / 60;
+                                double difference =
+                                    toTimeInHour - fromTimeInHour;
                                 if (difference <= 0) {
                                   return language.endStartTimeValidationMsg;
                                 }
                                 return null;
                               },
-                              decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.to),
+                              decoration: commonInputDecoration(
+                                  suffixIcon: Icons.access_time,
+                                  hintText: language.to),
                             ),
                           ),
                         ],
@@ -719,7 +842,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 Container(
                   padding: EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                    border: Border.all(
+                        color: borderColor,
+                        width: appStore.isDarkMode ? 0.2 : 1),
                     borderRadius: BorderRadius.circular(defaultRadius),
                   ),
                   child: Column(
@@ -738,7 +863,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           if (value!.isEmpty) return errorThisFieldRequired;
                           return null;
                         },
-                        decoration: commonInputDecoration(suffixIcon: Icons.calendar_today, hintText: language.date),
+                        decoration: commonInputDecoration(
+                            suffixIcon: Icons.calendar_today,
+                            hintText: language.date),
                       ),
                       SizedBox(height: 16),
                       Row(
@@ -748,14 +875,18 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                               controller: deliverFromTimeController,
                               type: DateTimePickerType.time,
                               onChanged: (value) {
-                                deliverFromTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                                deliverFromTime = TimeOfDay.fromDateTime(
+                                    DateFormat('hh:mm').parse(value));
                                 setState(() {});
                               },
                               validator: (value) {
-                                if (value!.isEmpty) return errorThisFieldRequired;
+                                if (value!.isEmpty)
+                                  return errorThisFieldRequired;
                                 return null;
                               },
-                              decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.from),
+                              decoration: commonInputDecoration(
+                                  suffixIcon: Icons.access_time,
+                                  hintText: language.from),
                             ),
                           ),
                           SizedBox(width: 16),
@@ -764,20 +895,27 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                               controller: deliverToTimeController,
                               type: DateTimePickerType.time,
                               onChanged: (value) {
-                                deliverToTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                                deliverToTime = TimeOfDay.fromDateTime(
+                                    DateFormat('hh:mm').parse(value));
                                 setState(() {});
                               },
                               validator: (value) {
-                                if (value!.isEmpty) return errorThisFieldRequired;
-                                double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute / 60;
-                                double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute / 60;
-                                double difference = toTimeInHour - fromTimeInHour;
+                                if (value!.isEmpty)
+                                  return errorThisFieldRequired;
+                                double fromTimeInHour = deliverFromTime!.hour +
+                                    deliverFromTime!.minute / 60;
+                                double toTimeInHour = deliverToTime!.hour +
+                                    deliverToTime!.minute / 60;
+                                double difference =
+                                    toTimeInHour - fromTimeInHour;
                                 if (difference < 0) {
                                   return language.endStartTimeValidationMsg;
                                 }
                                 return null;
                               },
-                              decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.to),
+                              decoration: commonInputDecoration(
+                                  suffixIcon: Icons.access_time,
+                                  hintText: language.to),
                             ),
                           )
                         ],
@@ -811,8 +949,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       style: primaryTextStyle(),
                       decoration: commonInputDecoration(),
                       items: [
-                        DropdownMenuItem(value: "Bike", child: Text("Bike", style: primaryTextStyle(), maxLines: 1)),
-                        DropdownMenuItem(value: "Car", child: Text("Car", style: primaryTextStyle(), maxLines: 1)),
+                        DropdownMenuItem(
+                            value: "Bike",
+                            child: Text("Bike",
+                                style: primaryTextStyle(), maxLines: 1)),
+                        DropdownMenuItem(
+                            value: "Car",
+                            child: Text("Car",
+                                style: primaryTextStyle(), maxLines: 1)),
                       ],
                       onChanged: (value) {
                         vehicle = value!;
@@ -821,12 +965,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           if (vehicle == "Bike") {
                             isBike = true;
                             appStore.isShowVehicle = 0;
-                           // delivery = "In-Day Delivery";
-
+                            // delivery = "In-Day Delivery";
                           } else {
                             isBike = false;
                             appStore.isShowVehicle = 1;
-                           // delivery1 = "Express Delivery";
+                            // delivery1 = "Express Delivery";
                           }
                         });
                         getCityApiCall();
@@ -853,16 +996,24 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             style: primaryTextStyle(),
                             decoration: commonInputDecoration(),
                             items: [
-                              DropdownMenuItem(value: "In-Day Delivery", child: Text("In-Day Delivery", style: primaryTextStyle(), maxLines: 1)),
-                              DropdownMenuItem(value: "Express Delivery", child: Text("Express Delivery", style: primaryTextStyle(), maxLines: 1)),
-                              DropdownMenuItem(value: "Vip Delivery", child: Text("Vip Delivery", style: primaryTextStyle(), maxLines: 1)),
+                              DropdownMenuItem(
+                                  value: "In-Day Delivery",
+                                  child: Text("In-Day Delivery",
+                                      style: primaryTextStyle(), maxLines: 1)),
+                              DropdownMenuItem(
+                                  value: "Express Delivery",
+                                  child: Text("Express Delivery",
+                                      style: primaryTextStyle(), maxLines: 1)),
+                              DropdownMenuItem(
+                                  value: "Vip Delivery",
+                                  child: Text("Vip Delivery",
+                                      style: primaryTextStyle(), maxLines: 1)),
                             ],
                             onChanged: (value) {
                               delivery = value!;
                               selectedCity = null;
                               getCityApiCall();
                               setState(() {});
-
                             },
                           ),
                         )
@@ -875,8 +1026,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             style: primaryTextStyle(),
                             decoration: commonInputDecoration(),
                             items: [
-                              DropdownMenuItem(value: "Express Delivery", child: Text("Express Delivery", style: primaryTextStyle(), maxLines: 1)),
-                              DropdownMenuItem(value: "Vip Delivery", child: Text("Vip Delivery", style: primaryTextStyle(), maxLines: 1)),
+                              DropdownMenuItem(
+                                  value: "Express Delivery",
+                                  child: Text("Express Delivery",
+                                      style: primaryTextStyle(), maxLines: 1)),
+                              DropdownMenuItem(
+                                  value: "Vip Delivery",
+                                  child: Text("Vip Delivery",
+                                      style: primaryTextStyle(), maxLines: 1)),
                             ],
                             onChanged: (value) {
                               delivery1 = value!;
@@ -914,7 +1071,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       selectedCity = null;
                       cityList.clear();
                       selectedCountry = value!;
-
                     });
 
                     getCityApiCall();
@@ -966,8 +1122,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   }).toList(),
                   onChanged: (value) {
                     selectedCity = value!;
-                    cityData = cityList.firstWhere((element) => element.id == selectedCity);
-
+                    cityData = cityList
+                        .firstWhere((element) => element.id == selectedCity);
 
                     getCityDetailApiCall();
                     getVehicleApiCall();
@@ -1024,7 +1180,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           Text(language.weight, style: boldTextStyle()),
           SizedBox(height: 8),
           Container(
-            decoration: BoxDecoration(border: Border.all(color: Theme.of(context).dividerColor), borderRadius: BorderRadius.circular(defaultRadius)),
+            decoration: BoxDecoration(
+                border: Border.all(color: Theme.of(context).dividerColor),
+                borderRadius: BorderRadius.circular(defaultRadius)),
             child: IntrinsicHeight(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -1039,13 +1197,18 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   GestureDetector(
                     child: Padding(
                       padding: const EdgeInsets.all(12),
-                      child: Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey),
+                      child: Icon(Icons.remove,
+                          color:
+                              appStore.isDarkMode ? Colors.white : Colors.grey),
                     ),
                     onTap: () {
                       if (double.parse(weightController.text) > 1) {
-                        weightController.text = (double.parse(weightController.text) - 1).toString();
+                        weightController.text =
+                            (double.parse(weightController.text) - 1)
+                                .toString();
                       }
-                      if (double.tryParse(weightController.text)! < cityData!.minWeight!) {
+                      if (double.tryParse(weightController.text)! <
+                          cityData!.minWeight!) {
                         weightController.text = cityData!.minWeight.toString();
                         showAlertDialog2(context);
                       }
@@ -1064,7 +1227,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       ],
                       decoration: InputDecoration(
                         counterText: '',
-                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: primaryColor)),
                         border: InputBorder.none,
                       ),
                     ),
@@ -1073,15 +1237,20 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   GestureDetector(
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
-                      child: Icon(Icons.add, color: appStore.isDarkMode ? Colors.white : Colors.grey),
+                      child: Icon(Icons.add,
+                          color:
+                              appStore.isDarkMode ? Colors.white : Colors.grey),
                     ),
                     onTap: () {
-                      weightController.text = (double.parse(weightController.text) + 1).toString();
-                      if (double.tryParse(weightController.text)! > cityData!.maxWeight!) {
+                      weightController.text =
+                          (double.parse(weightController.text) + 1).toString();
+                      if (double.tryParse(weightController.text)! >
+                          cityData!.maxWeight!) {
                         weightController.text = cityData!.maxWeight.toString();
                         showAlertDialog(context);
                       }
-                      if (double.tryParse(weightController.text)! < cityData!.minWeight!) {
+                      if (double.tryParse(weightController.text)! <
+                          cityData!.minWeight!) {
                         weightController.text = cityData!.minWeight.toString();
                         // showAlertDialog2(context);
                       }
@@ -1095,7 +1264,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           Text(language.numberOfParcels, style: boldTextStyle()),
           SizedBox(height: 8),
           Container(
-            decoration: BoxDecoration(border: Border.all(color: Theme.of(context).dividerColor), borderRadius: BorderRadius.circular(defaultRadius)),
+            decoration: BoxDecoration(
+                border: Border.all(color: Theme.of(context).dividerColor),
+                borderRadius: BorderRadius.circular(defaultRadius)),
             child: IntrinsicHeight(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -1103,18 +1274,23 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.all(12.0),
-                      child: Text(language.numberOfParcels, style: primaryTextStyle()),
+                      child: Text(language.numberOfParcels,
+                          style: primaryTextStyle()),
                     ),
                   ),
                   VerticalDivider(thickness: 1),
                   GestureDetector(
                     child: Padding(
                       padding: const EdgeInsets.all(12),
-                      child: Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey),
+                      child: Icon(Icons.remove,
+                          color:
+                              appStore.isDarkMode ? Colors.white : Colors.grey),
                     ),
                     onTap: () {
                       if (int.parse(totalParcelController.text) > 1) {
-                        totalParcelController.text = (int.parse(totalParcelController.text) - 1).toString();
+                        totalParcelController.text =
+                            (int.parse(totalParcelController.text) - 1)
+                                .toString();
                       }
                     },
                   ),
@@ -1128,7 +1304,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       textFieldType: TextFieldType.PHONE,
                       decoration: InputDecoration(
                         counterText: '',
-                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: primaryColor)),
                         border: InputBorder.none,
                       ),
                       inputFormatters: [
@@ -1140,10 +1317,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   GestureDetector(
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
-                      child: Icon(Icons.add, color: appStore.isDarkMode ? Colors.white : Colors.grey),
+                      child: Icon(Icons.add,
+                          color:
+                              appStore.isDarkMode ? Colors.white : Colors.grey),
                     ),
                     onTap: () {
-                      totalParcelController.text = (int.parse(totalParcelController.text) + 1).toString();
+                      totalParcelController.text =
+                          (int.parse(totalParcelController.text) + 1)
+                              .toString();
                     },
                   ),
                 ],
@@ -1174,10 +1355,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   elevation: 0,
                   labelStyle: primaryTextStyle(color: Colors.grey),
                   padding: EdgeInsets.zero,
-                  labelPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                  labelPadding:
+                      EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(defaultRadius),
-                    side: BorderSide(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                    side: BorderSide(
+                        color: borderColor,
+                        width: appStore.isDarkMode ? 0.2 : 1),
                   ),
                 ),
                 onTap: () {
@@ -1194,9 +1378,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               print(isCarry);
               setState(() {});
             },
-            title: Text("Courier will carry packages", style: primaryTextStyle()),
+            title:
+                Text("Courier will carry packages", style: primaryTextStyle()),
             controlAffinity: ListTileControlAffinity.trailing,
-            inactiveTrackColor: appStore.isDarkMode ? Colors.white12 : Colors.black12,
+            inactiveTrackColor:
+                appStore.isDarkMode ? Colors.white12 : Colors.black12,
           ),
         ],
       );
@@ -1211,144 +1397,148 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         SizedBox(height: 16),
         Text(language.pickupLocation, style: primaryTextStyle()),
         SizedBox(height: 8),
-    //     AppTextField(
-    //       controller: pickAddressCont,
-    //       textInputAction: TextInputAction.next,
-    //       nextFocus: pickPhoneFocus,
-    //       textFieldType: TextFieldType.ADDRESS,
-    //       decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
-    //       validator: (value) {
-    //         if (value!.isEmpty) return language.fieldRequiredMsg;
-    //         if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
-    //         return null;
-    //       },
-    //       onTap: () {
-    //         showModalBottomSheet(
-    //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
-    //           context: context,
-    //           builder: (context) {
-    //             return PickAddressBottomSheet(
-    //               onPick: (address) {
-    //                 deliverAddressCont.text = address.placeAddress ?? "";
-    //                 deliverLat = address.latitude.toString();
-    //                 deliverLong = address.longitude.toString();
-    //                 /*onChanged: (val) async {
-    //     deliverMsg = '';
-    //     deliverLat = null;
-    //     deliverLong = null;
-    //     if (val.isNotEmpty) {
-    //       if (val.length < 3) {
-    //         deliverMsg = language.selectedAddressValidation;
-    //         deliverPredictionList.clear();*/
-    //                 setState(() {});
-    //                 /*} else {
-    //         deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
-    //         setState(() {});
-    //       }
-    //     } else {
-    //       deliverPredictionList.clear();
-    //       setState(() {});
-    //     }*/
-    //               },
-    //               isPickup: false,
-    //             );
-    //             /*),
-    // if (deliverMsg != null && deliverMsg!.isNotEmpty)
-    //   Padding(
-    //       padding: EdgeInsets.only(top: 8, left: 8),
-    //       child: Text(
-    //         deliverMsg ?? "",
-    //         style: secondaryTextStyle(color: Colors.red),
-    //       )),
-    // if (deliverPredictionList.isNotEmpty)
-    //   ListView.builder(
-    //       physics: NeverScrollableScrollPhysics(),
-    //       controller: ScrollController(),
-    //       shrinkWrap: true,
-    //       padding: EdgeInsets.only(top: 16, bottom: 16),
-    //       itemCount: deliverPredictionList.length,
-    //       itemBuilder: (context, index) {
-    //         Predictions mData = deliverPredictionList[index];
-    //         return ListTile(
-    //           leading: Icon(Icons.location_pin, color: primaryColor),
-    //           title: Text(mData.description ?? "", style: primaryTextStyle()),
-    //           onTap: () async {
-    //             PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-    //             if (response != null) {
-    //               deliverAddressCont.text = mData.description ?? "";
-    //               deliverLat = response.result!.geometry!.location!.lat.toString();
-    //               deliverLong = response.result!.geometry!.location!.lng.toString();
-    //               deliverPredictionList.clear();
-    //               setState(() {});
-    //             }*/
-    //           },
-    //         );
-    //       },
-    //       onChanged: (val) async {
-    //         pickMsg = '';
-    //         pickLat = null;
-    //         pickLong = null;
-    //         if (val.isNotEmpty) {
-    //           if (val.length < 3) {
-    //             pickMsg = language.selectedAddressValidation;
-    //             pickPredictionList.clear();
-    //             setState(() {});
-    //           } else {
-    //             pickPredictionList = await getPlaceAutoCompleteApiCall(val);
-    //             setState(() {});
-    //           }
-    //         } else {
-    //           pickPredictionList.clear();
-    //           setState(() {});
-    //         }
-    //       },
-    //     ),
-    //     if (pickMsg != null && pickMsg!.isNotEmpty)
-    //       Padding(
-    //           padding: EdgeInsets.only(top: 8, left: 8),
-    //           child: Text(
-    //             pickMsg ?? "",
-    //             style: secondaryTextStyle(color: Colors.red),
-    //           )),
-    //     if (pickPredictionList.isNotEmpty)
-    //       ListView.builder(
-    //           physics: NeverScrollableScrollPhysics(),
-    //           controller: ScrollController(),
-    //           shrinkWrap: true,
-    //           padding: EdgeInsets.only(top: 16, bottom: 16),
-    //           itemCount: pickPredictionList.length,
-    //           itemBuilder: (context, index) {
-    //             Predictions mData = pickPredictionList[index];
-    //             return ListTile(
-    //               leading: Icon(Icons.location_pin, color: primaryColor),
-    //               title: Text(mData.description ?? "", style: primaryTextStyle()),
-    //               onTap: () async {
-    //                 PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-    //                 if (response != null) {
-    //                   pickAddressCont.text = mData.description ?? "";
-    //                   pickLat = response.result!.geometry!.location!.lat.toString();
-    //                   pickLong = response.result!.geometry!.location!.lng.toString();
-    //                   pickPredictionList.clear();
-    //                   setState(() {});
-    //                 }
-    //               },
-    //             );
-    //           }),
-      //  ********************************************
-                                                  AppTextField(
+        //     AppTextField(
+        //       controller: pickAddressCont,
+        //       textInputAction: TextInputAction.next,
+        //       nextFocus: pickPhoneFocus,
+        //       textFieldType: TextFieldType.ADDRESS,
+        //       decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+        //       validator: (value) {
+        //         if (value!.isEmpty) return language.fieldRequiredMsg;
+        //         if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
+        //         return null;
+        //       },
+        //       onTap: () {
+        //         showModalBottomSheet(
+        //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+        //           context: context,
+        //           builder: (context) {
+        //             return PickAddressBottomSheet(
+        //               onPick: (address) {
+        //                 deliverAddressCont.text = address.placeAddress ?? "";
+        //                 deliverLat = address.latitude.toString();
+        //                 deliverLong = address.longitude.toString();
+        //                 /*onChanged: (val) async {
+        //     deliverMsg = '';
+        //     deliverLat = null;
+        //     deliverLong = null;
+        //     if (val.isNotEmpty) {
+        //       if (val.length < 3) {
+        //         deliverMsg = language.selectedAddressValidation;
+        //         deliverPredictionList.clear();*/
+        //                 setState(() {});
+        //                 /*} else {
+        //         deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
+        //         setState(() {});
+        //       }
+        //     } else {
+        //       deliverPredictionList.clear();
+        //       setState(() {});
+        //     }*/
+        //               },
+        //               isPickup: false,
+        //             );
+        //             /*),
+        // if (deliverMsg != null && deliverMsg!.isNotEmpty)
+        //   Padding(
+        //       padding: EdgeInsets.only(top: 8, left: 8),
+        //       child: Text(
+        //         deliverMsg ?? "",
+        //         style: secondaryTextStyle(color: Colors.red),
+        //       )),
+        // if (deliverPredictionList.isNotEmpty)
+        //   ListView.builder(
+        //       physics: NeverScrollableScrollPhysics(),
+        //       controller: ScrollController(),
+        //       shrinkWrap: true,
+        //       padding: EdgeInsets.only(top: 16, bottom: 16),
+        //       itemCount: deliverPredictionList.length,
+        //       itemBuilder: (context, index) {
+        //         Predictions mData = deliverPredictionList[index];
+        //         return ListTile(
+        //           leading: Icon(Icons.location_pin, color: primaryColor),
+        //           title: Text(mData.description ?? "", style: primaryTextStyle()),
+        //           onTap: () async {
+        //             PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+        //             if (response != null) {
+        //               deliverAddressCont.text = mData.description ?? "";
+        //               deliverLat = response.result!.geometry!.location!.lat.toString();
+        //               deliverLong = response.result!.geometry!.location!.lng.toString();
+        //               deliverPredictionList.clear();
+        //               setState(() {});
+        //             }*/
+        //           },
+        //         );
+        //       },
+        //       onChanged: (val) async {
+        //         pickMsg = '';
+        //         pickLat = null;
+        //         pickLong = null;
+        //         if (val.isNotEmpty) {
+        //           if (val.length < 3) {
+        //             pickMsg = language.selectedAddressValidation;
+        //             pickPredictionList.clear();
+        //             setState(() {});
+        //           } else {
+        //             pickPredictionList = await getPlaceAutoCompleteApiCall(val);
+        //             setState(() {});
+        //           }
+        //         } else {
+        //           pickPredictionList.clear();
+        //           setState(() {});
+        //         }
+        //       },
+        //     ),
+        //     if (pickMsg != null && pickMsg!.isNotEmpty)
+        //       Padding(
+        //           padding: EdgeInsets.only(top: 8, left: 8),
+        //           child: Text(
+        //             pickMsg ?? "",
+        //             style: secondaryTextStyle(color: Colors.red),
+        //           )),
+        //     if (pickPredictionList.isNotEmpty)
+        //       ListView.builder(
+        //           physics: NeverScrollableScrollPhysics(),
+        //           controller: ScrollController(),
+        //           shrinkWrap: true,
+        //           padding: EdgeInsets.only(top: 16, bottom: 16),
+        //           itemCount: pickPredictionList.length,
+        //           itemBuilder: (context, index) {
+        //             Predictions mData = pickPredictionList[index];
+        //             return ListTile(
+        //               leading: Icon(Icons.location_pin, color: primaryColor),
+        //               title: Text(mData.description ?? "", style: primaryTextStyle()),
+        //               onTap: () async {
+        //                 PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+        //                 if (response != null) {
+        //                   pickAddressCont.text = mData.description ?? "";
+        //                   pickLat = response.result!.geometry!.location!.lat.toString();
+        //                   pickLong = response.result!.geometry!.location!.lng.toString();
+        //                   pickPredictionList.clear();
+        //                   setState(() {});
+        //                 }
+        //               },
+        //             );
+        //           }),
+        //  ********************************************
+        AppTextField(
           controller: pickAddressCont,
           textInputAction: TextInputAction.next,
           nextFocus: pickPhoneFocus,
           textFieldType: TextFieldType.ADDRESS,
-          decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          decoration:
+              commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
+            if (pickLat == null || pickLong == null)
+              return language.pleaseSelectValidAddress;
             return null;
           },
           onTap: () {
             showModalBottomSheet(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(defaultRadius))),
               context: context,
               builder: (context) {
                 return PickAddressBottomSheet(
@@ -1356,8 +1546,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     pickAddressCont.text = address.placeAddress ?? "";
                     pickLat = address.latitude.toString();
                     pickLong = address.longitude.toString();
-                setState(() {});
-              /*} else {
+                    setState(() {});
+                    /*} else {
                 pickPredictionList = await getPlaceAutoCompleteApiCall(val);
                 setState(() {});
               }
@@ -1365,9 +1555,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               pickPredictionList.clear();
               setState(() {});
             }*/
-          },
-          );
-        /*),
+                  },
+                );
+                /*),
         if (pickMsg != null && pickMsg!.isNotEmpty)
           Padding(
               padding: EdgeInsets.only(top: 8, left: 8),
@@ -1396,43 +1586,42 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       pickPredictionList.clear();
                       setState(() {});
                     }*/
-                  },
-                );
               },
-              ),
+            );
+          },
+        ),
         //*********************************************8
-  //       AppTextField(
-  //       controller: pickAddressCont,
-  //   textInputAction: TextInputAction.next,
-  //   nextFocus: pickPhoneFocus,
-  //   textFieldType: TextFieldType.ADDRESS,
-  //   decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
-  //   validator: (value) {
-  //   if (value!.isEmpty) return language.fieldRequiredMsg;
-  //   if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
-  //   return null;
-  //   },
-  //   onTap: () {
-  //   showModalBottomSheet(
-  //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
-  //   context: context,
-  //   builder: (context) {
-  //   return PickAddressBottomSheet(
-  //   onPick: (address) {
-  //   pickAddressCont.text = address.placeAddress ?? "";
-  //   pickLat = address.latitude.toString();
-  //   pickLong = address.longitude.toString();
-  //   setState(() {});
-  //   }, // Add the missing closing parenthesis here
-  //
-  //           );
-  //   },
-  //   );
-  //   },
-  // ),
+        //       AppTextField(
+        //       controller: pickAddressCont,
+        //   textInputAction: TextInputAction.next,
+        //   nextFocus: pickPhoneFocus,
+        //   textFieldType: TextFieldType.ADDRESS,
+        //   decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+        //   validator: (value) {
+        //   if (value!.isEmpty) return language.fieldRequiredMsg;
+        //   if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
+        //   return null;
+        //   },
+        //   onTap: () {
+        //   showModalBottomSheet(
+        //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+        //   context: context,
+        //   builder: (context) {
+        //   return PickAddressBottomSheet(
+        //   onPick: (address) {
+        //   pickAddressCont.text = address.placeAddress ?? "";
+        //   pickLat = address.latitude.toString();
+        //   pickLong = address.longitude.toString();
+        //   setState(() {});
+        //   }, // Add the missing closing parenthesis here
+        //
+        //           );
+        //   },
+        //   );
+        //   },
+        // ),
 
-
-    SizedBox(height: 16),
+        SizedBox(height: 16),
         Text(language.pickupContactNumber, style: primaryTextStyle()),
         SizedBox(height: 8),
         AppTextField(
@@ -1446,7 +1635,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               suffixOnTap: () {
                 _askPermissions(0);
               },
-
               prefixIcon: IntrinsicHeight(
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -1458,15 +1646,19 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       showFlagDialog: true,
                       showOnlyCountryWhenClosed: false,
                       alignLeft: false,
-                      dialogSize: Size(MediaQuery.of(context).size.width - 60, MediaQuery.of(context).size.height * 0.6),
+                      dialogSize: Size(MediaQuery.of(context).size.width - 60,
+                          MediaQuery.of(context).size.height * 0.6),
                       textStyle: primaryTextStyle(),
                       dialogBackgroundColor: Theme.of(context).cardColor,
                       barrierColor: Colors.black12,
                       dialogTextStyle: primaryTextStyle(),
                       searchDecoration: InputDecoration(
                         iconColor: Theme.of(context).dividerColor,
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).dividerColor)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: primaryColor)),
                       ),
                       searchStyle: primaryTextStyle(),
                       onInit: (c) {
@@ -1480,10 +1672,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   ],
                 ),
               )),
-              validator: (s) {
+          validator: (s) {
             if (s!.trim().isEmpty) return language.fieldRequiredMsg;
-            if (s.trim().length < minContactLength || s.trim().length > maxContactLength) return language.contactLengthValidation;
-          /*validator: (value) {
+            if (s.trim().length < minContactLength ||
+                s.trim().length > maxContactLength)
+              return language.contactLengthValidation;
+            /*validator: (value) {
             if (value!.trim().isEmpty) return errorThisFieldRequired;
             if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLengthValidation;*/
             return null;
@@ -1520,23 +1714,27 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textInputAction: TextInputAction.next,
           nextFocus: deliverPhoneFocus,
           textFieldType: TextFieldType.ADDRESS,
-          decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          decoration:
+              commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+            if (deliverLat == null || deliverLong == null)
+              return language.pleaseSelectValidAddress;
             return null;
           },
-    onTap: () {
-        showModalBottomSheet(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
-          context: context,
-          builder: (context) {
-            return PickAddressBottomSheet(
-              onPick: (address) {
-                deliverAddressCont.text = address.placeAddress ?? "";
-                deliverLat = address.latitude.toString();
-                deliverLong = address.longitude.toString();
-      /*onChanged: (val) async {
+          onTap: () {
+            showModalBottomSheet(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(defaultRadius))),
+              context: context,
+              builder: (context) {
+                return PickAddressBottomSheet(
+                  onPick: (address) {
+                    deliverAddressCont.text = address.placeAddress ?? "";
+                    deliverLat = address.latitude.toString();
+                    deliverLong = address.longitude.toString();
+                    /*onChanged: (val) async {
         deliverMsg = '';
         deliverLat = null;
         deliverLong = null;
@@ -1544,8 +1742,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           if (val.length < 3) {
             deliverMsg = language.selectedAddressValidation;
             deliverPredictionList.clear();*/
-            setState(() {});
-          /*} else {
+                    setState(() {});
+                    /*} else {
             deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
             setState(() {});
           }
@@ -1553,10 +1751,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           deliverPredictionList.clear();
           setState(() {});
         }*/
-      },
-      isPickup: false,
-            );
-    /*),
+                  },
+                  isPickup: false,
+                );
+                /*),
     if (deliverMsg != null && deliverMsg!.isNotEmpty)
       Padding(
           padding: EdgeInsets.only(top: 8, left: 8),
@@ -1625,13 +1823,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 Predictions mData = deliverPredictionList[index];
                 return ListTile(
                   leading: Icon(Icons.location_pin, color: primaryColor),
-                  title: Text(mData.description ?? "", style: primaryTextStyle()),
+                  title:
+                      Text(mData.description ?? "", style: primaryTextStyle()),
                   onTap: () async {
-                    PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+                    PlaceIdDetailModel? response =
+                        await getPlaceIdDetailApiCall(placeId: mData.placeId!);
                     if (response != null) {
                       deliverAddressCont.text = mData.description ?? "";
-                      deliverLat = response.result!.geometry!.location!.lat.toString();
-                      deliverLong = response.result!.geometry!.location!.lng.toString();
+                      deliverLat =
+                          response.result!.geometry!.location!.lat.toString();
+                      deliverLong =
+                          response.result!.geometry!.location!.lng.toString();
                       deliverPredictionList.clear();
                       setState(() {});
                     }
@@ -1737,15 +1939,19 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     showFlagDialog: true,
                     showOnlyCountryWhenClosed: false,
                     alignLeft: false,
-                    dialogSize: Size(MediaQuery.of(context).size.width - 60, MediaQuery.of(context).size.height * 0.6),
+                    dialogSize: Size(MediaQuery.of(context).size.width - 60,
+                        MediaQuery.of(context).size.height * 0.6),
                     textStyle: primaryTextStyle(),
                     dialogBackgroundColor: Theme.of(context).cardColor,
                     barrierColor: Colors.black12,
                     dialogTextStyle: primaryTextStyle(),
                     searchDecoration: InputDecoration(
                       iconColor: Theme.of(context).dividerColor,
-                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).dividerColor)),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: primaryColor)),
                     ),
                     searchStyle: primaryTextStyle(),
                     onInit: (c) {
@@ -1762,8 +1968,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
           validator: (s) {
             if (s!.trim().isEmpty) return language.fieldRequiredMsg;
-            if (s.trim().length < minContactLength || s.trim().length > maxContactLength) return language.contactLengthValidation;
-          /*validator: (value) {
+            if (s.trim().length < minContactLength ||
+                s.trim().length > maxContactLength)
+              return language.contactLengthValidation;
+            /*validator: (value) {
             if (value!.trim().isEmpty) return errorThisFieldRequired;
             if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLengthValidation;*/
             return null;
@@ -1807,20 +2015,25 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textInputAction: TextInputAction.next,
           nextFocus: deliverPhoneFocus,
           textFieldType: TextFieldType.ADDRESS,
-          decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          decoration:
+              commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+            if (deliverLat == null || deliverLong == null)
+              return language.pleaseSelectValidAddress;
             return null;
           },
           onTap: () {
             showModalBottomSheet(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(defaultRadius))),
               context: context,
               builder: (context) {
                 return PickAddressBottomSheet(
                   onPick: (address) {
-                    anotherDeliverAddress2Cont.text = address.placeAddress ?? "";
+                    anotherDeliverAddress2Cont.text =
+                        address.placeAddress ?? "";
                     deliverLat = address.latitude.toString();
                     deliverLong = address.longitude.toString();
                     /*onChanged: (val) async {
@@ -1912,13 +2125,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 Predictions mData = deliverPredictionList[index];
                 return ListTile(
                   leading: Icon(Icons.location_pin, color: primaryColor),
-                  title: Text(mData.description ?? "", style: primaryTextStyle()),
+                  title:
+                      Text(mData.description ?? "", style: primaryTextStyle()),
                   onTap: () async {
-                    PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+                    PlaceIdDetailModel? response =
+                        await getPlaceIdDetailApiCall(placeId: mData.placeId!);
                     if (response != null) {
                       anotherDeliverAddress2Cont.text = mData.description ?? "";
-                      deliverLat = response.result!.geometry!.location!.lat.toString();
-                      deliverLong = response.result!.geometry!.location!.lng.toString();
+                      deliverLat =
+                          response.result!.geometry!.location!.lat.toString();
+                      deliverLong =
+                          response.result!.geometry!.location!.lng.toString();
                       deliverPredictionList.clear();
                       setState(() {});
                     }
@@ -1926,129 +2143,129 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 );
               }),
         //#######################################
-    //     AppTextField(
-    //       controller: anotherDeliverAddress2Cont,
-    //       textInputAction: TextInputAction.next,
-    //       nextFocus: anotherDeliver2PhoneFocus,
-    //       textFieldType: TextFieldType.ADDRESS,
-    //       decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
-    //       validator: (value) {
-    //         if (value!.isEmpty) return language.fieldRequiredMsg;
-    //         if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
-    //         return null;
-    //       },
-    //       onTap: () {
-    //         showModalBottomSheet(
-    //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
-    //           context: context,
-    //           builder: (context) {
-    //             return PickAddressBottomSheet(
-    //               onPick: (address) {
-    //                 deliverAddressCont.text = address.placeAddress ?? "";
-    //                 deliverLat = address.latitude.toString();
-    //                 deliverLong = address.longitude.toString();
-    //                 /*onChanged: (val) async {
-    //     deliverMsg = '';
-    //     deliverLat = null;
-    //     deliverLong = null;
-    //     if (val.isNotEmpty) {
-    //       if (val.length < 3) {
-    //         deliverMsg = language.selectedAddressValidation;
-    //         deliverPredictionList.clear();*/
-    //                 setState(() {});
-    //                 /*} else {
-    //         deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
-    //         setState(() {});
-    //       }
-    //     } else {
-    //       deliverPredictionList.clear();
-    //       setState(() {});
-    //     }*/
-    //               },
-    //               isPickup: false,
-    //             );
-    //             /*),
-    // if (deliverMsg != null && deliverMsg!.isNotEmpty)
-    //   Padding(
-    //       padding: EdgeInsets.only(top: 8, left: 8),
-    //       child: Text(
-    //         deliverMsg ?? "",
-    //         style: secondaryTextStyle(color: Colors.red),
-    //       )),
-    // if (deliverPredictionList.isNotEmpty)
-    //   ListView.builder(
-    //       physics: NeverScrollableScrollPhysics(),
-    //       controller: ScrollController(),
-    //       shrinkWrap: true,
-    //       padding: EdgeInsets.only(top: 16, bottom: 16),
-    //       itemCount: deliverPredictionList.length,
-    //       itemBuilder: (context, index) {
-    //         Predictions mData = deliverPredictionList[index];
-    //         return ListTile(
-    //           leading: Icon(Icons.location_pin, color: primaryColor),
-    //           title: Text(mData.description ?? "", style: primaryTextStyle()),
-    //           onTap: () async {
-    //             PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-    //             if (response != null) {
-    //               deliverAddressCont.text = mData.description ?? "";
-    //               deliverLat = response.result!.geometry!.location!.lat.toString();
-    //               deliverLong = response.result!.geometry!.location!.lng.toString();
-    //               deliverPredictionList.clear();
-    //               setState(() {});
-    //             }*/
-    //           },
-    //         );
-    //       },
-    //       onChanged: (val) async {
-    //         anotherDeliver2Msg = '';
-    //         anotherDeliver2Lat = null;
-    //         anotherDeliver2Long = null;
-    //         if (val.isNotEmpty) {
-    //           if (val.length < 3) {
-    //             anotherDeliver2Msg = language.selectedAddressValidation;
-    //             deliverPredictionList.clear();
-    //             setState(() {});
-    //           } else {
-    //             deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
-    //             setState(() {});
-    //           }
-    //         } else {
-    //           deliverPredictionList.clear();
-    //           setState(() {});
-    //         }
-    //       },
-    //     ),
-    //     if (anotherDeliver2Msg != null && anotherDeliver2Msg!.isNotEmpty)
-    //       Padding(
-    //           padding: EdgeInsets.only(top: 8, left: 8),
-    //           child: Text(
-    //             anotherDeliver2Msg ?? "",
-    //             style: secondaryTextStyle(color: Colors.red),
-    //           )),
-    //     if (deliverPredictionList.isNotEmpty)
-    //       ListView.builder(
-    //           physics: NeverScrollableScrollPhysics(),
-    //           controller: ScrollController(),
-    //           shrinkWrap: true,
-    //           padding: EdgeInsets.only(top: 16, bottom: 16),
-    //           itemCount: deliverPredictionList.length,
-    //           itemBuilder: (context, index) {
-    //             Predictions mData = deliverPredictionList[index];
-    //             return ListTile(
-    //               leading: Icon(Icons.location_pin, color: primaryColor),
-    //               title: Text(mData.description ?? "", style: primaryTextStyle()),
-    //               onTap: () async {
-    //                 PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-    //                 if (response != null) {
-    //                   anotherDeliverAddress2Cont.text = mData.description ?? "";
-    //                   anotherDeliver2Lat = response.result!.geometry!.location!.lat.toString();
-    //                   anotherDeliver2Long = response.result!.geometry!.location!.lng.toString();
-    //                   deliverPredictionList.clear();
-    //                   setState(() {});
-    //                 }
-    //               },
-    //             );
-    //           }),
+        //     AppTextField(
+        //       controller: anotherDeliverAddress2Cont,
+        //       textInputAction: TextInputAction.next,
+        //       nextFocus: anotherDeliver2PhoneFocus,
+        //       textFieldType: TextFieldType.ADDRESS,
+        //       decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+        //       validator: (value) {
+        //         if (value!.isEmpty) return language.fieldRequiredMsg;
+        //         if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+        //         return null;
+        //       },
+        //       onTap: () {
+        //         showModalBottomSheet(
+        //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+        //           context: context,
+        //           builder: (context) {
+        //             return PickAddressBottomSheet(
+        //               onPick: (address) {
+        //                 deliverAddressCont.text = address.placeAddress ?? "";
+        //                 deliverLat = address.latitude.toString();
+        //                 deliverLong = address.longitude.toString();
+        //                 /*onChanged: (val) async {
+        //     deliverMsg = '';
+        //     deliverLat = null;
+        //     deliverLong = null;
+        //     if (val.isNotEmpty) {
+        //       if (val.length < 3) {
+        //         deliverMsg = language.selectedAddressValidation;
+        //         deliverPredictionList.clear();*/
+        //                 setState(() {});
+        //                 /*} else {
+        //         deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
+        //         setState(() {});
+        //       }
+        //     } else {
+        //       deliverPredictionList.clear();
+        //       setState(() {});
+        //     }*/
+        //               },
+        //               isPickup: false,
+        //             );
+        //             /*),
+        // if (deliverMsg != null && deliverMsg!.isNotEmpty)
+        //   Padding(
+        //       padding: EdgeInsets.only(top: 8, left: 8),
+        //       child: Text(
+        //         deliverMsg ?? "",
+        //         style: secondaryTextStyle(color: Colors.red),
+        //       )),
+        // if (deliverPredictionList.isNotEmpty)
+        //   ListView.builder(
+        //       physics: NeverScrollableScrollPhysics(),
+        //       controller: ScrollController(),
+        //       shrinkWrap: true,
+        //       padding: EdgeInsets.only(top: 16, bottom: 16),
+        //       itemCount: deliverPredictionList.length,
+        //       itemBuilder: (context, index) {
+        //         Predictions mData = deliverPredictionList[index];
+        //         return ListTile(
+        //           leading: Icon(Icons.location_pin, color: primaryColor),
+        //           title: Text(mData.description ?? "", style: primaryTextStyle()),
+        //           onTap: () async {
+        //             PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+        //             if (response != null) {
+        //               deliverAddressCont.text = mData.description ?? "";
+        //               deliverLat = response.result!.geometry!.location!.lat.toString();
+        //               deliverLong = response.result!.geometry!.location!.lng.toString();
+        //               deliverPredictionList.clear();
+        //               setState(() {});
+        //             }*/
+        //           },
+        //         );
+        //       },
+        //       onChanged: (val) async {
+        //         anotherDeliver2Msg = '';
+        //         anotherDeliver2Lat = null;
+        //         anotherDeliver2Long = null;
+        //         if (val.isNotEmpty) {
+        //           if (val.length < 3) {
+        //             anotherDeliver2Msg = language.selectedAddressValidation;
+        //             deliverPredictionList.clear();
+        //             setState(() {});
+        //           } else {
+        //             deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
+        //             setState(() {});
+        //           }
+        //         } else {
+        //           deliverPredictionList.clear();
+        //           setState(() {});
+        //         }
+        //       },
+        //     ),
+        //     if (anotherDeliver2Msg != null && anotherDeliver2Msg!.isNotEmpty)
+        //       Padding(
+        //           padding: EdgeInsets.only(top: 8, left: 8),
+        //           child: Text(
+        //             anotherDeliver2Msg ?? "",
+        //             style: secondaryTextStyle(color: Colors.red),
+        //           )),
+        //     if (deliverPredictionList.isNotEmpty)
+        //       ListView.builder(
+        //           physics: NeverScrollableScrollPhysics(),
+        //           controller: ScrollController(),
+        //           shrinkWrap: true,
+        //           padding: EdgeInsets.only(top: 16, bottom: 16),
+        //           itemCount: deliverPredictionList.length,
+        //           itemBuilder: (context, index) {
+        //             Predictions mData = deliverPredictionList[index];
+        //             return ListTile(
+        //               leading: Icon(Icons.location_pin, color: primaryColor),
+        //               title: Text(mData.description ?? "", style: primaryTextStyle()),
+        //               onTap: () async {
+        //                 PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+        //                 if (response != null) {
+        //                   anotherDeliverAddress2Cont.text = mData.description ?? "";
+        //                   anotherDeliver2Lat = response.result!.geometry!.location!.lat.toString();
+        //                   anotherDeliver2Long = response.result!.geometry!.location!.lng.toString();
+        //                   deliverPredictionList.clear();
+        //                   setState(() {});
+        //                 }
+        //               },
+        //             );
+        //           }),
         //#################################
         SizedBox(height: 16),
         Text(language.deliveryContactNumber, style: primaryTextStyle()),
@@ -2075,15 +2292,19 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     showFlagDialog: true,
                     showOnlyCountryWhenClosed: false,
                     alignLeft: false,
-                    dialogSize: Size(MediaQuery.of(context).size.width - 60, MediaQuery.of(context).size.height * 0.6),
+                    dialogSize: Size(MediaQuery.of(context).size.width - 60,
+                        MediaQuery.of(context).size.height * 0.6),
                     textStyle: primaryTextStyle(),
                     dialogBackgroundColor: Theme.of(context).cardColor,
                     barrierColor: Colors.black12,
                     dialogTextStyle: primaryTextStyle(),
                     searchDecoration: InputDecoration(
                       iconColor: Theme.of(context).dividerColor,
-                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).dividerColor)),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: primaryColor)),
                     ),
                     searchStyle: primaryTextStyle(),
                     onInit: (c) {
@@ -2100,7 +2321,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
           validator: (value) {
             if (value!.trim().isEmpty) return errorThisFieldRequired;
-            if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLengthValidation;
+            if (value.trim().length < minContactLength ||
+                value.trim().length > maxContactLength)
+              return language.contactLengthValidation;
             return null;
           },
           inputFormatters: [
@@ -2138,24 +2361,29 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         Text(language.deliveryLocation, style: primaryTextStyle()),
         SizedBox(height: 8),
         AppTextField(
-          controller:anotherDeliverAddress3Cont,
+          controller: anotherDeliverAddress3Cont,
           textInputAction: TextInputAction.next,
           nextFocus: deliverPhoneFocus,
           textFieldType: TextFieldType.ADDRESS,
-          decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          decoration:
+              commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+            if (deliverLat == null || deliverLong == null)
+              return language.pleaseSelectValidAddress;
             return null;
           },
           onTap: () {
             showModalBottomSheet(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(defaultRadius))),
               context: context,
               builder: (context) {
                 return PickAddressBottomSheet(
                   onPick: (address) {
-                    anotherDeliverAddress3Cont.text = address.placeAddress ?? "";
+                    anotherDeliverAddress3Cont.text =
+                        address.placeAddress ?? "";
                     deliverLat = address.latitude.toString();
                     deliverLong = address.longitude.toString();
                     /*onChanged: (val) async {
@@ -2247,13 +2475,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 Predictions mData = deliverPredictionList[index];
                 return ListTile(
                   leading: Icon(Icons.location_pin, color: primaryColor),
-                  title: Text(mData.description ?? "", style: primaryTextStyle()),
+                  title:
+                      Text(mData.description ?? "", style: primaryTextStyle()),
                   onTap: () async {
-                    PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+                    PlaceIdDetailModel? response =
+                        await getPlaceIdDetailApiCall(placeId: mData.placeId!);
                     if (response != null) {
                       anotherDeliverAddress3Cont.text = mData.description ?? "";
-                      deliverLat = response.result!.geometry!.location!.lat.toString();
-                      deliverLong = response.result!.geometry!.location!.lng.toString();
+                      deliverLat =
+                          response.result!.geometry!.location!.lat.toString();
+                      deliverLong =
+                          response.result!.geometry!.location!.lng.toString();
                       deliverPredictionList.clear();
                       setState(() {});
                     }
@@ -2262,129 +2494,129 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               }),
         //##############################
 
-    //     AppTextField(
-    //       controller: anotherDeliverAddress3Cont,
-    //       textInputAction: TextInputAction.next,
-    //       nextFocus: anotherDeliver3PhoneFocus,
-    //       textFieldType: TextFieldType.ADDRESS,
-    //       decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
-    //       validator: (value) {
-    //         if (value!.isEmpty) return language.fieldRequiredMsg;
-    //         if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
-    //         return null;
-    //       },
-    //       onTap: () {
-    //         showModalBottomSheet(
-    //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
-    //           context: context,
-    //           builder: (context) {
-    //             return PickAddressBottomSheet(
-    //               onPick: (address) {
-    //                 deliverAddressCont.text = address.placeAddress ?? "";
-    //                 deliverLat = address.latitude.toString();
-    //                 deliverLong = address.longitude.toString();
-    //                 /*onChanged: (val) async {
-    //     deliverMsg = '';
-    //     deliverLat = null;
-    //     deliverLong = null;
-    //     if (val.isNotEmpty) {
-    //       if (val.length < 3) {
-    //         deliverMsg = language.selectedAddressValidation;
-    //         deliverPredictionList.clear();*/
-    //                 setState(() {});
-    //                 /*} else {
-    //         deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
-    //         setState(() {});
-    //       }
-    //     } else {
-    //       deliverPredictionList.clear();
-    //       setState(() {});
-    //     }*/
-    //               },
-    //               isPickup: false,
-    //             );
-    //             /*),
-    // if (deliverMsg != null && deliverMsg!.isNotEmpty)
-    //   Padding(
-    //       padding: EdgeInsets.only(top: 8, left: 8),
-    //       child: Text(
-    //         deliverMsg ?? "",
-    //         style: secondaryTextStyle(color: Colors.red),
-    //       )),
-    // if (deliverPredictionList.isNotEmpty)
-    //   ListView.builder(
-    //       physics: NeverScrollableScrollPhysics(),
-    //       controller: ScrollController(),
-    //       shrinkWrap: true,
-    //       padding: EdgeInsets.only(top: 16, bottom: 16),
-    //       itemCount: deliverPredictionList.length,
-    //       itemBuilder: (context, index) {
-    //         Predictions mData = deliverPredictionList[index];
-    //         return ListTile(
-    //           leading: Icon(Icons.location_pin, color: primaryColor),
-    //           title: Text(mData.description ?? "", style: primaryTextStyle()),
-    //           onTap: () async {
-    //             PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-    //             if (response != null) {
-    //               deliverAddressCont.text = mData.description ?? "";
-    //               deliverLat = response.result!.geometry!.location!.lat.toString();
-    //               deliverLong = response.result!.geometry!.location!.lng.toString();
-    //               deliverPredictionList.clear();
-    //               setState(() {});
-    //             }*/
-    //           },
-    //         );
-    //       },
-    //       onChanged: (val) async {
-    //         anotherDeliver3Msg = '';
-    //         anotherDeliver3Lat = null;
-    //         anotherDeliver3Long = null;
-    //         if (val.isNotEmpty) {
-    //           if (val.length < 3) {
-    //             anotherDeliver3Msg = language.selectedAddressValidation;
-    //             deliverPredictionList.clear();
-    //             setState(() {});
-    //           } else {
-    //             deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
-    //             setState(() {});
-    //           }
-    //         } else {
-    //           deliverPredictionList.clear();
-    //           setState(() {});
-    //         }
-    //       },
-    //     ),
-    //     if (anotherDeliver3Msg != null && anotherDeliver3Msg!.isNotEmpty)
-    //       Padding(
-    //           padding: EdgeInsets.only(top: 8, left: 8),
-    //           child: Text(
-    //             anotherDeliver3Msg ?? "",
-    //             style: secondaryTextStyle(color: Colors.red),
-    //           )),
-    //     if (deliverPredictionList.isNotEmpty)
-    //       ListView.builder(
-    //           physics: NeverScrollableScrollPhysics(),
-    //           controller: ScrollController(),
-    //           shrinkWrap: true,
-    //           padding: EdgeInsets.only(top: 16, bottom: 16),
-    //           itemCount: deliverPredictionList.length,
-    //           itemBuilder: (context, index) {
-    //             Predictions mData = deliverPredictionList[index];
-    //             return ListTile(
-    //               leading: Icon(Icons.location_pin, color: primaryColor),
-    //               title: Text(mData.description ?? "", style: primaryTextStyle()),
-    //               onTap: () async {
-    //                 PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-    //                 if (response != null) {
-    //                   anotherDeliverAddress3Cont.text = mData.description ?? "";
-    //                   anotherDeliver3Lat = response.result!.geometry!.location!.lat.toString();
-    //                   anotherDeliver3Long = response.result!.geometry!.location!.lng.toString();
-    //                   deliverPredictionList.clear();
-    //                   setState(() {});
-    //                 }
-    //               },
-    //             );
-    //           }),
+        //     AppTextField(
+        //       controller: anotherDeliverAddress3Cont,
+        //       textInputAction: TextInputAction.next,
+        //       nextFocus: anotherDeliver3PhoneFocus,
+        //       textFieldType: TextFieldType.ADDRESS,
+        //       decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+        //       validator: (value) {
+        //         if (value!.isEmpty) return language.fieldRequiredMsg;
+        //         if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+        //         return null;
+        //       },
+        //       onTap: () {
+        //         showModalBottomSheet(
+        //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+        //           context: context,
+        //           builder: (context) {
+        //             return PickAddressBottomSheet(
+        //               onPick: (address) {
+        //                 deliverAddressCont.text = address.placeAddress ?? "";
+        //                 deliverLat = address.latitude.toString();
+        //                 deliverLong = address.longitude.toString();
+        //                 /*onChanged: (val) async {
+        //     deliverMsg = '';
+        //     deliverLat = null;
+        //     deliverLong = null;
+        //     if (val.isNotEmpty) {
+        //       if (val.length < 3) {
+        //         deliverMsg = language.selectedAddressValidation;
+        //         deliverPredictionList.clear();*/
+        //                 setState(() {});
+        //                 /*} else {
+        //         deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
+        //         setState(() {});
+        //       }
+        //     } else {
+        //       deliverPredictionList.clear();
+        //       setState(() {});
+        //     }*/
+        //               },
+        //               isPickup: false,
+        //             );
+        //             /*),
+        // if (deliverMsg != null && deliverMsg!.isNotEmpty)
+        //   Padding(
+        //       padding: EdgeInsets.only(top: 8, left: 8),
+        //       child: Text(
+        //         deliverMsg ?? "",
+        //         style: secondaryTextStyle(color: Colors.red),
+        //       )),
+        // if (deliverPredictionList.isNotEmpty)
+        //   ListView.builder(
+        //       physics: NeverScrollableScrollPhysics(),
+        //       controller: ScrollController(),
+        //       shrinkWrap: true,
+        //       padding: EdgeInsets.only(top: 16, bottom: 16),
+        //       itemCount: deliverPredictionList.length,
+        //       itemBuilder: (context, index) {
+        //         Predictions mData = deliverPredictionList[index];
+        //         return ListTile(
+        //           leading: Icon(Icons.location_pin, color: primaryColor),
+        //           title: Text(mData.description ?? "", style: primaryTextStyle()),
+        //           onTap: () async {
+        //             PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+        //             if (response != null) {
+        //               deliverAddressCont.text = mData.description ?? "";
+        //               deliverLat = response.result!.geometry!.location!.lat.toString();
+        //               deliverLong = response.result!.geometry!.location!.lng.toString();
+        //               deliverPredictionList.clear();
+        //               setState(() {});
+        //             }*/
+        //           },
+        //         );
+        //       },
+        //       onChanged: (val) async {
+        //         anotherDeliver3Msg = '';
+        //         anotherDeliver3Lat = null;
+        //         anotherDeliver3Long = null;
+        //         if (val.isNotEmpty) {
+        //           if (val.length < 3) {
+        //             anotherDeliver3Msg = language.selectedAddressValidation;
+        //             deliverPredictionList.clear();
+        //             setState(() {});
+        //           } else {
+        //             deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
+        //             setState(() {});
+        //           }
+        //         } else {
+        //           deliverPredictionList.clear();
+        //           setState(() {});
+        //         }
+        //       },
+        //     ),
+        //     if (anotherDeliver3Msg != null && anotherDeliver3Msg!.isNotEmpty)
+        //       Padding(
+        //           padding: EdgeInsets.only(top: 8, left: 8),
+        //           child: Text(
+        //             anotherDeliver3Msg ?? "",
+        //             style: secondaryTextStyle(color: Colors.red),
+        //           )),
+        //     if (deliverPredictionList.isNotEmpty)
+        //       ListView.builder(
+        //           physics: NeverScrollableScrollPhysics(),
+        //           controller: ScrollController(),
+        //           shrinkWrap: true,
+        //           padding: EdgeInsets.only(top: 16, bottom: 16),
+        //           itemCount: deliverPredictionList.length,
+        //           itemBuilder: (context, index) {
+        //             Predictions mData = deliverPredictionList[index];
+        //             return ListTile(
+        //               leading: Icon(Icons.location_pin, color: primaryColor),
+        //               title: Text(mData.description ?? "", style: primaryTextStyle()),
+        //               onTap: () async {
+        //                 PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+        //                 if (response != null) {
+        //                   anotherDeliverAddress3Cont.text = mData.description ?? "";
+        //                   anotherDeliver3Lat = response.result!.geometry!.location!.lat.toString();
+        //                   anotherDeliver3Long = response.result!.geometry!.location!.lng.toString();
+        //                   deliverPredictionList.clear();
+        //                   setState(() {});
+        //                 }
+        //               },
+        //             );
+        //           }),
         //#####################3
         SizedBox(height: 16),
         Text(language.deliveryContactNumber, style: primaryTextStyle()),
@@ -2411,15 +2643,19 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     showFlagDialog: true,
                     showOnlyCountryWhenClosed: false,
                     alignLeft: false,
-                    dialogSize: Size(MediaQuery.of(context).size.width - 60, MediaQuery.of(context).size.height * 0.6),
+                    dialogSize: Size(MediaQuery.of(context).size.width - 60,
+                        MediaQuery.of(context).size.height * 0.6),
                     textStyle: primaryTextStyle(),
                     dialogBackgroundColor: Theme.of(context).cardColor,
                     barrierColor: Colors.black12,
                     dialogTextStyle: primaryTextStyle(),
                     searchDecoration: InputDecoration(
                       iconColor: Theme.of(context).dividerColor,
-                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).dividerColor)),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: primaryColor)),
                     ),
                     searchStyle: primaryTextStyle(),
                     onInit: (c) {
@@ -2436,7 +2672,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
           validator: (value) {
             if (value!.trim().isEmpty) return errorThisFieldRequired;
-            if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLengthValidation;
+            if (value.trim().length < minContactLength ||
+                value.trim().length > maxContactLength)
+              return language.contactLengthValidation;
             return null;
           },
           inputFormatters: [
@@ -2474,24 +2712,29 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         Text(language.deliveryLocation, style: primaryTextStyle()),
         SizedBox(height: 8),
         AppTextField(
-          controller:anotherDeliverAddress4Cont,
+          controller: anotherDeliverAddress4Cont,
           textInputAction: TextInputAction.next,
           nextFocus: deliverPhoneFocus,
           textFieldType: TextFieldType.ADDRESS,
-          decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          decoration:
+              commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+            if (deliverLat == null || deliverLong == null)
+              return language.pleaseSelectValidAddress;
             return null;
           },
           onTap: () {
             showModalBottomSheet(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(defaultRadius))),
               context: context,
               builder: (context) {
                 return PickAddressBottomSheet(
                   onPick: (address) {
-                    anotherDeliverAddress4Cont.text = address.placeAddress ?? "";
+                    anotherDeliverAddress4Cont.text =
+                        address.placeAddress ?? "";
                     deliverLat = address.latitude.toString();
                     deliverLong = address.longitude.toString();
                     /*onChanged: (val) async {
@@ -2583,13 +2826,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 Predictions mData = deliverPredictionList[index];
                 return ListTile(
                   leading: Icon(Icons.location_pin, color: primaryColor),
-                  title: Text(mData.description ?? "", style: primaryTextStyle()),
+                  title:
+                      Text(mData.description ?? "", style: primaryTextStyle()),
                   onTap: () async {
-                    PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+                    PlaceIdDetailModel? response =
+                        await getPlaceIdDetailApiCall(placeId: mData.placeId!);
                     if (response != null) {
                       anotherDeliverAddress4Cont.text = mData.description ?? "";
-                      deliverLat = response.result!.geometry!.location!.lat.toString();
-                      deliverLong = response.result!.geometry!.location!.lng.toString();
+                      deliverLat =
+                          response.result!.geometry!.location!.lat.toString();
+                      deliverLong =
+                          response.result!.geometry!.location!.lng.toString();
                       deliverPredictionList.clear();
                       setState(() {});
                     }
@@ -2597,129 +2844,129 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 );
               }),
         //*********************************
-    //     AppTextField(
-    //       controller: anotherDeliverAddress4Cont,
-    //       textInputAction: TextInputAction.next,
-    //       nextFocus: anotherDeliver4PhoneFocus,
-    //       textFieldType: TextFieldType.ADDRESS,
-    //       decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
-    //       validator: (value) {
-    //         if (value!.isEmpty) return language.fieldRequiredMsg;
-    //         if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
-    //         return null;
-    //       },
-    //       onTap: () {
-    //         showModalBottomSheet(
-    //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
-    //           context: context,
-    //           builder: (context) {
-    //             return PickAddressBottomSheet(
-    //               onPick: (address) {
-    //                 deliverAddressCont.text = address.placeAddress ?? "";
-    //                 deliverLat = address.latitude.toString();
-    //                 deliverLong = address.longitude.toString();
-    //                 /*onChanged: (val) async {
-    //     deliverMsg = '';
-    //     deliverLat = null;
-    //     deliverLong = null;
-    //     if (val.isNotEmpty) {
-    //       if (val.length < 3) {
-    //         deliverMsg = language.selectedAddressValidation;
-    //         deliverPredictionList.clear();*/
-    //                 setState(() {});
-    //                 /*} else {
-    //         deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
-    //         setState(() {});
-    //       }
-    //     } else {
-    //       deliverPredictionList.clear();
-    //       setState(() {});
-    //     }*/
-    //               },
-    //               isPickup: false,
-    //             );
-    //             /*),
-    // if (deliverMsg != null && deliverMsg!.isNotEmpty)
-    //   Padding(
-    //       padding: EdgeInsets.only(top: 8, left: 8),
-    //       child: Text(
-    //         deliverMsg ?? "",
-    //         style: secondaryTextStyle(color: Colors.red),
-    //       )),
-    // if (deliverPredictionList.isNotEmpty)
-    //   ListView.builder(
-    //       physics: NeverScrollableScrollPhysics(),
-    //       controller: ScrollController(),
-    //       shrinkWrap: true,
-    //       padding: EdgeInsets.only(top: 16, bottom: 16),
-    //       itemCount: deliverPredictionList.length,
-    //       itemBuilder: (context, index) {
-    //         Predictions mData = deliverPredictionList[index];
-    //         return ListTile(
-    //           leading: Icon(Icons.location_pin, color: primaryColor),
-    //           title: Text(mData.description ?? "", style: primaryTextStyle()),
-    //           onTap: () async {
-    //             PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-    //             if (response != null) {
-    //               deliverAddressCont.text = mData.description ?? "";
-    //               deliverLat = response.result!.geometry!.location!.lat.toString();
-    //               deliverLong = response.result!.geometry!.location!.lng.toString();
-    //               deliverPredictionList.clear();
-    //               setState(() {});
-    //             }*/
-    //           },
-    //         );
-    //       },
-    //       onChanged: (val) async {
-    //         anotherDeliver4Msg = '';
-    //         anotherDeliver4Lat = null;
-    //         anotherDeliver4Long = null;
-    //         if (val.isNotEmpty) {
-    //           if (val.length < 4) {
-    //             anotherDeliver4Msg = language.selectedAddressValidation;
-    //             deliverPredictionList.clear();
-    //             setState(() {});
-    //           } else {
-    //             deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
-    //             setState(() {});
-    //           }
-    //         } else {
-    //           deliverPredictionList.clear();
-    //           setState(() {});
-    //         }
-    //       },
-    //     ),
-    //     if (anotherDeliver4Msg != null && anotherDeliver4Msg!.isNotEmpty)
-    //       Padding(
-    //           padding: EdgeInsets.only(top: 8, left: 8),
-    //           child: Text(
-    //             anotherDeliver4Msg ?? "",
-    //             style: secondaryTextStyle(color: Colors.red),
-    //           )),
-    //     if (deliverPredictionList.isNotEmpty)
-    //       ListView.builder(
-    //           physics: NeverScrollableScrollPhysics(),
-    //           controller: ScrollController(),
-    //           shrinkWrap: true,
-    //           padding: EdgeInsets.only(top: 16, bottom: 16),
-    //           itemCount: deliverPredictionList.length,
-    //           itemBuilder: (context, index) {
-    //             Predictions mData = deliverPredictionList[index];
-    //             return ListTile(
-    //               leading: Icon(Icons.location_pin, color: primaryColor),
-    //               title: Text(mData.description ?? "", style: primaryTextStyle()),
-    //               onTap: () async {
-    //                 PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-    //                 if (response != null) {
-    //                   anotherDeliverAddress4Cont.text = mData.description ?? "";
-    //                   anotherDeliver4Lat = response.result!.geometry!.location!.lat.toString();
-    //                   anotherDeliver4Long = response.result!.geometry!.location!.lng.toString();
-    //                   deliverPredictionList.clear();
-    //                   setState(() {});
-    //                 }
-    //               },
-    //             );
-    //           }),
+        //     AppTextField(
+        //       controller: anotherDeliverAddress4Cont,
+        //       textInputAction: TextInputAction.next,
+        //       nextFocus: anotherDeliver4PhoneFocus,
+        //       textFieldType: TextFieldType.ADDRESS,
+        //       decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+        //       validator: (value) {
+        //         if (value!.isEmpty) return language.fieldRequiredMsg;
+        //         if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+        //         return null;
+        //       },
+        //       onTap: () {
+        //         showModalBottomSheet(
+        //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+        //           context: context,
+        //           builder: (context) {
+        //             return PickAddressBottomSheet(
+        //               onPick: (address) {
+        //                 deliverAddressCont.text = address.placeAddress ?? "";
+        //                 deliverLat = address.latitude.toString();
+        //                 deliverLong = address.longitude.toString();
+        //                 /*onChanged: (val) async {
+        //     deliverMsg = '';
+        //     deliverLat = null;
+        //     deliverLong = null;
+        //     if (val.isNotEmpty) {
+        //       if (val.length < 3) {
+        //         deliverMsg = language.selectedAddressValidation;
+        //         deliverPredictionList.clear();*/
+        //                 setState(() {});
+        //                 /*} else {
+        //         deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
+        //         setState(() {});
+        //       }
+        //     } else {
+        //       deliverPredictionList.clear();
+        //       setState(() {});
+        //     }*/
+        //               },
+        //               isPickup: false,
+        //             );
+        //             /*),
+        // if (deliverMsg != null && deliverMsg!.isNotEmpty)
+        //   Padding(
+        //       padding: EdgeInsets.only(top: 8, left: 8),
+        //       child: Text(
+        //         deliverMsg ?? "",
+        //         style: secondaryTextStyle(color: Colors.red),
+        //       )),
+        // if (deliverPredictionList.isNotEmpty)
+        //   ListView.builder(
+        //       physics: NeverScrollableScrollPhysics(),
+        //       controller: ScrollController(),
+        //       shrinkWrap: true,
+        //       padding: EdgeInsets.only(top: 16, bottom: 16),
+        //       itemCount: deliverPredictionList.length,
+        //       itemBuilder: (context, index) {
+        //         Predictions mData = deliverPredictionList[index];
+        //         return ListTile(
+        //           leading: Icon(Icons.location_pin, color: primaryColor),
+        //           title: Text(mData.description ?? "", style: primaryTextStyle()),
+        //           onTap: () async {
+        //             PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+        //             if (response != null) {
+        //               deliverAddressCont.text = mData.description ?? "";
+        //               deliverLat = response.result!.geometry!.location!.lat.toString();
+        //               deliverLong = response.result!.geometry!.location!.lng.toString();
+        //               deliverPredictionList.clear();
+        //               setState(() {});
+        //             }*/
+        //           },
+        //         );
+        //       },
+        //       onChanged: (val) async {
+        //         anotherDeliver4Msg = '';
+        //         anotherDeliver4Lat = null;
+        //         anotherDeliver4Long = null;
+        //         if (val.isNotEmpty) {
+        //           if (val.length < 4) {
+        //             anotherDeliver4Msg = language.selectedAddressValidation;
+        //             deliverPredictionList.clear();
+        //             setState(() {});
+        //           } else {
+        //             deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
+        //             setState(() {});
+        //           }
+        //         } else {
+        //           deliverPredictionList.clear();
+        //           setState(() {});
+        //         }
+        //       },
+        //     ),
+        //     if (anotherDeliver4Msg != null && anotherDeliver4Msg!.isNotEmpty)
+        //       Padding(
+        //           padding: EdgeInsets.only(top: 8, left: 8),
+        //           child: Text(
+        //             anotherDeliver4Msg ?? "",
+        //             style: secondaryTextStyle(color: Colors.red),
+        //           )),
+        //     if (deliverPredictionList.isNotEmpty)
+        //       ListView.builder(
+        //           physics: NeverScrollableScrollPhysics(),
+        //           controller: ScrollController(),
+        //           shrinkWrap: true,
+        //           padding: EdgeInsets.only(top: 16, bottom: 16),
+        //           itemCount: deliverPredictionList.length,
+        //           itemBuilder: (context, index) {
+        //             Predictions mData = deliverPredictionList[index];
+        //             return ListTile(
+        //               leading: Icon(Icons.location_pin, color: primaryColor),
+        //               title: Text(mData.description ?? "", style: primaryTextStyle()),
+        //               onTap: () async {
+        //                 PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+        //                 if (response != null) {
+        //                   anotherDeliverAddress4Cont.text = mData.description ?? "";
+        //                   anotherDeliver4Lat = response.result!.geometry!.location!.lat.toString();
+        //                   anotherDeliver4Long = response.result!.geometry!.location!.lng.toString();
+        //                   deliverPredictionList.clear();
+        //                   setState(() {});
+        //                 }
+        //               },
+        //             );
+        //           }),
         //*********************************
         SizedBox(height: 16),
         Text(language.deliveryContactNumber, style: primaryTextStyle()),
@@ -2746,15 +2993,19 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     showFlagDialog: true,
                     showOnlyCountryWhenClosed: false,
                     alignLeft: false,
-                    dialogSize: Size(MediaQuery.of(context).size.width - 60, MediaQuery.of(context).size.height * 0.6),
+                    dialogSize: Size(MediaQuery.of(context).size.width - 60,
+                        MediaQuery.of(context).size.height * 0.6),
                     textStyle: primaryTextStyle(),
                     dialogBackgroundColor: Theme.of(context).cardColor,
                     barrierColor: Colors.black12,
                     dialogTextStyle: primaryTextStyle(),
                     searchDecoration: InputDecoration(
                       iconColor: Theme.of(context).dividerColor,
-                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).dividerColor)),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: primaryColor)),
                     ),
                     searchStyle: primaryTextStyle(),
                     onInit: (c) {
@@ -2771,7 +3022,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
           validator: (value) {
             if (value!.trim().isEmpty) return errorThisFieldRequired;
-            if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLengthValidation;
+            if (value.trim().length < minContactLength ||
+                value.trim().length > maxContactLength)
+              return language.contactLengthValidation;
             return null;
           },
           inputFormatters: [
@@ -2809,24 +3062,29 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         Text(language.deliveryLocation, style: primaryTextStyle()),
         SizedBox(height: 8),
         AppTextField(
-          controller:anotherDeliverAddress5Cont,
+          controller: anotherDeliverAddress5Cont,
           textInputAction: TextInputAction.next,
           nextFocus: deliverPhoneFocus,
           textFieldType: TextFieldType.ADDRESS,
-          decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          decoration:
+              commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+            if (deliverLat == null || deliverLong == null)
+              return language.pleaseSelectValidAddress;
             return null;
           },
           onTap: () {
             showModalBottomSheet(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(defaultRadius))),
               context: context,
               builder: (context) {
                 return PickAddressBottomSheet(
                   onPick: (address) {
-                    anotherDeliverAddress5Cont.text = address.placeAddress ?? "";
+                    anotherDeliverAddress5Cont.text =
+                        address.placeAddress ?? "";
                     deliverLat = address.latitude.toString();
                     deliverLong = address.longitude.toString();
                     /*onChanged: (val) async {
@@ -2918,13 +3176,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 Predictions mData = deliverPredictionList[index];
                 return ListTile(
                   leading: Icon(Icons.location_pin, color: primaryColor),
-                  title: Text(mData.description ?? "", style: primaryTextStyle()),
+                  title:
+                      Text(mData.description ?? "", style: primaryTextStyle()),
                   onTap: () async {
-                    PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+                    PlaceIdDetailModel? response =
+                        await getPlaceIdDetailApiCall(placeId: mData.placeId!);
                     if (response != null) {
                       anotherDeliverAddress5Cont.text = mData.description ?? "";
-                      deliverLat = response.result!.geometry!.location!.lat.toString();
-                      deliverLong = response.result!.geometry!.location!.lng.toString();
+                      deliverLat =
+                          response.result!.geometry!.location!.lat.toString();
+                      deliverLong =
+                          response.result!.geometry!.location!.lng.toString();
                       deliverPredictionList.clear();
                       setState(() {});
                     }
@@ -2932,129 +3194,129 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 );
               }),
         //********************************
-    //     AppTextField(
-    //       controller: anotherDeliverAddress5Cont,
-    //       textInputAction: TextInputAction.next,
-    //       nextFocus: anotherDeliver5PhoneFocus,
-    //       textFieldType: TextFieldType.ADDRESS,
-    //       decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
-    //       validator: (value) {
-    //         if (value!.isEmpty) return language.fieldRequiredMsg;
-    //         if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
-    //         return null;
-    //       },
-    //       onTap: () {
-    //         showModalBottomSheet(
-    //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
-    //           context: context,
-    //           builder: (context) {
-    //             return PickAddressBottomSheet(
-    //               onPick: (address) {
-    //                 deliverAddressCont.text = address.placeAddress ?? "";
-    //                 deliverLat = address.latitude.toString();
-    //                 deliverLong = address.longitude.toString();
-    //                 /*onChanged: (val) async {
-    //     deliverMsg = '';
-    //     deliverLat = null;
-    //     deliverLong = null;
-    //     if (val.isNotEmpty) {
-    //       if (val.length < 3) {
-    //         deliverMsg = language.selectedAddressValidation;
-    //         deliverPredictionList.clear();*/
-    //                 setState(() {});
-    //                 /*} else {
-    //         deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
-    //         setState(() {});
-    //       }
-    //     } else {
-    //       deliverPredictionList.clear();
-    //       setState(() {});
-    //     }*/
-    //               },
-    //               isPickup: false,
-    //             );
-    //             /*),
-    // if (deliverMsg != null && deliverMsg!.isNotEmpty)
-    //   Padding(
-    //       padding: EdgeInsets.only(top: 8, left: 8),
-    //       child: Text(
-    //         deliverMsg ?? "",
-    //         style: secondaryTextStyle(color: Colors.red),
-    //       )),
-    // if (deliverPredictionList.isNotEmpty)
-    //   ListView.builder(
-    //       physics: NeverScrollableScrollPhysics(),
-    //       controller: ScrollController(),
-    //       shrinkWrap: true,
-    //       padding: EdgeInsets.only(top: 16, bottom: 16),
-    //       itemCount: deliverPredictionList.length,
-    //       itemBuilder: (context, index) {
-    //         Predictions mData = deliverPredictionList[index];
-    //         return ListTile(
-    //           leading: Icon(Icons.location_pin, color: primaryColor),
-    //           title: Text(mData.description ?? "", style: primaryTextStyle()),
-    //           onTap: () async {
-    //             PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-    //             if (response != null) {
-    //               deliverAddressCont.text = mData.description ?? "";
-    //               deliverLat = response.result!.geometry!.location!.lat.toString();
-    //               deliverLong = response.result!.geometry!.location!.lng.toString();
-    //               deliverPredictionList.clear();
-    //               setState(() {});
-    //             }*/
-    //           },
-    //         );
-    //       },
-    //       onChanged: (val) async {
-    //         anotherDeliver5Msg = '';
-    //         anotherDeliver5Lat = null;
-    //         anotherDeliver5Long = null;
-    //         if (val.isNotEmpty) {
-    //           if (val.length < 5) {
-    //             anotherDeliver5Msg = language.selectedAddressValidation;
-    //             deliverPredictionList.clear();
-    //             setState(() {});
-    //           } else {
-    //             deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
-    //             setState(() {});
-    //           }
-    //         } else {
-    //           deliverPredictionList.clear();
-    //           setState(() {});
-    //         }
-    //       },
-    //     ),
-    //     if (anotherDeliver5Msg != null && anotherDeliver5Msg!.isNotEmpty)
-    //       Padding(
-    //           padding: EdgeInsets.only(top: 8, left: 8),
-    //           child: Text(
-    //             anotherDeliver5Msg ?? "",
-    //             style: secondaryTextStyle(color: Colors.red),
-    //           )),
-    //     if (deliverPredictionList.isNotEmpty)
-    //       ListView.builder(
-    //           physics: NeverScrollableScrollPhysics(),
-    //           controller: ScrollController(),
-    //           shrinkWrap: true,
-    //           padding: EdgeInsets.only(top: 16, bottom: 16),
-    //           itemCount: deliverPredictionList.length,
-    //           itemBuilder: (context, index) {
-    //             Predictions mData = deliverPredictionList[index];
-    //             return ListTile(
-    //               leading: Icon(Icons.location_pin, color: primaryColor),
-    //               title: Text(mData.description ?? "", style: primaryTextStyle()),
-    //               onTap: () async {
-    //                 PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-    //                 if (response != null) {
-    //                   anotherDeliverAddress5Cont.text = mData.description ?? "";
-    //                   anotherDeliver5Lat = response.result!.geometry!.location!.lat.toString();
-    //                   anotherDeliver5Long = response.result!.geometry!.location!.lng.toString();
-    //                   deliverPredictionList.clear();
-    //                   setState(() {});
-    //                 }
-    //               },
-    //             );
-    //           }),
+        //     AppTextField(
+        //       controller: anotherDeliverAddress5Cont,
+        //       textInputAction: TextInputAction.next,
+        //       nextFocus: anotherDeliver5PhoneFocus,
+        //       textFieldType: TextFieldType.ADDRESS,
+        //       decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+        //       validator: (value) {
+        //         if (value!.isEmpty) return language.fieldRequiredMsg;
+        //         if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+        //         return null;
+        //       },
+        //       onTap: () {
+        //         showModalBottomSheet(
+        //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+        //           context: context,
+        //           builder: (context) {
+        //             return PickAddressBottomSheet(
+        //               onPick: (address) {
+        //                 deliverAddressCont.text = address.placeAddress ?? "";
+        //                 deliverLat = address.latitude.toString();
+        //                 deliverLong = address.longitude.toString();
+        //                 /*onChanged: (val) async {
+        //     deliverMsg = '';
+        //     deliverLat = null;
+        //     deliverLong = null;
+        //     if (val.isNotEmpty) {
+        //       if (val.length < 3) {
+        //         deliverMsg = language.selectedAddressValidation;
+        //         deliverPredictionList.clear();*/
+        //                 setState(() {});
+        //                 /*} else {
+        //         deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
+        //         setState(() {});
+        //       }
+        //     } else {
+        //       deliverPredictionList.clear();
+        //       setState(() {});
+        //     }*/
+        //               },
+        //               isPickup: false,
+        //             );
+        //             /*),
+        // if (deliverMsg != null && deliverMsg!.isNotEmpty)
+        //   Padding(
+        //       padding: EdgeInsets.only(top: 8, left: 8),
+        //       child: Text(
+        //         deliverMsg ?? "",
+        //         style: secondaryTextStyle(color: Colors.red),
+        //       )),
+        // if (deliverPredictionList.isNotEmpty)
+        //   ListView.builder(
+        //       physics: NeverScrollableScrollPhysics(),
+        //       controller: ScrollController(),
+        //       shrinkWrap: true,
+        //       padding: EdgeInsets.only(top: 16, bottom: 16),
+        //       itemCount: deliverPredictionList.length,
+        //       itemBuilder: (context, index) {
+        //         Predictions mData = deliverPredictionList[index];
+        //         return ListTile(
+        //           leading: Icon(Icons.location_pin, color: primaryColor),
+        //           title: Text(mData.description ?? "", style: primaryTextStyle()),
+        //           onTap: () async {
+        //             PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+        //             if (response != null) {
+        //               deliverAddressCont.text = mData.description ?? "";
+        //               deliverLat = response.result!.geometry!.location!.lat.toString();
+        //               deliverLong = response.result!.geometry!.location!.lng.toString();
+        //               deliverPredictionList.clear();
+        //               setState(() {});
+        //             }*/
+        //           },
+        //         );
+        //       },
+        //       onChanged: (val) async {
+        //         anotherDeliver5Msg = '';
+        //         anotherDeliver5Lat = null;
+        //         anotherDeliver5Long = null;
+        //         if (val.isNotEmpty) {
+        //           if (val.length < 5) {
+        //             anotherDeliver5Msg = language.selectedAddressValidation;
+        //             deliverPredictionList.clear();
+        //             setState(() {});
+        //           } else {
+        //             deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
+        //             setState(() {});
+        //           }
+        //         } else {
+        //           deliverPredictionList.clear();
+        //           setState(() {});
+        //         }
+        //       },
+        //     ),
+        //     if (anotherDeliver5Msg != null && anotherDeliver5Msg!.isNotEmpty)
+        //       Padding(
+        //           padding: EdgeInsets.only(top: 8, left: 8),
+        //           child: Text(
+        //             anotherDeliver5Msg ?? "",
+        //             style: secondaryTextStyle(color: Colors.red),
+        //           )),
+        //     if (deliverPredictionList.isNotEmpty)
+        //       ListView.builder(
+        //           physics: NeverScrollableScrollPhysics(),
+        //           controller: ScrollController(),
+        //           shrinkWrap: true,
+        //           padding: EdgeInsets.only(top: 16, bottom: 16),
+        //           itemCount: deliverPredictionList.length,
+        //           itemBuilder: (context, index) {
+        //             Predictions mData = deliverPredictionList[index];
+        //             return ListTile(
+        //               leading: Icon(Icons.location_pin, color: primaryColor),
+        //               title: Text(mData.description ?? "", style: primaryTextStyle()),
+        //               onTap: () async {
+        //                 PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+        //                 if (response != null) {
+        //                   anotherDeliverAddress5Cont.text = mData.description ?? "";
+        //                   anotherDeliver5Lat = response.result!.geometry!.location!.lat.toString();
+        //                   anotherDeliver5Long = response.result!.geometry!.location!.lng.toString();
+        //                   deliverPredictionList.clear();
+        //                   setState(() {});
+        //                 }
+        //               },
+        //             );
+        //           }),
         //**********************
         SizedBox(height: 16),
         Text(language.deliveryContactNumber, style: primaryTextStyle()),
@@ -3081,15 +3343,19 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     showFlagDialog: true,
                     showOnlyCountryWhenClosed: false,
                     alignLeft: false,
-                    dialogSize: Size(MediaQuery.of(context).size.width - 60, MediaQuery.of(context).size.height * 0.6),
+                    dialogSize: Size(MediaQuery.of(context).size.width - 60,
+                        MediaQuery.of(context).size.height * 0.6),
                     textStyle: primaryTextStyle(),
                     dialogBackgroundColor: Theme.of(context).cardColor,
                     barrierColor: Colors.black12,
                     dialogTextStyle: primaryTextStyle(),
                     searchDecoration: InputDecoration(
                       iconColor: Theme.of(context).dividerColor,
-                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
+                      enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).dividerColor)),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: primaryColor)),
                     ),
                     searchStyle: primaryTextStyle(),
                     onInit: (c) {
@@ -3106,7 +3372,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
           validator: (value) {
             if (value!.trim().isEmpty) return errorThisFieldRequired;
-            if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLengthValidation;
+            if (value.trim().length < minContactLength ||
+                value.trim().length > maxContactLength)
+              return language.contactLengthValidation;
             return null;
           },
           inputFormatters: [
@@ -3138,7 +3406,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+            border: Border.all(
+                color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
             color: Colors.transparent,
           ),
           child: Column(
@@ -3151,7 +3420,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   SizedBox(width: 16),
                   Expanded(
                       child: Text(parcelTypeCont.text,
-                          style: primaryTextStyle(), maxLines: 3, textAlign: TextAlign.end, overflow: TextOverflow.ellipsis)),
+                          style: primaryTextStyle(),
+                          maxLines: 3,
+                          textAlign: TextAlign.end,
+                          overflow: TextOverflow.ellipsis)),
                 ],
               ),
               SizedBox(height: 8),
@@ -3160,7 +3432,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 children: [
                   Text(language.weight, style: primaryTextStyle()),
                   SizedBox(width: 16),
-                  Text('${weightController.text} ${countryData?.weightType}', style: primaryTextStyle()),
+                  Text('${weightController.text} ${countryData?.weightType}',
+                      style: primaryTextStyle()),
                 ],
               ),
               SizedBox(height: 8),
@@ -3169,7 +3442,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 children: [
                   Text(language.numberOfParcels, style: primaryTextStyle()),
                   SizedBox(width: 16),
-                  Text('${totalParcelController.text}', style: primaryTextStyle()),
+                  Text('${totalParcelController.text}',
+                      style: primaryTextStyle()),
                 ],
               ),
             ],
@@ -3183,15 +3457,20 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+            border: Border.all(
+                color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
             color: Colors.transparent,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(pickAddressCont.text, style: primaryTextStyle()),
-              Visibility(visible: pickPhoneCont.text.isNotEmpty, child: SizedBox(height: 8)),
-              Visibility(visible: pickPhoneCont.text.isNotEmpty, child: Text(pickPhoneCont.text, style: secondaryTextStyle())),
+              Visibility(
+                  visible: pickPhoneCont.text.isNotEmpty,
+                  child: SizedBox(height: 8)),
+              Visibility(
+                  visible: pickPhoneCont.text.isNotEmpty,
+                  child: Text(pickPhoneCont.text, style: secondaryTextStyle())),
             ],
           ),
         ),
@@ -3203,15 +3482,21 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           padding: EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+            border: Border.all(
+                color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
             color: Colors.transparent,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(deliverAddressCont.text, style: primaryTextStyle()),
-              Visibility(visible: deliverPhoneCont.text.isNotEmpty, child: SizedBox(height: 8)),
-              Visibility(visible: deliverPhoneCont.text.isNotEmpty, child: Text(deliverPhoneCont.text, style: secondaryTextStyle())),
+              Visibility(
+                  visible: deliverPhoneCont.text.isNotEmpty,
+                  child: SizedBox(height: 8)),
+              Visibility(
+                  visible: deliverPhoneCont.text.isNotEmpty,
+                  child:
+                      Text(deliverPhoneCont.text, style: secondaryTextStyle())),
             ],
           ),
         ),
@@ -3224,16 +3509,22 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(defaultRadius),
-              border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+              border: Border.all(
+                  color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
               color: Colors.transparent,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(anotherDeliverAddress2Cont.text, style: primaryTextStyle()),
-                Visibility(visible: anotherDeliver2PhoneCont.text.isNotEmpty, child: SizedBox(height: 8)),
+                Text(anotherDeliverAddress2Cont.text,
+                    style: primaryTextStyle()),
                 Visibility(
-                    visible: anotherDeliver2PhoneCont.text.isNotEmpty, child: Text(anotherDeliver2PhoneCont.text, style: secondaryTextStyle())),
+                    visible: anotherDeliver2PhoneCont.text.isNotEmpty,
+                    child: SizedBox(height: 8)),
+                Visibility(
+                    visible: anotherDeliver2PhoneCont.text.isNotEmpty,
+                    child: Text(anotherDeliver2PhoneCont.text,
+                        style: secondaryTextStyle())),
               ],
             ),
           ),
@@ -3247,16 +3538,22 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(defaultRadius),
-              border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+              border: Border.all(
+                  color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
               color: Colors.transparent,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(anotherDeliverAddress3Cont.text, style: primaryTextStyle()),
-                Visibility(visible: anotherDeliver3PhoneCont.text.isNotEmpty, child: SizedBox(height: 8)),
+                Text(anotherDeliverAddress3Cont.text,
+                    style: primaryTextStyle()),
                 Visibility(
-                    visible: anotherDeliver3PhoneCont.text.isNotEmpty, child: Text(anotherDeliver3PhoneCont.text, style: secondaryTextStyle())),
+                    visible: anotherDeliver3PhoneCont.text.isNotEmpty,
+                    child: SizedBox(height: 8)),
+                Visibility(
+                    visible: anotherDeliver3PhoneCont.text.isNotEmpty,
+                    child: Text(anotherDeliver3PhoneCont.text,
+                        style: secondaryTextStyle())),
               ],
             ),
           ),
@@ -3270,16 +3567,22 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(defaultRadius),
-              border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+              border: Border.all(
+                  color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
               color: Colors.transparent,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(anotherDeliverAddress4Cont.text, style: primaryTextStyle()),
-                Visibility(visible: anotherDeliver4PhoneCont.text.isNotEmpty, child: SizedBox(height: 8)),
+                Text(anotherDeliverAddress4Cont.text,
+                    style: primaryTextStyle()),
                 Visibility(
-                    visible: anotherDeliver4PhoneCont.text.isNotEmpty, child: Text(anotherDeliver4PhoneCont.text, style: secondaryTextStyle())),
+                    visible: anotherDeliver4PhoneCont.text.isNotEmpty,
+                    child: SizedBox(height: 8)),
+                Visibility(
+                    visible: anotherDeliver4PhoneCont.text.isNotEmpty,
+                    child: Text(anotherDeliver4PhoneCont.text,
+                        style: secondaryTextStyle())),
               ],
             ),
           ),
@@ -3293,16 +3596,22 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(defaultRadius),
-              border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+              border: Border.all(
+                  color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
               color: Colors.transparent,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(anotherDeliverAddress5Cont.text, style: primaryTextStyle()),
-                Visibility(visible: anotherDeliver5PhoneCont.text.isNotEmpty, child: SizedBox(height: 8)),
+                Text(anotherDeliverAddress5Cont.text,
+                    style: primaryTextStyle()),
                 Visibility(
-                    visible: anotherDeliver5PhoneCont.text.isNotEmpty, child: Text(anotherDeliver5PhoneCont.text, style: secondaryTextStyle())),
+                    visible: anotherDeliver5PhoneCont.text.isNotEmpty,
+                    child: SizedBox(height: 8)),
+                Visibility(
+                    visible: anotherDeliver5PhoneCont.text.isNotEmpty,
+                    child: Text(anotherDeliver5PhoneCont.text,
+                        style: secondaryTextStyle())),
               ],
             ),
           ),
@@ -3337,19 +3646,37 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 value: paymentCollectFrom,
                 decoration: commonInputDecoration(),
                 items: [
-                  DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle(), maxLines: 1)),
-                  DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle(), maxLines: 1)),
+                  DropdownMenuItem(
+                      value: PAYMENT_ON_PICKUP,
+                      child: Text(language.pickupLocation,
+                          style: primaryTextStyle(), maxLines: 1)),
+                  DropdownMenuItem(
+                      value: PAYMENT_ON_DELIVERY,
+                      child: Text(language.deliveryLocation,
+                          style: primaryTextStyle(), maxLines: 1)),
                   if (anotherDeliverAddress2Cont.text.isNotEmpty) ...[
-                    DropdownMenuItem(value: PAYMENT_ON_ANOTHER_DELIVERY2, child: Text("Delivery Location 2", style: primaryTextStyle(), maxLines: 1)),
+                    DropdownMenuItem(
+                        value: PAYMENT_ON_ANOTHER_DELIVERY2,
+                        child: Text("Delivery Location 2",
+                            style: primaryTextStyle(), maxLines: 1)),
                   ],
                   if (anotherDeliverAddress3Cont.text.isNotEmpty) ...[
-                    DropdownMenuItem(value: PAYMENT_ON_ANOTHER_DELIVERY3, child: Text("Delivery Location 3", style: primaryTextStyle(), maxLines: 1)),
+                    DropdownMenuItem(
+                        value: PAYMENT_ON_ANOTHER_DELIVERY3,
+                        child: Text("Delivery Location 3",
+                            style: primaryTextStyle(), maxLines: 1)),
                   ],
                   if (anotherDeliverAddress4Cont.text.isNotEmpty) ...[
-                    DropdownMenuItem(value: PAYMENT_ON_ANOTHER_DELIVERY4, child: Text("Delivery Location 4", style: primaryTextStyle(), maxLines: 1)),
+                    DropdownMenuItem(
+                        value: PAYMENT_ON_ANOTHER_DELIVERY4,
+                        child: Text("Delivery Location 4",
+                            style: primaryTextStyle(), maxLines: 1)),
                   ],
                   if (anotherDeliverAddress5Cont.text.isNotEmpty) ...[
-                    DropdownMenuItem(value: PAYMENT_ON_ANOTHER_DELIVERY5, child: Text("Delivery Location 5", style: primaryTextStyle(), maxLines: 1)),
+                    DropdownMenuItem(
+                        value: PAYMENT_ON_ANOTHER_DELIVERY5,
+                        child: Text("Delivery Location 5",
+                            style: primaryTextStyle(), maxLines: 1)),
                   ],
                 ],
                 onChanged: (value) {
@@ -3372,7 +3699,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       onWillPop: () async {
         if (selectedTabIndex == 0) {
           DateTime now = DateTime.now();
-          if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+          if (currentBackPressTime == null ||
+              now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
             currentBackPressTime = now;
             toast(language.pressBackAgainToExit);
             return false;
@@ -3409,7 +3737,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           body: Stack(
             children: [
               SingleChildScrollView(
-                padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
+                padding:
+                    EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -3429,13 +3758,21 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                                             : 4, (index) {
                           return Container(
                             alignment: Alignment.center,
-                          height: 35,
-                          width: 35,
-                          decoration: BoxDecoration(
-                            color: selectedTabIndex >= index ? primaryColor : (appStore.isDarkMode ? scaffoldSecondaryDark : borderColor),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Text('${index + 1}', style: primaryTextStyle(color: selectedTabIndex >= index ? Colors.white : null)),
+                            height: 35,
+                            width: 35,
+                            decoration: BoxDecoration(
+                              color: selectedTabIndex >= index
+                                  ? primaryColor
+                                  : (appStore.isDarkMode
+                                      ? scaffoldSecondaryDark
+                                      : borderColor),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text('${index + 1}',
+                                style: primaryTextStyle(
+                                    color: selectedTabIndex >= index
+                                        ? Colors.white
+                                        : null)),
                             /*color: selectedTabIndex >= index ? primaryColor : borderColor,
                             height: 5,
                             width: MediaQuery.of(context).size.width * 0.1,*/
@@ -3456,7 +3793,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 ),
               ),
               Observer(
-                builder: (context) => Visibility(visible: appStore.isLoading, child: loaderWidget()),
+                builder: (context) => Visibility(
+                    visible: appStore.isLoading, child: loaderWidget()),
               ),
             ],
           ),
@@ -3481,11 +3819,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           // selectedTabIndex = 2;
                           if (anotherDeliverAddress5Cont.text.isNotEmpty) {
                             selectedTabIndex = 6;
-                          } else if (anotherDeliverAddress4Cont.text.isNotEmpty) {
+                          } else if (anotherDeliverAddress4Cont
+                              .text.isNotEmpty) {
                             selectedTabIndex = 5;
-                          } else if (anotherDeliverAddress3Cont.text.isNotEmpty) {
+                          } else if (anotherDeliverAddress3Cont
+                              .text.isNotEmpty) {
                             selectedTabIndex = 4;
-                          } else if (anotherDeliverAddress2Cont.text.isNotEmpty) {
+                          } else if (anotherDeliverAddress2Cont
+                              .text.isNotEmpty) {
                             selectedTabIndex = 3;
                           } else if (deliverAddressCont.text.isNotEmpty) {
                             selectedTabIndex = 2;
@@ -3498,22 +3839,37 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     ),
                   ),
                 Expanded(
-                  child: dialogPrimaryButton(selectedTabIndex != 7 ? language.next : language.createOrder, () async {
+                  child: dialogPrimaryButton(
+                      selectedTabIndex != 7
+                          ? language.next
+                          : language.createOrder, () async {
                     FocusScope.of(context).requestFocus(new FocusNode());
                     if (selectedTabIndex != 7) {
                       if (_formKey.currentState!.validate()) {
                         Duration difference = Duration();
                         Duration differenceCurrentTime = Duration();
                         if (!isDeliverNow) {
-                          pickFromDateTime = pickDate!.add(Duration(hours: pickFromTime!.hour, minutes: pickFromTime!.minute));
-                          pickToDateTime = pickDate!.add(Duration(hours: pickToTime!.hour, minutes: pickToTime!.minute));
-                          deliverFromDateTime = deliverDate!.add(Duration(hours: deliverFromTime!.hour, minutes: deliverFromTime!.minute));
-                          deliverToDateTime = deliverDate!.add(Duration(hours: deliverToTime!.hour, minutes: deliverToTime!.minute));
-                          difference = pickFromDateTime!.difference(deliverFromDateTime!);
-                          differenceCurrentTime = DateTime.now().difference(pickFromDateTime!);
+                          pickFromDateTime = pickDate!.add(Duration(
+                              hours: pickFromTime!.hour,
+                              minutes: pickFromTime!.minute));
+                          pickToDateTime = pickDate!.add(Duration(
+                              hours: pickToTime!.hour,
+                              minutes: pickToTime!.minute));
+                          deliverFromDateTime = deliverDate!.add(Duration(
+                              hours: deliverFromTime!.hour,
+                              minutes: deliverFromTime!.minute));
+                          deliverToDateTime = deliverDate!.add(Duration(
+                              hours: deliverToTime!.hour,
+                              minutes: deliverToTime!.minute));
+                          difference = pickFromDateTime!
+                              .difference(deliverFromDateTime!);
+                          differenceCurrentTime =
+                              DateTime.now().difference(pickFromDateTime!);
                         }
-                        if (differenceCurrentTime.inMinutes > 0) return toast(language.pickupCurrentValidationMsg);
-                        if (difference.inMinutes > 0) return toast(language.pickupDeliverValidationMsg);
+                        if (differenceCurrentTime.inMinutes > 0)
+                          return toast(language.pickupCurrentValidationMsg);
+                        if (difference.inMinutes > 0)
+                          return toast(language.pickupDeliverValidationMsg);
                         if (selectedTabIndex == 2) {
                           selectedTabIndex = 7;
                         } else if (selectedTabIndex == 3) {
@@ -3536,7 +3892,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     } else {
                       commonConfirmationDialog(context, DIALOG_TYPE_ENABLE, () {
                         createOrderApiCall(ORDER_CREATED);
-                      }, title: language.createOrderQue, subtitle: language.createOrderConfirmation);
+                      },
+                          title: language.createOrderQue,
+                          subtitle: language.createOrderConfirmation);
                     }
                   }),
                 )

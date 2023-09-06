@@ -20,7 +20,7 @@ class AppSettingModel {
   String? currency;
   String? currencyCode;
   String? currencyPosition;
-  String? carryPackagesCharges;
+  num? carryPackagesCharges;
   int? isVehicleInOrder;
 
   AppSettingModel({
