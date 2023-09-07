@@ -60,7 +60,7 @@ Widget commonCachedNetworkImage(
   bool usePlaceholderIfUrlEmpty = true,
   double? radius,
 }) {
-  if (url.validate().isEmpty) {
+  if (url == null || url.isEmpty) {
     return placeHolderWidget(
         height: height,
         width: width,

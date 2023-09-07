@@ -66,7 +66,9 @@ const COUNTRY_ID = 'COUNTRY_ID';
 const COUNTRY_DATA = 'COUNTRY_DATA';
 
 const CITY_ID = 'City';
+const CITY_NAME = 'CITY_NAME';
 const CITY_DATA = 'CITY_DATA';
+
 
 const CLIENT = 'client';
 const CORPORATE = 'corporate';

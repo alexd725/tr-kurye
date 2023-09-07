@@ -79,7 +79,7 @@ containerDecoration() {
 }
 
 Widget commonCachedNetworkImage(String? url, {double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment, bool usePlaceholderIfUrlEmpty = true, double? radius}) {
-  if (url != null && url.isEmpty) {
+  if (url == null || url.isEmpty) {
     return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
   } else if (url.validate().startsWith('http')) {
     return CachedNetworkImage(

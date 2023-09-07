@@ -23,6 +23,25 @@ Widget commonButton(String title, Function() onTap,
   );
 }
 
+Widget roundButton(String title, Function() onTap,
+    {double? width, Color? color, Color? textColor}) {
+  return SizedBox(
+    width: width,
+    child: AppButton(
+      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      shapeBorder:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      elevation: 0,
+      child: Text(
+        title,
+        style: boldTextStyle(color: textColor ?? white),
+      ),
+      color: color ?? colorPrimary,
+      onTap: onTap,
+    ),
+  );
+}
+
 Widget outlineButton(String title, Function() onTap, {double? width}) {
   return SizedBox(
     width: width,
@@ -38,6 +57,25 @@ Widget outlineButton(String title, Function() onTap, {double? width}) {
             side: BorderSide(color: borderColor)),
         elevation: 0,
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        backgroundColor: Colors.transparent,
+      ),
+    ),
+  );
+}
+
+Widget textButton(String title, Function() onTap, {double? width}) {
+  return SizedBox(
+    width: width,
+    height: 30,
+    child: TextButton(
+      child: Text(
+        title,
+        style: boldTextStyle(),
+      ),
+      onPressed: onTap,
+      style: TextButton.styleFrom(
+        elevation: 0,
+        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
         backgroundColor: Colors.transparent,
       ),
     ),

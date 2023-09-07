@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mighty_delivery/user/components/AgreeDialog.dart';
+import 'package:mighty_delivery/user/components/CreateOrderConfirmationDialog.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -47,34 +49,24 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
       init();
 
       if (getIntAsync(CITY_ID) == 0) {
-        return getBottomSheet();
+        return showAgreeDialog();
       } else {
         return;
       }
     });
   }
 
-  getBottomSheet() {
-    return showMaterialModalBottomSheet(
-      enableDrag: false,
-      isDismissible: false,
-      context: context,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Container(
-          height: MediaQuery.of(context).size.height * 0.8,
-          child: Column(
-            children: [
-              Text(UserTerms),
-              CupertinoButton(
-                  child: Text("I Agree"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  })
-            ],
-          ),
-        ),
-      ),
+  showAgreeDialog() {
+    return showInDialog(
+      context,
+      contentPadding: EdgeInsets.all(16),
+      builder: (p0) {
+        return AgreeDialog(
+          onAgree: () {
+            pop();
+          },
+        );
+      },
     );
   }
 
