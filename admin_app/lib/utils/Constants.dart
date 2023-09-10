@@ -2,7 +2,7 @@ var errorThisFieldRequired = 'This field is required';
 const currencySymbolDefault = '₹';
 const currencyCodeDefault = 'INR';
 
-const mBaseUrl = "http://127.0.0.1:8000/api/";
+const mBaseUrl = "http://192.168.1.104:8000/api/";
 // const mBaseUrl = "http://10.10.18.72:8000/api/";
 
 const googleMapAPIKey = 'AIzaSyDQDmiPg45vvSyOfOO2euQSiqOeNGjiFXo';

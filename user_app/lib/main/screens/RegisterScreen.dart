@@ -121,6 +121,7 @@ class RegisterScreenState extends State<RegisterScreen> {
               .then((res) async {
             appStore.setLoading(false);
             toast('Registration Successful');
+            print("Error0");
 
             /*  authService
           .signUpWithEmailPasswordDriver(context,
@@ -543,7 +544,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 title: RichTextWidget(
                                   list: [
                                     TextSpan(
-                                        text: '${language.iAgreeToThe}',
+                                        text: '${language.iAgreeToThe} ',
                                         style: secondaryTextStyle()),
                                     TextSpan(
                                       text: language.termOfService,
@@ -806,7 +807,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 title: RichTextWidget(
                                   list: [
                                     TextSpan(
-                                        text: '${language.iAgreeToThe}',
+                                        text: '${language.iAgreeToThe} ',
                                         style: secondaryTextStyle()),
                                     TextSpan(
                                       text: language.termOfService,

@@ -23,15 +23,16 @@ class AuthServices {
       'updatedAt': Timestamp.now(),
     }, user.uid);
   }
+
   Future<void> signUpWithEmailPassword(context,
       {String? name,
-        String? email,
-        String? password,
-        String? mobileNumber,
-        String? lName,
-        String? userName,
-        bool? isOTP,
-        String? userType}) async {
+      String? email,
+      String? password,
+      String? mobileNumber,
+      String? lName,
+      String? userName,
+      bool? isOTP,
+      String? userType}) async {
     UserCredential? userCredential = await _auth.createUserWithEmailAndPassword(
         email: email!, password: password!);
     if (userCredential.user != null) {
@@ -40,26 +41,27 @@ class AuthServices {
       // UserData userModel = UserData();
       User currentUser = userCredential.user!;
       UserData userModel = UserData();
+
       /// Create user
       userModel.uid = currentUser.uid;
-          userModel.email = currentUser.email;
+      userModel.email = currentUser.email;
 
-          // userModel.longitude = userData?.data?.longitude;
-          // userModel.latitude = userData?.data?.longitude;
-          // userModel.countryName = userData?.data?.countryName;
-          // userModel.cityName = userData?.data?.cityName;
-          // userModel.status = userData?.data?.status;
-          // userModel.playerId = userData?.data?.playerId;
-          // userModel.profileImage = userData?.data?.profileImage;
-          userModel.uid = currentUser.uid;
-          userModel.email = currentUser.email;
-          userModel.contactNumber = mobileNumber;
-          userModel.name = name;
-          userModel.username = userName;
-         // userModel.userType = userType;
-          userModel.createdAt = Timestamp.now().toDate().toString();
-          userModel.updatedAt = Timestamp.now().toDate().toString();
-          userModel.playerId = getStringAsync(PLAYER_ID);
+      // userModel.longitude = userData?.data?.longitude;
+      // userModel.latitude = userData?.data?.longitude;
+      // userModel.countryName = userData?.data?.countryName;
+      // userModel.cityName = userData?.data?.cityName;
+      // userModel.status = userData?.data?.status;
+      // userModel.playerId = userData?.data?.playerId;
+      // userModel.profileImage = userData?.data?.profileImage;
+      userModel.uid = currentUser.uid;
+      userModel.email = currentUser.email;
+      userModel.contactNumber = mobileNumber;
+      userModel.name = name;
+      userModel.username = userName;
+      // userModel.userType = userType;
+      userModel.createdAt = Timestamp.now().toDate().toString();
+      userModel.updatedAt = Timestamp.now().toDate().toString();
+      userModel.playerId = getStringAsync(PLAYER_ID);
 
       await userService
           .addDocumentWithCustomId(currentUser.uid, userModel.toJson())
@@ -245,7 +247,8 @@ class AuthServices {
       String? carOrMotor,
       bool? isOTP,
       String? userType,
-      String? plateNumber, required LoginResponse userData}) async {
+      String? plateNumber,
+      required LoginResponse userData}) async {
     UserCredential? userCredential = await _auth.createUserWithEmailAndPassword(
         email: email!, password: password!);
     if (userCredential.user != null) {
@@ -284,34 +287,25 @@ class AuthServices {
           "player_id": getStringAsync(PLAYER_ID).validate(),
           "plate_number": plateNumber,
         };
-        //Map req = {
-        //   "name": nameController.text.trim(),
-        //   "username": userNameController.text.trim(),
-        //   "email": emailController.text.trim(),
-        //   "password": passController.text.validate(),
-        //   "user_type": widget.userType.validate(),
-        //   "contact_number": '$countryCode ${phoneController.text.trim()}',
-        //   "player_id": getStringAsync(PLAYER_ID).validate(),
-        // };
-        await signUpApi(request).then((res) async {
-          if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
-            appStore.setLogin(false);
-            LoginScreen().launch(context,
-                isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-          } else {
-            await logInApi(request).then((res) async {
-              UserCitySelectScreen().launch(context,
-                  isNewTask: true,
-                  pageRouteAnimation: PageRouteAnimation.Slide);
-            }).catchError((e) {
-              toast(e.toString());
-            });
-          }
-        }).catchError((e) {
-          toast(e.toString());
-          return;
-        });
-        appStore.setLoading(false);
+        //if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
+        appStore.setLogin(false);
+        LoginScreen().launch(context,
+            isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+        //} else {
+        //  await logInApi(request).then((res) async {
+        //    UserCitySelectScreen().launch(context,
+        //        isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+        //  }).catchError((e) {
+        //    toast(e.toString());
+        //  });
+        //}
+        //await signUpApi(request).then((res) async {
+        //
+        //}).catchError((e) {
+        //  toast(e.toString());
+        //  return;
+        //});
+        //appStore.setLoading(false);
       }).catchError((e) {
         appStore.setLoading(false);
         toast(e.toString());
@@ -354,7 +348,6 @@ class AuthServices {
       userModel.createdAt = Timestamp.now().toDate().toString();
       userModel.updatedAt = Timestamp.now().toDate().toString();
       userModel.playerId = getStringAsync(PLAYER_ID);
-
 
       await userService
           .addDocumentWithCustomId(currentUser.uid, userModel.toJson())
@@ -518,7 +511,8 @@ class AuthServices {
       userModel.playerId = getStringAsync(PLAYER_ID);
 
       setValue(UID, currentUser.uid.validate());
-      print("_______________________________________________ ${getStringAsync(UID)}");
+      print(
+          "_______________________________________________ ${getStringAsync(UID)}");
       log(getStringAsync(UID));
       setValue(USER_EMAIL, userModel.email.validate());
       setValue(IS_LOGGED_IN, true);

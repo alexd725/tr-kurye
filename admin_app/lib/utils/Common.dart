@@ -141,6 +141,7 @@ Widget commonCachedNetworkImage(
   bool usePlaceholderIfUrlEmpty = true,
   double? radius,
 }) {
+  //if (url == null || url.isEmpty) {
   if (url == null || url.isEmpty) {
     return placeHolderWidget(
         height: height,
@@ -174,6 +175,7 @@ Widget commonCachedNetworkImage(
       },
     );
   } else {
+    //print('uri: $url');
     return Image.network(url!,
         height: height,
         width: width,

@@ -124,8 +124,11 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
       // });
       cityData.forEach((element) {
         String cityNameWithVehicleType = '${element.name}';
-        Cities.add(cityNameWithVehicleType);
-        CitiesId.add(element.id);
+        print('cityNameWithVehicleType =< ${cityNameWithVehicleType}');
+        if (Cities.indexOf(cityNameWithVehicleType) < 0) {
+          Cities.add(cityNameWithVehicleType);
+          CitiesId.add(element.id);
+        }
       });
       // distictCities.add(Cities.toSet().toString());
       // print(Cities);

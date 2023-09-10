@@ -868,7 +868,7 @@ class SendPackageFragmentState extends State<SendPackageFragment> {
               }).toList(),
             ),
             8.height,
-            if (appStore.isShowVehicle == 1)
+            if (appStore.isShowVehicle == 1 && vehicleList.isNotEmpty)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -899,7 +899,7 @@ class SendPackageFragmentState extends State<SendPackageFragment> {
                       selectedVehicle = value;
                       print(selectedVehicle);
                       setState(() {
-                       // print(item.title);
+                        // print(item.title);
                       });
                     },
                     validator: (value) {

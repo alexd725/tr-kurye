@@ -39,13 +39,13 @@ class _ChatScreenState extends State<ChatScreen> {
   UserData sender = UserData(
     name: getStringAsync(USER_NAME),
     profileImage: getStringAsync(USER_PROFILE_PHOTO),
-    uid: getStringAsync(UID),
+    uid: '${getIntAsync(UID)}',
     playerId: getStringAsync(PLAYER_ID),
   );
 
   init() async {
     log(widget.userData!.toJson());
-    id = getStringAsync(UID);
+    id = sender.uid!;
     mIsEnterKey = getBoolAsync(IS_ENTER_KEY, defaultValue: false);
     mSelectedImage = getStringAsync(SELECTED_WALLPAPER,
         defaultValue: "assets/default_wallpaper.png");
@@ -70,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
     data.isMessageRead = false;
     data.createdAt = DateTime.now().millisecondsSinceEpoch;
 
-    if (widget.userData!.id.toString() == getStringAsync(UID)) {
+    if (widget.userData!.id.toString() == sender.uid) {
       //
     }
     if (result != null) {
@@ -198,7 +198,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 padding: EdgeInsets.only(left: 8, top: 8, right: 8, bottom: 0),
                 physics: BouncingScrollPhysics(),
                 query: chatMessageService.chatMessagesWithPagination(
-                    currentUserId: getStringAsync(UID),
+                    currentUserId: sender.uid,
                     receiverUserId: widget.userData!.id.toString().validate()),
                 itemsPerPage: PER_PAGE_CHAT_COUNT,
                 shrinkWrap: true,

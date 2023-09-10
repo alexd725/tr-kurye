@@ -72,10 +72,22 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
 
   getCityApiCall({String? name}) async {
     appStore.setLoading(true);
-    await getClientCityList(countryId: selectedCountry!, name: name).then((value) {
+    await getClientCityList(countryId: selectedCountry!, name: name)
+        .then((value) {
       appStore.setLoading(false);
       cityData.clear();
-      cityData.addAll(value.data!);
+      value.data!.forEach((element) {
+        print('cityData.indexOf(element) => ${cityData.indexOf(element)}');
+        var isExist = false;
+        cityData.forEach((element2) {
+          if (element2.name == element.name) {
+            isExist = true;
+          }
+        });
+        if (!isExist) {
+          cityData.add(element);
+        }
+      });
       cityData.forEach((element) {
         if (element.id! == getIntAsync(CITY_ID)) {
           selectedCity = getIntAsync(CITY_ID);
@@ -96,7 +108,8 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
 
   Future<void> updateCountryCityApiCall() async {
     appStore.setLoading(true);
-    await updateCountryCity(countryId: selectedCountry, cityId: selectedCity).then((value) {
+    await updateCountryCity(countryId: selectedCountry, cityId: selectedCity)
+        .then((value) {
       appStore.setLoading(false);
       if (widget.isBack) {
         finish(context);
@@ -127,7 +140,9 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
       content: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.all(16),
-          width: ResponsiveWidget.isSmallScreen(context) ? context.width() * 0.8 : context.width() * 0.4,
+          width: ResponsiveWidget.isSmallScreen(context)
+              ? context.width() * 0.8
+              : context.width() * 0.4,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -151,7 +166,10 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(flex: 1, child: Text(language.country, style: boldTextStyle())),
+                      Expanded(
+                          flex: 1,
+                          child:
+                              Text(language.country, style: boldTextStyle())),
                       16.width,
                       Expanded(
                         flex: 2,
@@ -173,7 +191,8 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                             setState(() {});
                           },
                           validator: (value) {
-                            if (selectedCountry == null) return errorThisFieldRequired;
+                            if (selectedCountry == null)
+                              return errorThisFieldRequired;
                             return null;
                           },
                         ),
@@ -182,14 +201,17 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                   ),
                   16.height,
                   Row(children: [
-                    Expanded(child: Text(language.city, style: boldTextStyle())),
+                    Expanded(
+                        child: Text(language.city, style: boldTextStyle())),
                     16.width,
                     Expanded(
                       child: TextField(
                         controller: searchCityController,
                         keyboardType: TextInputType.name,
                         textInputAction: TextInputAction.next,
-                        decoration: commonInputDecoration(hintText: language.selectCity, suffixIcon: Icons.search),
+                        decoration: commonInputDecoration(
+                            hintText: language.selectCity,
+                            suffixIcon: Icons.search),
                         onChanged: (value) {
                           getCityApiCall(name: value);
                         },
@@ -207,8 +229,14 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                             CityData mData = cityData[index];
                             return ListTile(
                               contentPadding: EdgeInsets.zero,
-                              title: Text(mData.name!, style: selectedCity == mData.id ? boldTextStyle(color: primaryColor) : primaryTextStyle()),
-                              trailing: selectedCity == mData.id ? Icon(Icons.check_circle, color: primaryColor) : SizedBox(),
+                              title: Text(mData.name!,
+                                  style: selectedCity == mData.id
+                                      ? boldTextStyle(color: primaryColor)
+                                      : primaryTextStyle()),
+                              trailing: selectedCity == mData.id
+                                  ? Icon(Icons.check_circle,
+                                      color: primaryColor)
+                                  : SizedBox(),
                               onTap: () {
                                 selectedCity = mData.id!;
                                 setValue(CITY_ID, selectedCity);

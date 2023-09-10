@@ -149,9 +149,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       appStore.setLoading(false);
       countryList = value.data!;
       //selectedCountry = countryList[0].id!;
-      setState(() {
-
-      });
+      setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);
       log(error);
@@ -255,6 +253,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       log(error.toString());
     });
   }
+
 // vical list
   getVehicleApiCall({String? name}) async {
     appStore.setLoading(true);
@@ -266,10 +265,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       setState(() {
         print("awais");
       });
-      if(vehicleList.isEmpty) showohiddenoption = 0;
+      if (vehicleList.isEmpty)
+        showohiddenoption = 0;
+      else
+        showohiddenoption = 1;
     }).catchError((error) {
       appStore.setLoading(false);
-     // appStore.isShowVehicle = 0;
+      // appStore.isShowVehicle = 0;
       //showohiddenoption = 0;
       log(error);
     });
@@ -800,13 +802,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                                 });
 
                                 getCityApiCall();
-
                               },
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(width: 8),
+                      SizedBox(width: 16),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -1263,11 +1264,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                               );
                             }).toList(),
                             onChanged: (value) {
-                              setState(() {
+                              setState(() async {
                                 selectedCity = value!;
 
-                                getCityDetailApiCall();
-                                getVehicleApiCall();
+                                await getCityDetailApiCall();
+                                await getVehicleApiCall();
                                 setState(() {
                                   weightController.text =
                                       cityData!.minWeight.toString();
@@ -1855,7 +1856,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                                 style: boldTextStyle()),
                             SizedBox(height: 8),
                             Container(
-
                               padding: EdgeInsets.all(16),
                               decoration: BoxDecoration(
                                 border: Border.all(
@@ -2006,8 +2006,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                                             VerticalDivider(
                                                 color: Colors.grey
                                                     .withOpacity(0.5)),
-                                            
-                                            
                                           ],
                                         ),
                                       ),
@@ -2039,12 +2037,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                                     maxLines: 3,
                                     minLines: 3,
                                   ),
-                                  
                                 ],
                               ),
                             ),
                             //start wroking from here
-                       
 
                             // stop working
                           ],
@@ -2143,9 +2139,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   //
                   //   ],
                   // ),
-                  
-                  
-                  
+
                   // end working
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -2228,13 +2222,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             ],
                           ),
                         ),
-
                       SizedBox(width: 16),
                       if (!ResponsiveWidget.isSmallScreen(context)) Spacer(),
                     ],
                   ),
-
-
                 ],
               ),
             ),

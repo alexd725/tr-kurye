@@ -73,7 +73,8 @@ class SignUpComponentState extends State<SignUpComponent> {
                   email: res.data!.email,
                   password: passController.text.trim(),
                   mobileNumber: res.data!.contactNumber,
-                  userType: res.data!.userType,userData:res)
+                  userType: res.data!.userType,
+                  userData: res)
               .then((res) async {
             appStore.setLoading(false);
           }).catchError((e) {
@@ -107,7 +108,9 @@ class SignUpComponentState extends State<SignUpComponent> {
         backgroundColor: Colors.white,
         content: SingleChildScrollView(
           child: Container(
-            width: ResponsiveWidget.isSmallScreen(context) ? context.width() * 0.8 : context.width() * 0.4,
+            width: ResponsiveWidget.isSmallScreen(context)
+                ? context.width() * 0.8
+                : context.width() * 0.4,
             child: Form(
               key: formKey,
               child: Column(
@@ -117,7 +120,8 @@ class SignUpComponentState extends State<SignUpComponent> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(language.signUp, style: boldTextStyle(size: 20, color: primaryColor)),
+                      Text(language.signUp,
+                          style: boldTextStyle(size: 20, color: primaryColor)),
                       16.width,
                       IconButton(
                           onPressed: () {
@@ -164,7 +168,8 @@ class SignUpComponentState extends State<SignUpComponent> {
                     errorInvalidEmail: language.emailValidation,
                   ),
                   16.height,
-                  Text(language.contactNumber, style: primaryTextStyle(size: 14)),
+                  Text(language.contactNumber,
+                      style: primaryTextStyle(size: 14)),
                   8.height,
                   AppTextField(
                     controller: phoneController,
@@ -179,19 +184,25 @@ class SignUpComponentState extends State<SignUpComponent> {
                             CountryCodePicker(
                               initialSelection: countryCode,
                               showCountryOnly: false,
-                              dialogSize: Size(context.width() - 60, context.height() * 0.6),
+                              dialogSize: Size(
+                                  context.width() - 60, context.height() * 0.6),
                               showFlag: true,
                               showFlagDialog: true,
                               showOnlyCountryWhenClosed: false,
                               alignLeft: false,
                               textStyle: primaryTextStyle(),
-                              dialogBackgroundColor: Theme.of(context).cardColor,
+                              dialogBackgroundColor:
+                                  Theme.of(context).cardColor,
                               barrierColor: Colors.black12,
                               dialogTextStyle: primaryTextStyle(),
                               searchDecoration: InputDecoration(
                                 iconColor: Theme.of(context).dividerColor,
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Theme.of(context).dividerColor)),
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: primaryColor)),
                               ),
                               searchStyle: primaryTextStyle(),
                               onInit: (c) {
@@ -201,14 +212,18 @@ class SignUpComponentState extends State<SignUpComponent> {
                                 countryCode = c.dialCode!;
                               },
                             ),
-                            VerticalDivider(color: Colors.grey.withOpacity(0.5)),
+                            VerticalDivider(
+                                color: Colors.grey.withOpacity(0.5)),
                           ],
                         ),
                       ),
                     ),
                     validator: (value) {
-                      if (value!.trim().isEmpty) return language.field_required_msg;
-                      if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contact_length_validation;
+                      if (value!.trim().isEmpty)
+                        return language.field_required_msg;
+                      if (value.trim().length < minContactLength ||
+                          value.trim().length > maxContactLength)
+                        return language.contact_length_validation;
                       return null;
                     },
                   ),
@@ -232,22 +247,27 @@ class SignUpComponentState extends State<SignUpComponent> {
                     title: RichText(
                       text: TextSpan(
                         children: [
-                          TextSpan(text: language.agreeText, style: primaryTextStyle(size: 14)),
+                          TextSpan(
+                              text: language.agreeText + " ",
+                              style: primaryTextStyle(size: 14)),
                           TextSpan(
                             text: language.termsOfService,
                             style: boldTextStyle(color: primaryColor, size: 14),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                 Navigator.of(context).pushNamed(TermAndConditionScreen.route);
+                                Navigator.of(context)
+                                    .pushNamed(TermAndConditionScreen.route);
                               },
                           ),
-                          TextSpan(text: ' & ', style: primaryTextStyle(size: 14)),
+                          TextSpan(
+                              text: ' & ', style: primaryTextStyle(size: 14)),
                           TextSpan(
                             text: language.privacyPolicy,
                             style: boldTextStyle(color: primaryColor, size: 14),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Navigator.of(context).pushNamed(PrivacyPolicyScreen.route);
+                                Navigator.of(context)
+                                    .pushNamed(PrivacyPolicyScreen.route);
                               },
                           ),
                         ],
@@ -270,9 +290,13 @@ class SignUpComponentState extends State<SignUpComponent> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(language.alreadyAcc, style: primaryTextStyle(size: 14)),
+                      Text(language.alreadyAcc,
+                          style: primaryTextStyle(size: 14)),
                       4.width,
-                      Text(language.signIn, style: boldTextStyle(color: primaryColor, size: 14)).onTap(() {
+                      Text(language.signIn,
+                              style:
+                                  boldTextStyle(color: primaryColor, size: 14))
+                          .onTap(() {
                         Navigator.pop(context);
                         showDialog(
                             context: context,

@@ -69,7 +69,7 @@ Widget commonCachedNetworkImage(
         radius: radius);
   } else if (url.validate().startsWith('http')) {
     return CachedNetworkImage(
-      imageUrl: url!,
+      imageUrl: url,
       height: height,
       width: width,
       fit: fit,
@@ -93,7 +93,7 @@ Widget commonCachedNetworkImage(
       },
     );
   } else {
-    return Image.asset(url!,
+    return Image.asset(url,
             height: height,
             width: width,
             fit: fit,

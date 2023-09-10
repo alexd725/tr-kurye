@@ -98,7 +98,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
               children: [
                 DropdownButton<String>(
                   value: carOrMotorEdit.isEmpty ? "Car" : carOrMotorEdit,
-                  items: <String>["Car", "Motor"].map((String value) {
+                  items: <String>["Car", "Bike"].map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -174,6 +174,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     taxOfficeController.text = officeNumber;
     idNoController.text = id_no;
     setState(() {
+      print('carOrMotorPage => ${carOrMotorPage}');
       carOrMotorEdit = carOrMotorPage;
     });
     plateNumberController.text = plateNumber;

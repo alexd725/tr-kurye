@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 const currencySymbolDefault = '₹';
 const currencyCodeDefault = 'INR';
-const mBaseUrl = "http://127.0.0.1:8000/api/";
+const mBaseUrl = "http://192.168.1.104:8000/api/";
 // const mBaseUrl = "http://10.10.18.72:8000/api/";
 
 const mOneSignalAppId = 'ADD_YOUR_ONE_SIGNAL_APP_ID';

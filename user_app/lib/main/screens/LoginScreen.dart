@@ -84,13 +84,16 @@ class LoginScreenState extends State<LoginScreen> {
           await setValue(USER_EMAIL, emailController.text);
           await setValue(USER_PASSWORD, passController.text);
         }
+        print('start loginapi');
         await logInApi(req).then((v) async {
+          print('success loginapi');
           appStore.setLoading(false);
 
           authService
               .signInWithEmailPassword(context,
                   email: emailController.text, password: passController.text)
               .then((value) async {
+            appStore.setLoading(false);
             if (v.data!.userType != CLIENT &&
                 v.data!.userType != DELIVERY_MAN &&
                 v.data!.userType != CORPORATE) {
@@ -123,6 +126,7 @@ class LoginScreenState extends State<LoginScreen> {
             }
           });
         }).catchError((e) {
+          print('failure loginapi');
           appStore.setLoading(false);
           toast(e.toString());
         });

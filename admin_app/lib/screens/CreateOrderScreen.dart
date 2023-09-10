@@ -385,9 +385,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       appStore.setLoading(false);
       vehicleList.clear();
       vehicleList = value.data!;
+      print('vehicleList => ${vehicleList}');
       if (vehicleList.isNotEmpty) selectedVehicle = vehicleList[0].id!;
       setState(() {});
-      if (vehicleList.isEmpty) showohiddenoption = 0;
+      if (vehicleList.isEmpty)
+        showohiddenoption = 0;
+      else
+        showohiddenoption = 1;
     }).catchError((error) {
       appStore.setLoading(false);
       log(error);
@@ -1129,14 +1133,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       child: Text(item.name ?? ''),
                     );
                   }).toList(),
-                  onChanged: (value) {
+                  onChanged: (value) async {
                     selectedCity = value!;
                     cityData = cityList
                         .firstWhere((element) => element.id == selectedCity);
 
-                    getCityDetailApiCall();
-                    getVehicleApiCall();
+                    print(
+                        'cityData => ${cityData!.id.toString()} ${cityData!.name}');
+                    await getCityDetailApiCall();
+                    await getVehicleApiCall();
                     setState(() {
+                      minWeight = cityData!.minWeight;
                       weightController.text = minWeight.toString();
                     });
                   },

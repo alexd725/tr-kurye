@@ -90,7 +90,7 @@ Future<LoginResponse> logInApi(Map request,
   if (!response.statusCode.isSuccessful()) {
     if (response.body.isJson()) {
       var json = jsonDecode(response.body);
-    print("_______$json");
+      print("_______$json");
       if (json.containsKey('code') &&
           json['code'].toString().contains('invalid_username')) {
         throw 'invalid_username';
@@ -127,7 +127,7 @@ Future<LoginResponse> logInApi(Map request,
     await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
     await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
     await setValue(CITY_ID, loginResponse.data!.cityId.validate());
-     //await setValue(UID, loginResponse.data!.uid.validate());
+    //await setValue(UID, loginResponse.data!.uid.validate());
     await userService
         .getUser(email: loginResponse.data!.email.validate())
         .then((value) async {
@@ -349,7 +349,7 @@ Future getUser() async {
     taxNumber = response["tax_number"] ?? "No Data";
     officeNumber = response["tax_office"] ?? "No Data";
     id_no = response["id_no"] ?? "No Data";
-    carOrMotorPage = response["car_or_moto"] ?? "No Data";
+    carOrMotorPage = response["car_or_moto"] ?? "Car";
     plateNumber = response["plate_number"] ?? "No Data";
   }
   print(response["car_or_moto"]);

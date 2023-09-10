@@ -258,7 +258,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   getCityApiCall({String? name}) async {
     appStore.setLoading(true);
-    await getCityList(countryId: 0, name: name).then((value) {
+    await getCityList(countryId: 0, name: name).then((value) async {
       appStore.setLoading(false);
       cityData_list.clear();
       cityData_list.addAll(value.data!);
@@ -302,11 +302,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         //   minWeight = element.minWeight;
         // }
       });
-      maxWeight = cityData!.maxWeight;
-      minWeight = cityData!.minWeight;
       chargePerAddress = value.data![0].chargePerAddress != null
           ? value.data![0].chargePerAddress
           : 0;
+
+      await getVehicleApiCall2(cityData!.vehicle_type);
       setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);
@@ -323,10 +323,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     await getAppSettingApiCall();
     log('CITY_ID =====> ${getIntAsync(CITY_ID)}');
     await getCityDetailApiCall(getIntAsync(CITY_ID));
-    getParcelTypeListApiCall();
+    await getParcelTypeListApiCall();
     extraChargesList();
-    getVehicleList(cityID: cityData!.id);
-    getCityApiCall();
+    //getVehicleList(cityID: cityData!.id);
+    await getCityApiCall();
     if (widget.orderData != null) {
       List<dynamic> deliveryPointsList =
           widget.orderData!.deliveryPointsList ?? [];
@@ -557,10 +557,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     await getCityDetail(cityId).then((value) async {
       await setValue(CITY_DATA, value.data!.toJson());
       cityData = value.data!;
-      if (double.tryParse(weightController.text)! < minWeight!.toDouble()) {
-        weightController.text = minWeight!.toString();
-      }
-      getVehicleApiCall();
+      await getVehicleApiCall();
       setState(() {});
     }).catchError((error) {});
   }
@@ -580,8 +577,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     appStore.setLoading(true);
     await getParcelTypeList().then((value) {
       appStore.setLoading(false);
-      vehicleList.clear();
-      vehicles_list.clear();
       parcelTypeList.clear();
       parcelTypeList.addAll(value.data!);
       setState(() {});
@@ -608,19 +603,30 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 //*********************************
 
-  getVehicleApiCall2({String? name}) async {
-    appStore.setLoading(true);
-    await getVehicleList(cityID: cityData!.id).then((value) {
-      appStore.setLoading(false);
-      // vehicleList.clear();
-      //vehicles_list.clear();
-      vehicleList = value.data!;
-      if (value.data!.isNotEmpty) selectedVehicle = value.data![0].id;
-      setState(() {});
-    }).catchError((error) {
-      appStore.setLoading(false);
-      toast(error);
+  getVehicleApiCall2(String? vehicleType) async {
+    cityData_list.forEach((element) {
+      print(
+          'result => ${element.name == cityData!.name && element.vehicle_type == vehicleType}');
+      if (element.name == cityData!.name &&
+          element.vehicle_type == vehicleType) {
+        cityData = element;
+        minWeight = cityData!.minWeight;
+        maxWeight = cityData!.maxWeight;
+        weightController.text = minWeight.toString();
+      }
     });
+    //appStore.setLoading(true);
+    //await getVehicleList(cityID: cityData!.id).then((value) {
+    //  appStore.setLoading(false);
+    //  // vehicleList.clear();
+    //  //vehicles_list.clear();
+    //  vehicleList = value.data!;
+    //  if (value.data!.isNotEmpty) selectedVehicle = value.data![0].id;
+    //  setState(() {});
+    //}).catchError((error) {
+    //  appStore.setLoading(false);
+    //  toast(error);
+    //});
   }
 
 //   Future<void> getVehicleApiCall({String? name}) async {
@@ -667,7 +673,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     totalChargePerAddress = 0;
 
     /// calculate weight Charge
-    if (weightController.text.toDouble() >= cityData!.minWeight!) {
+    if (weightController.text.toDouble() >= minWeight!) {
       weightCharge =
           ((weightController.text.toDouble()) * cityData!.perWeightCharges!)
               .toStringAsFixed(digitAfterDecimal)
@@ -1260,7 +1266,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     }).toList(),
                     onChanged: (value) {
                       // getVehicleApiCall();
-                      getVehicleApiCall2();
+                      getVehicleApiCall2(value);
                       print("++++++++++++++++++++++++++++++++++$vehicle");
 
                       setState(() {
@@ -1349,7 +1355,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           }).toList()),
                     onChanged: (valueD) {
                       delivery = valueD!;
-                      getCityApiCall();
                       setState(() {
                         if (double.tryParse(weightController.text)! <
                                 minWeight!.toDouble() ||
@@ -1643,7 +1648,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   print("dddddddddd");
 
                   setState(() {
-                    weightController.text = cityData!.minWeight.toString();
+                    weightController.text = minWeight.toString();
                   });
                 },
                 validator: (value) {
@@ -1676,7 +1681,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            // if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
+            if (!mTestMode) if (pickLat == null || pickLong == null)
+              return language.pleaseSelectValidAddress;
             return null;
           },
           onTap: () {

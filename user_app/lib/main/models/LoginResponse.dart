@@ -32,14 +32,14 @@ class LoginResponse {
     return data;
   }
 }
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> data = new Map<String, dynamic>();
-  //   if (this.data != null) {
-  //     data['data'] = this.data!.toJson();
-  //   }
-  //   data['message'] = this.message;
-  //   return data;
-  // }
+// Map<String, dynamic> toJson() {
+//   final Map<String, dynamic> data = new Map<String, dynamic>();
+//   if (this.data != null) {
+//     data['data'] = this.data!.toJson();
+//   }
+//   data['message'] = this.message;
+//   return data;
+// }
 //}
 
 class UserData {
@@ -128,7 +128,7 @@ class UserData {
     loginType = json['login_type'];
     latitude = json['latitude'];
     longitude = json['longitude'];
-    uid =  json['uid'];
+    uid = json['uid'];
     playerId = json['player_id'];
     fcmToken = json['fcm_token'];
     lastNotificationSeen = json['last_notification_seen'];
