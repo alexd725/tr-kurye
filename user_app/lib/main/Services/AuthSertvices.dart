@@ -292,7 +292,7 @@ class AuthServices {
           "plate_number": plateNumber,
         };
         await signUpApi(request).then((res) async {
-          if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
+          if (userType == DELIVERY_MAN) {
             appStore.setLogin(false);
             LoginScreen().launch(context,
                 isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
