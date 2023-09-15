@@ -328,10 +328,10 @@ class UserController extends Controller
     {
         $input = $request->all();
 
-        print('input => '. $request);
+        print('input => ' . $request);
         $user_id = $input['id'];
         if ($user_id > 0) {
-            print('$user_id > 0 => '. $user_id);
+            print('$user_id > 0 => ' . $user_id);
             $user = User::where('id', $user_id)->first();
 
             $user->uid = $input['uid'];
@@ -345,7 +345,7 @@ class UserController extends Controller
             ];
             return json_custom_response($response);
         } else {
-            print('$user_id => '. $user_id);
+            print('$user_id => ' . $user_id);
             $password = $input['password'];
             $input['user_type'] = isset($input['user_type']) ? $input['user_type'] : 'client';
             $input['password'] = Hash::make($password);

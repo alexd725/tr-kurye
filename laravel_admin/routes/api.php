@@ -45,8 +45,7 @@ Route::get('/getuser/{id}', [App\Http\Controllers\CreditCardController::class, '
 Route::get('/searchorders/{id}/{search}', [App\Http\Controllers\CreditCardController::class, 'searchdrivers']);
 
 
-Route::post('
-', [API\UserController::class, 'register']);
+Route::post('register', [API\UserController::class, 'register']);
 Route::post('login', [API\UserController::class, 'login']);
 Route::post('forget-password', [API\UserController::class, 'forgetPassword']);
 Route::post('social-login', [API\UserController::class, 'socialLogin']);
@@ -65,12 +64,12 @@ Route::get('city-list', [API\CityController::class, 'getList']);
 Route::get('city-detail', [API\CityController::class, 'getDetail']);
 Route::get('extracharge-list', [API\ExtraChargeController::class, 'getList']);
 Route::get('paymentgateway-list', [API\PaymentGatewayController::class, 'getList']);
-Route::get('vehicle-list', [ API\VehicleController::class, 'getList' ] );
+Route::get('vehicle-list', [API\VehicleController::class, 'getList']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('dashboard-detail', [API\UserController::class, 'dashboard']);
-    Route::get('dashboard-chartdata', [ API\UserController::class, 'dashboardChartData' ]);
+    Route::get('dashboard-chartdata', [API\UserController::class, 'dashboardChartData']);
     Route::post('country-save', [App\Http\Controllers\CountryController::class, 'store']);
     Route::post('country-delete/{id}', [App\Http\Controllers\CountryController::class, 'destroy']);
     Route::post('country-action', [App\Http\Controllers\CountryController::class, 'action']);
@@ -86,7 +85,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('staticdata-save', [App\Http\Controllers\StaticDataController::class, 'store']);
     Route::post('staticdata-delete/{id}', [App\Http\Controllers\StaticDataController::class, 'destroy']);
 
-    Route::get('order-list', [API\OrderController::class, 'getList']); 
+    Route::get('order-list', [API\OrderController::class, 'getList']);
     Route::get('order-detail', [API\OrderController::class, 'getDetail']);
     Route::post('order-save', [App\Http\Controllers\OrderController::class, 'store']);
     Route::post('order-update/{id}', [App\Http\Controllers\OrderController::class, 'update']);
@@ -100,16 +99,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('payment-save', [API\PaymentController::class, 'paymentSave']);
     Route::get('payment-list', [API\PaymentController::class, 'getList']);
 
-    Route::post('save-wallet', [ API\WalletController::class, 'saveWallet'] );
-    Route::get('wallet-list', [ API\WalletController::class, 'getList'] );
-    
-    Route::get('withdrawrequest-list', [ API\WithdrawRequestController::class, 'getList'] );
-    Route::post('save-withdrawrequest', [ API\WithdrawRequestController::class, 'saveWithdrawrequest'] );
-    Route::post('approved-withdrawrequest', [ API\WithdrawRequestController::class, 'approvedWithdrawRequest'] );
-    Route::post('decline-withdrawrequest', [ API\WithdrawRequestController::class, 'declineWithdrawRequest'] );
+    Route::post('save-wallet', [API\WalletController::class, 'saveWallet']);
+    Route::get('wallet-list', [API\WalletController::class, 'getList']);
+
+    Route::get('withdrawrequest-list', [API\WithdrawRequestController::class, 'getList']);
+    Route::post('save-withdrawrequest', [API\WithdrawRequestController::class, 'saveWithdrawrequest']);
+    Route::post('approved-withdrawrequest', [API\WithdrawRequestController::class, 'approvedWithdrawRequest']);
+    Route::post('decline-withdrawrequest', [API\WithdrawRequestController::class, 'declineWithdrawRequest']);
 
     Route::post('notification-list', [API\NotificationController::class, 'getList']);
-    Route::get('notification-count',[API\NotificationController::class,'notificationCounts']);
+    Route::get('notification-count', [API\NotificationController::class, 'notificationCounts']);
 
     Route::post('update-user-status', [API\UserController::class, 'updateUserStatus']);
     Route::post('change-password', [API\UserController::class, 'changePassword']);
@@ -136,14 +135,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('place-detail-api', [API\CommonController::class, 'placeDetail']);
 
     Route::get('logout', [API\UserController::class, 'logout']);
-    Route::get('wallet-detail', [ API\WalletController::class, 'getWallatDetail'] );
+    Route::get('wallet-detail', [API\WalletController::class, 'getWallatDetail']);
 
-    Route::get('client-dashboard', [ API\DashboardController::class, 'clientDashboard' ]);
-    Route::get('deliveryman-earning-list', [ API\PaymentController::class, 'getDeliveryManEarningList' ] );
+    Route::get('client-dashboard', [API\DashboardController::class, 'clientDashboard']);
+    Route::get('deliveryman-earning-list', [API\PaymentController::class, 'getDeliveryManEarningList']);
 
-    Route::get('user-profile-detail', [ API\UserController::class, 'commonUserDetail' ]);
+    Route::get('user-profile-detail', [API\UserController::class, 'commonUserDetail']);
 
-    Route::post('vehicle-save', [ App\Http\Controllers\VehicleController::class, 'store' ] );
-    Route::post('vehicle-delete/{id}', [ App\Http\Controllers\VehicleController::class, 'destroy' ] );
-    Route::post('vehicle-action', [ App\Http\Controllers\VehicleController::class, 'action' ] );
+    Route::post('vehicle-save', [App\Http\Controllers\VehicleController::class, 'store']);
+    Route::post('vehicle-delete/{id}', [App\Http\Controllers\VehicleController::class, 'destroy']);
+    Route::post('vehicle-action', [App\Http\Controllers\VehicleController::class, 'action']);
 });
