@@ -93,7 +93,7 @@ class RegisterScreenState extends State<RegisterScreen> {
       if (isAcceptedTc) {
         appStore.setLoading(true);
         var request = {
-          "id": 0,
+          "id": '0',
           "name": nameController.text,
           "username": userNameController.text,
           "id_no": idNumber.text.trim(),
@@ -108,7 +108,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         await signUpApi(request).then((res) async {
           authService
               .signUpWithEmailPasswordDriver(context,
-                  id: res.data!.id,
+                  id: '${res.data!.id}',
                   lName: res.data!.name,
                   userName: res.data!.username,
                   idNumber: idNumber.text.trim(),
@@ -173,7 +173,7 @@ class RegisterScreenState extends State<RegisterScreen> {
       selectedIndex == 0
           ? authService
               .signUpWithEmailPassword(context,
-                  id: 0,
+                  id: '0',
                   lName: nameController.text,
                   userName: userNameController.text,
                   name: nameController.text.trim(),
@@ -190,7 +190,7 @@ class RegisterScreenState extends State<RegisterScreen> {
             })
           : authService
               .signUpWithEmailPasswordCorporate(context,
-                  id: 0,
+                  id: '0',
                   lName: nameController.text,
                   //------------------------------------ Changed by noah
 

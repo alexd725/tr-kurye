@@ -25,7 +25,7 @@ class AuthServices {
   }
 
   Future<void> signUpWithEmailPassword(context,
-      {int? id,
+      {String? id,
       String? name,
       String? email,
       String? password,
@@ -68,7 +68,7 @@ class AuthServices {
           .addDocumentWithCustomId(currentUser.uid, userModel.toJson())
           .then((value) async {
         var request = {
-          "id": 0,
+          "id": '0',
           "name": name,
           "username": userName,
           "user_type": userType,
@@ -239,7 +239,7 @@ class AuthServices {
   // this is for driver
 
   Future<void> signUpWithEmailPasswordDriver(context,
-      {int? id,
+      {String? id,
       String? idNumber,
       String? name,
       String? email,
@@ -322,7 +322,7 @@ class AuthServices {
   // this is for corporate
 
   Future<void> signUpWithEmailPasswordCorporate(context,
-      {int? id,
+      {String? id,
       String? institution,
       String? password,
       String? mobileNumber,
