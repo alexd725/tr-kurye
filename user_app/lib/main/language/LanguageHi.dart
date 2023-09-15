@@ -1017,6 +1017,10 @@ class LanguageHi extends BaseLanguage {
       'नोट: यदि आप पार्सल को पिकअप से पहले ऑर्डर रद्द करते हैं, तो रद्द करने का शुल्क काट दिया जाएगा। कोई भी समय में कटौती की जाएगी।';
 
   @override
+  String get driverRegistNote =>
+      'Not: Bilgileriniz incelendikten sonra size dönüş yapılacaktır.';
+
+  @override
   String get earningHistory => "कमाई का इतिहास";
 
   @override

@@ -660,6 +660,8 @@ abstract class BaseLanguage {
 
   String get cancelNote;
 
+  String get driverRegistNote;
+
   String get earningHistory;
 
   String get earning;

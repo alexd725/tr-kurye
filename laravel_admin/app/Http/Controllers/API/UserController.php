@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Http\Requests\UserRequest;
 use Validator;
 use Hash;
-Use Auth;
+use Auth;
 use App\Http\Resources\API\UserResource;
 use Illuminate\Support\Facades\Password;
 use App\Models\Country;
@@ -38,10 +38,10 @@ class UserController extends Controller
         $dashboard_data['total_client'] = User::userCount('client');
         $dashboard_data['total_delivery_man'] = User::userCount('delivery_man');
         $dashboard_data['total_order'] = Order::myOrder()->count();
-        $dashboard_data['today_register_user'] = User::where('user_type','client')->whereDate('created_at',today())->count();
+        $dashboard_data['today_register_user'] = User::where('user_type', 'client')->whereDate('created_at', today())->count();
         $total_compeleted_earning = Order::myOrder()->where('status', 'completed')->sum('total_amount');
         $total_cancelled_earning = Order::myOrder()->where('status', 'cancelled')->sum('total_amount');
-        
+
         $dashboard_data['total_earning'] = $total_compeleted_earning + $total_cancelled_earning;
         $dashboard_data['total_cancelled_order'] = Order::myOrder()->where('status', 'cancelled')->count();
 
@@ -55,112 +55,112 @@ class UserController extends Controller
         $dashboard_data['total_completed_order'] = Order::myOrder()->where('status', 'completed')->count();
         $dashboard_data['total_failed_order'] = Order::myOrder()->where('status', 'failed')->count();
 
-        $dashboard_data['today_create_order'] = Order::myOrder()->whereDate('created_at',today())->where('status', 'create')->count();
-        $dashboard_data['today_active_order'] = Order::myOrder()->whereDate('created_at',today())->where('status', 'active')->count();
-        $dashboard_data['today_delayed_order'] = Order::myOrder()->whereDate('created_at',today())->where('status', 'delayed')->count();
-        $dashboard_data['today_cancelled_order'] = Order::myOrder()->whereDate('created_at',today())->where('status', 'cancelled')->count();
-        $dashboard_data['today_courier_assigned_order'] = Order::myOrder()->whereDate('created_at',today())->where('status', 'courier_assigned')->count();
-        $dashboard_data['today_courier_picked_up_order'] = Order::myOrder()->whereDate('created_at',today())->where('status', 'courier_picked_up')->count();
-        $dashboard_data['today_courier_departed_order'] = Order::myOrder()->whereDate('created_at',today())->where('status', 'courier_departed')->count();
-        $dashboard_data['today_courier_arrived_order'] = Order::myOrder()->whereDate('created_at',today())->where('status', 'courier_arrived')->count();
-        $dashboard_data['today_completed_order'] = Order::myOrder()->whereDate('created_at',today())->where('status', 'completed')->count();
-        $dashboard_data['today_failed_order'] = Order::myOrder()->whereDate('created_at',today())->where('status', 'failed')->count();
-       
+        $dashboard_data['today_create_order'] = Order::myOrder()->whereDate('created_at', today())->where('status', 'create')->count();
+        $dashboard_data['today_active_order'] = Order::myOrder()->whereDate('created_at', today())->where('status', 'active')->count();
+        $dashboard_data['today_delayed_order'] = Order::myOrder()->whereDate('created_at', today())->where('status', 'delayed')->count();
+        $dashboard_data['today_cancelled_order'] = Order::myOrder()->whereDate('created_at', today())->where('status', 'cancelled')->count();
+        $dashboard_data['today_courier_assigned_order'] = Order::myOrder()->whereDate('created_at', today())->where('status', 'courier_assigned')->count();
+        $dashboard_data['today_courier_picked_up_order'] = Order::myOrder()->whereDate('created_at', today())->where('status', 'courier_picked_up')->count();
+        $dashboard_data['today_courier_departed_order'] = Order::myOrder()->whereDate('created_at', today())->where('status', 'courier_departed')->count();
+        $dashboard_data['today_courier_arrived_order'] = Order::myOrder()->whereDate('created_at', today())->where('status', 'courier_arrived')->count();
+        $dashboard_data['today_completed_order'] = Order::myOrder()->whereDate('created_at', today())->where('status', 'completed')->count();
+        $dashboard_data['today_failed_order'] = Order::myOrder()->whereDate('created_at', today())->where('status', 'failed')->count();
+
         $dashboard_data['app_setting'] = AppSetting::first();
         /*
         $upcoming_order = Order::myOrder()->whereDate('pickup_datetime','>=',Carbon::now()->format('Y-m-d H:i:s'))->orderBy('pickup_datetime','asc')->paginate(10);
         $dashboard_data['upcoming_order'] = OrderResource::collection($upcoming_order);
         */
 
-        $upcoming_order = Order::myOrder()->whereNotIn('status',['draft', 'cancelled', 'completed'])->whereNotNull('pickup_point->start_time')
-                        ->where('pickup_point->start_time','>=',Carbon::now()->format('Y-m-d H:i:s'))
-                        ->orderBy('pickup_point->start_time','asc')->paginate(10);
+        $upcoming_order = Order::myOrder()->whereNotIn('status', ['draft', 'cancelled', 'completed'])->whereNotNull('pickup_point->start_time')
+            ->where('pickup_point->start_time', '>=', Carbon::now()->format('Y-m-d H:i:s'))
+            ->orderBy('pickup_point->start_time', 'asc')->paginate(10);
         $dashboard_data['upcoming_order'] = OrderResource::collection($upcoming_order);
 
-        $recent_order = Order::myOrder()->whereDate('date','<=',Carbon::now()->format('Y-m-d'))->orderBy('date','desc')->paginate(10);
+        $recent_order = Order::myOrder()->whereDate('date', '<=', Carbon::now()->format('Y-m-d'))->orderBy('date', 'desc')->paginate(10);
         $dashboard_data['recent_order'] = OrderResource::collection($recent_order);
 
-        $client = User::where('user_type','client')->orderBy('created_at','desc')->paginate(10);
+        $client = User::where('user_type', 'client')->orderBy('created_at', 'desc')->paginate(10);
         $dashboard_data['recent_client'] = UserResource::collection($client);
 
-        $delivery_man = User::where('user_type','delivery_man')->orderBy('created_at','desc')->paginate(10);
+        $delivery_man = User::where('user_type', 'delivery_man')->orderBy('created_at', 'desc')->paginate(10);
         $dashboard_data['recent_delivery_man'] = UserResource::collection($delivery_man);
 
         $sunday = strtotime('sunday -1 week');
-	    $sunday = date('w', $sunday) === date('w') ? $sunday + 7*86400 : $sunday;
-        $saturday = strtotime(date('Y-m-d',$sunday).' +6 days');
+        $sunday = date('w', $sunday) === date('w') ? $sunday + 7 * 86400 : $sunday;
+        $saturday = strtotime(date('Y-m-d', $sunday) . ' +6 days');
 
-        $week_start = date('Y-m-d 00:00:00',$sunday);
-        $week_end = date('Y-m-d 23:59:59',$saturday);
+        $week_start = date('Y-m-d 00:00:00', $sunday);
+        $week_end = date('Y-m-d 23:59:59', $saturday);
 
         $dashboard_data['week'] = [
-            'week_start'=> $week_start,
-            'week_end'  => $week_end
+            'week_start' => $week_start,
+            'week_end' => $week_end
         ];
-        $weekly_order_count = Order::selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date' )
-                        ->whereBetween('created_at', [ $week_start, $week_end ])
-                        ->get()->toArray();
-        
-                        $data = [];
-        
+        $weekly_order_count = Order::selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date')
+            ->whereBetween('created_at', [$week_start, $week_end])
+            ->get()->toArray();
+
+        $data = [];
+
         $order_collection = collect($weekly_order_count);
-        for($i = 0; $i < 7 ; $i++){
-            $total = $order_collection->filter(function ($value, $key) use($week_start, $i){
-                return $value['date'] == date('Y-m-d',strtotime($week_start. ' + ' . $i . 'day'));
+        for ($i = 0; $i < 7; $i++) {
+            $total = $order_collection->filter(function ($value, $key) use ($week_start, $i) {
+                return $value['date'] == date('Y-m-d', strtotime($week_start . ' + ' . $i . 'day'));
             })->count();
-            
+
             $data[] = [
                 'day' => date('l', strtotime($week_start . ' + ' . $i . 'day')),
                 'total' => $total,
-                'date' => date('Y-m-d',strtotime($week_start. ' + ' . $i . 'day')),    
+                'date' => date('Y-m-d', strtotime($week_start . ' + ' . $i . 'day')),
             ];
         }
 
         $dashboard_data['weekly_order_count'] = $data;
 
-        $user_week_report = User::selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date' )
-                        ->where('user_type','client')
-                        ->whereBetween('created_at', [ $week_start, $week_end ])
-                        ->get()->toArray();
+        $user_week_report = User::selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date')
+            ->where('user_type', 'client')
+            ->whereBetween('created_at', [$week_start, $week_end])
+            ->get()->toArray();
         $data = [];
-        
+
         $user_collection = collect($user_week_report);
-        for($i = 0; $i < 7 ; $i++){
-            $total = $user_collection->filter(function ($value, $key) use($week_start,$i){
-                return $value['date'] == date('Y-m-d',strtotime($week_start. ' + ' . $i . 'day'));
+        for ($i = 0; $i < 7; $i++) {
+            $total = $user_collection->filter(function ($value, $key) use ($week_start, $i) {
+                return $value['date'] == date('Y-m-d', strtotime($week_start . ' + ' . $i . 'day'));
             })->count();
-            
+
             $data[] = [
                 'day' => date('l', strtotime($week_start . ' + ' . $i . 'day')),
                 'total' => $total,
-                'date' => date('Y-m-d',strtotime($week_start. ' + ' . $i . 'day')),    
+                'date' => date('Y-m-d', strtotime($week_start . ' + ' . $i . 'day')),
             ];
         }
 
         $dashboard_data['user_weekly_count'] = $data;
-      
+
         $user = auth()->user();
-        $dashboard_data['all_unread_count']  = isset($user->unreadNotifications) ? $user->unreadNotifications->count() : 0;
-        
-        $weekly_payment_report = Payment::myPayment()->selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date, total_amount ' )
-        //$weekly_payment_report = Payment::selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date, total_amount ' )
-                        ->where('payment_status','paid')
-                        ->whereBetween('created_at', [ $week_start, $week_end ])
-                        ->get()->toArray();
+        $dashboard_data['all_unread_count'] = isset($user->unreadNotifications) ? $user->unreadNotifications->count() : 0;
+
+        $weekly_payment_report = Payment::myPayment()->selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date, total_amount ')
+            //$weekly_payment_report = Payment::selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date, total_amount ' )
+            ->where('payment_status', 'paid')
+            ->whereBetween('created_at', [$week_start, $week_end])
+            ->get()->toArray();
         $data = [];
 
         //$dashboard_data['weekly_sql'] = Payment::selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date, total_amount ' )
         //                                ->where('payment_status','paid')->whereBetween('created_at', [ $week_start, $week_end ])->toSql();
         $payment_collection = collect($weekly_payment_report);
-        for($i = 0; $i < 7 ; $i++){
-            $total_amount = $payment_collection->filter(function ($value, $key) use($week_start,$i){
-                return $value['date'] == date('Y-m-d',strtotime($week_start. ' + ' . $i . 'day'));
+        for ($i = 0; $i < 7; $i++) {
+            $total_amount = $payment_collection->filter(function ($value, $key) use ($week_start, $i) {
+                return $value['date'] == date('Y-m-d', strtotime($week_start . ' + ' . $i . 'day'));
             })->sum('total_amount');
-            
+
             $data[] = [
                 'day' => date('l', strtotime($week_start . ' + ' . $i . 'day')),
                 'total_amount' => $total_amount,
-                'date' => date('Y-m-d',strtotime($week_start. ' + ' . $i . 'day')),    
+                'date' => date('Y-m-d', strtotime($week_start . ' + ' . $i . 'day')),
             ];
         }
 
@@ -170,67 +170,67 @@ class UserController extends Controller
         $diff = $month_start->diffInDays($today) + 1; // $today->daysInMonth;
 
         $dashboard_data['month'] = [
-            'month_start'=> $month_start,
-            'month_end'  => $today,
+            'month_start' => $month_start,
+            'month_end' => $today,
             'diff' => $diff,
         ];
-        $monthly_order_count = Order::selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date' )
-                        ->whereBetween('created_at', [ $month_start, $today ])
-                        ->get()->toArray();
-        
+        $monthly_order_count = Order::selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date')
+            ->whereBetween('created_at', [$month_start, $today])
+            ->get()->toArray();
+
         $monthly_order_count_data = [];
-        
+
         $order_collection = collect($monthly_order_count);
 
-        $monthly_payment_report = Payment::myPayment()->selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date, total_amount ' )
-            ->where('payment_status','paid')
-            ->whereBetween('created_at', [ $month_start, $today ])
-            ->whereHas('order',function ($query) {
-                $query->where('status','completed');
+        $monthly_payment_report = Payment::myPayment()->selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date, total_amount ')
+            ->where('payment_status', 'paid')
+            ->whereBetween('created_at', [$month_start, $today])
+            ->whereHas('order', function ($query) {
+                $query->where('status', 'completed');
             })->withTrashed()
             ->get()->toArray();
-        
+
         $monthly_payment_completed_order_data = [];
-               
+
         $payment_collection = collect($monthly_payment_report);
-        
-        $monthly_payment_cancelled_report = Payment::myPayment()->selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date, cancel_charges ' )
-            ->where('payment_status','paid')
-            ->whereBetween('created_at', [ $month_start, $today ])
-            ->whereHas('order',function ($query) {
-                $query->where('status','cancelled');
+
+        $monthly_payment_cancelled_report = Payment::myPayment()->selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date, cancel_charges ')
+            ->where('payment_status', 'paid')
+            ->whereBetween('created_at', [$month_start, $today])
+            ->whereHas('order', function ($query) {
+                $query->where('status', 'cancelled');
             })->withTrashed()
             ->get()->toArray();
-        
-        $monthly_payment_cancelled_order_data = [];       
+
+        $monthly_payment_cancelled_order_data = [];
         $payment_cancelled_collection = collect($monthly_payment_cancelled_report);
 
-        for($i = 0; $i < $diff ; $i++){
-            $total = $order_collection->filter(function ($value, $key) use($month_start, $i){
-                return $value['date'] == date('Y-m-d',strtotime($month_start. ' + ' . $i . 'day'));
+        for ($i = 0; $i < $diff; $i++) {
+            $total = $order_collection->filter(function ($value, $key) use ($month_start, $i) {
+                return $value['date'] == date('Y-m-d', strtotime($month_start . ' + ' . $i . 'day'));
             })->count();
-            
+
             $monthly_order_count_data[] = [
                 'total' => $total,
-                'date' => date('Y-m-d',strtotime($month_start. ' + ' . $i . 'day')),    
+                'date' => date('Y-m-d', strtotime($month_start . ' + ' . $i . 'day')),
             ];
 
-            $total_amount = $payment_collection->filter(function ($value, $key) use($month_start,$i){
-                return $value['date'] == date('Y-m-d',strtotime($month_start. ' + ' . $i . 'day'));
+            $total_amount = $payment_collection->filter(function ($value, $key) use ($month_start, $i) {
+                return $value['date'] == date('Y-m-d', strtotime($month_start . ' + ' . $i . 'day'));
             })->sum('total_amount');
-            
+
             $monthly_payment_completed_order_data[] = [
                 'total_amount' => $total_amount,
-                'date' => date('Y-m-d',strtotime($month_start. ' + ' . $i . 'day')),    
+                'date' => date('Y-m-d', strtotime($month_start . ' + ' . $i . 'day')),
             ];
 
-            $cancel_charges = $payment_cancelled_collection->filter(function ($value, $key) use($month_start,$i){
-                return $value['date'] == date('Y-m-d',strtotime($month_start. ' + ' . $i . 'day'));
+            $cancel_charges = $payment_cancelled_collection->filter(function ($value, $key) use ($month_start, $i) {
+                return $value['date'] == date('Y-m-d', strtotime($month_start . ' + ' . $i . 'day'));
             })->sum('cancel_charges');
-            
-            $monthly_payment_cancelled_order_data[] = [ 
+
+            $monthly_payment_cancelled_order_data[] = [
                 'total_amount' => $cancel_charges,
-                'date' => date('Y-m-d',strtotime($month_start. ' + ' . $i . 'day')),    
+                'date' => date('Y-m-d', strtotime($month_start . ' + ' . $i . 'day')),
             ];
         }
 
@@ -246,79 +246,76 @@ class UserController extends Controller
         $type = request('type');
         $month_start = Carbon::parse(request('start_at'))->startOfMonth();
         $month_end = Carbon::parse(request('end_at'))->endOfMonth();
-        
+
         $diff = $month_start->diffInDays($month_end) + 1;
         $dashboard_data['month'] = [
-            'month_start'=> $month_start,
-            'month_end'  => $month_end,
+            'month_start' => $month_start,
+            'month_end' => $month_end,
             'diff' => $diff,
         ];
         $data = [];
-        if( $type == 'monthly_order_count' )
-        {
-            $monthly_order_count = Order::selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date' )
-                ->whereBetween('created_at', [ $month_start, $month_end ])
+        if ($type == 'monthly_order_count') {
+            $monthly_order_count = Order::selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date')
+                ->whereBetween('created_at', [$month_start, $month_end])
                 ->get()->toArray();
-            
+
             $order_collection = collect($monthly_order_count);
-            
-            for($i = 0; $i < $diff ; $i++) {
-                $total = $order_collection->filter(function ($value, $key) use($month_start, $i){
-                    return $value['date'] == date('Y-m-d',strtotime($month_start. ' + ' . $i . 'day'));
+
+            for ($i = 0; $i < $diff; $i++) {
+                $total = $order_collection->filter(function ($value, $key) use ($month_start, $i) {
+                    return $value['date'] == date('Y-m-d', strtotime($month_start . ' + ' . $i . 'day'));
                 })->count();
-                
+
                 $data[] = [
                     'total' => $total,
-                    'date' => date('Y-m-d',strtotime($month_start. ' + ' . $i . 'day')),    
+                    'date' => date('Y-m-d', strtotime($month_start . ' + ' . $i . 'day')),
                 ];
             }
             $dashboard_data['monthly_order_count'] = $data;
         }
 
-        if( $type == 'monthly_payment_completed_report' )
-        {
-            $monthly_payment_report = Payment::myPayment()->selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date, total_amount ' )
-                ->where('payment_status','paid')
-                ->whereBetween('created_at', [ $month_start, $month_end ])
-                ->whereHas('order',function ($query) {
-                    $query->where('status','completed');
+        if ($type == 'monthly_payment_completed_report') {
+            $monthly_payment_report = Payment::myPayment()->selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date, total_amount ')
+                ->where('payment_status', 'paid')
+                ->whereBetween('created_at', [$month_start, $month_end])
+                ->whereHas('order', function ($query) {
+                    $query->where('status', 'completed');
                 })->withTrashed()
                 ->get()->toArray();
 
             $payment_collection = collect($monthly_payment_report);
 
-            for($i = 0; $i < $diff ; $i++) {
-                $total_amount = $payment_collection->filter(function ($value, $key) use($month_start,$i){
-                    return $value['date'] == date('Y-m-d',strtotime($month_start. ' + ' . $i . 'day'));
+            for ($i = 0; $i < $diff; $i++) {
+                $total_amount = $payment_collection->filter(function ($value, $key) use ($month_start, $i) {
+                    return $value['date'] == date('Y-m-d', strtotime($month_start . ' + ' . $i . 'day'));
                 })->sum('total_amount');
                 $data[] = [
                     'total_amount' => $total_amount,
-                    'date' => date('Y-m-d', strtotime($month_start. ' + ' . $i . 'day')),    
+                    'date' => date('Y-m-d', strtotime($month_start . ' + ' . $i . 'day')),
                 ];
             }
             $dashboard_data['monthly_payment_completed_report'] = $data;
         }
 
-        if( $type == 'monthly_payment_cancelled_report' )
-        {
-            $monthly_payment_report = Payment::myPayment()->selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date, cancel_charges ' )
-                ->where('payment_status','paid')
-                ->whereBetween('created_at', [ $month_start, $month_end ])
-                ->whereHas('order',function ($query) {
-                    $query->where('status','cancelled');
+        if ($type == 'monthly_payment_cancelled_report') {
+            $monthly_payment_report = Payment::myPayment()->selectRaw('DATE_FORMAT(created_at , "%w") as days , DATE_FORMAT(created_at , "%Y-%m-%d") as date, cancel_charges ')
+                ->where('payment_status', 'paid')
+                ->whereBetween('created_at', [$month_start, $month_end])
+                ->whereHas('order', function ($query) {
+                    $query->where('status', 'cancelled');
                 })->withTrashed()
                 ->get()->toArray();
-            
+
             $payment_collection = collect($monthly_payment_report);
-            
-            for($i = 0; $i < $diff ; $i++) {
-                $cancel_charges = $payment_collection->filter(function ($value, $key) use($month_start,$i){
-                    return $value['date'] == date('Y-m-d',strtotime($month_start. ' + ' . $i . 'day'));
+
+            for ($i = 0; $i < $diff; $i++) {
+                $cancel_charges = $payment_collection->filter(function ($value, $key) use ($month_start, $i) {
+                    return $value['date'] == date('Y-m-d', strtotime($month_start . ' + ' . $i . 'day'));
                 })->sum('cancel_charges');
 
                 $data[] = [
                     'total_amount' => $cancel_charges,
-                    'date' => date('Y-m-d', strtotime($month_start. ' + ' . $i . 'day')),    
+                    'date' => date('Y-m-d', strtotime($month_start . ' + ' . $i . 'day')),
                 ];
             }
             $dashboard_data['monthly_payment_cancelled_report'] = $data;
@@ -330,70 +327,87 @@ class UserController extends Controller
     public function register(UserRequest $request)
     {
         $input = $request->all();
-                
-        $password = $input['password'];
-        $input['user_type'] = isset($input['user_type']) ? $input['user_type'] : 'client';
-        $input['password'] = Hash::make($password);
 
-        if( in_array($input['user_type'],['delivery_man']))
-        {
-            $input['status'] = isset($input['status']) ? $input['status']: 0;
+        print('input => '. $request);
+        $user_id = $input['id'];
+        if ($user_id > 0) {
+            print('$user_id > 0 => '. $user_id);
+            $user = User::where('id', $user_id)->first();
+
+            $user->uid = $input['uid'];
+
+            $user->save();
+
+            $message = __('message.update_form', ['form' => __('message.' . $input['user_uid'])]);
+            $response = [
+                'data' => $user,
+                'message' => $message
+            ];
+            return json_custom_response($response);
+        } else {
+            print('$user_id => '. $user_id);
+            $password = $input['password'];
+            $input['user_type'] = isset($input['user_type']) ? $input['user_type'] : 'client';
+            $input['password'] = Hash::make($password);
+
+            if (in_array($input['user_type'], ['delivery_man'])) {
+                $input['status'] = isset($input['status']) ? $input['status'] : 0;
+            }
+            $user = User::create($input);
+            if ($request->has('user_bank_account') && $request->user_bank_account != null) {
+                $user->userBankAccount()->create($request->user_bank_account);
+            }
+            $message = __('message.save_form', ['form' => __('message.' . $input['user_type'])]);
+            $user->api_token = $user->createToken('auth_token')->plainTextToken;
+            $response = [
+                'message' => $message,
+                'data' => $user
+            ];
+            return json_custom_response($response);
         }
-        $user = User::create($input);
-        if( $request->has('user_bank_account') && $request->user_bank_account != null ) {
-            $user->userBankAccount()->create($request->user_bank_account);
-        }
-        $message = __('message.save_form',['form' => __('message.'.$input['user_type']) ]);
-        $user->api_token = $user->createToken('auth_token')->plainTextToken;
-        $response = [
-            'message' => $message,
-            'data' => $user
-        ];
-        return json_custom_response($response);
     }
 
     public function login()
-    {      
-        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
-            
+    {
+        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+
             $user = Auth::user();
 
-            if(request('player_id') != null){
+            if (request('player_id') != null) {
                 $user->player_id = request('player_id');
             }
-            
-            if(request('fcm_token') != null){
+
+            if (request('fcm_token') != null) {
                 $user->fcm_token = request('fcm_token');
             }
 
             $user->save();
-            
+
             $success = $user;
             $success['api_token'] = $user->createToken('auth_token')->plainTextToken;
-            $success['profile_image'] = getSingleMedia($user,'profile_image',null);
+            $success['profile_image'] = getSingleMedia($user, 'profile_image', null);
             $is_verified_delivery_man = false;
-            if($user->user_type == 'delivery_man') {
+            if ($user->user_type == 'delivery_man') {
                 $is_verified_delivery_man = DeliveryManDocument::verifyDeliveryManDocument($user->id);
             }
             $success['is_verified_delivery_man'] = (int) $is_verified_delivery_man;
             unset($success['media']);
 
-            return json_custom_response([ 'data' => $success ], 200 );
-        }
-        else{
+            return json_custom_response(['data' => $success], 200);
+        } else {
             $message = __('auth.failed');
-            
-            return json_message_response($message,400);
+
+            return json_message_response($message, 400);
         }
     }
 
     public function userList(Request $request)
     {
         $user_type = isset($request['user_type']) ? $request['user_type'] : 'client';
-        
+
         $user_list = User::query();
-        
-        $user_list->when(request('user_type'), function ($q) use($user_type) {
+
+        $user_list->when(request('user_type'), function ($q) use ($user_type) {
             return $q->where('user_type', $user_type);
         });
 
@@ -405,29 +419,27 @@ class UserController extends Controller
             return $q->where('city_id', request('city_id'));
         });
 
-        if( $request->has('status') && isset($request->status) )
-        {
-            $user_list = $user_list->where('status',request('status'));
+        if ($request->has('status') && isset($request->status)) {
+            $user_list = $user_list->where('status', request('status'));
         }
-        
-        if( $request->has('is_deleted') && isset($request->is_deleted) && $request->is_deleted){
+
+        if ($request->has('is_deleted') && isset($request->is_deleted) && $request->is_deleted) {
             $user_list = $user_list->withTrashed();
         }
 
 
         $per_page = config('constant.PER_PAGE_LIMIT');
-        if( $request->has('per_page') && !empty($request->per_page))
-        {
-            if(is_numeric($request->per_page)){
+        if ($request->has('per_page') && !empty($request->per_page)) {
+            if (is_numeric($request->per_page)) {
                 $per_page = $request->per_page;
             }
-            if($request->per_page == -1 ){
+            if ($request->per_page == -1) {
                 $per_page = $user_list->count();
             }
         }
-        
+
         //$user_list = $user_list->paginate($per_page);
-        $user_list = $user_list->orderBy('id','desc')->paginate($per_page);
+        $user_list = $user_list->orderBy('id', 'desc')->paginate($per_page);
 
         $items = UserResource::collection($user_list);
 
@@ -435,7 +447,7 @@ class UserController extends Controller
             'pagination' => json_pagination_response($items),
             'data' => $items,
         ];
-        
+
         return json_custom_response($response);
     }
 
@@ -443,11 +455,10 @@ class UserController extends Controller
     {
         $id = $request->id;
 
-        $user = User::where('id',$id)->withTrashed()->first();
-        if(empty($user))
-        {
+        $user = User::where('id', $id)->withTrashed()->first();
+        if (empty($user)) {
             $message = __('message.user_not_found');
-            return json_message_response($message,400);   
+            return json_message_response($message, 400);
         }
 
         $user_detail = new UserResource($user);
@@ -462,28 +473,28 @@ class UserController extends Controller
     {
         $id = $request->id;
 
-        $user = User::where('id',$id)->withTrashed()->first();
-        if(empty($user))
-        {
+        $user = User::where('id', $id)->withTrashed()->first();
+        if (empty($user)) {
             $message = __('message.user_not_found');
-            return json_message_response($message,400);   
+            return json_message_response($message, 400);
         }
 
         $user_detail = new UserDetailResource($user);
 
-        $wallet_history = $user->userWalletHistory()->orderBy('id','desc')->paginate(10);
+        $wallet_history = $user->userWalletHistory()->orderBy('id', 'desc')->paginate(10);
         $wallet_history_items = WalletHistoryResource::collection($wallet_history);
         $response = [
             'data' => $user_detail,
             'wallet_history' => [
                 'pagination' => json_pagination_response($wallet_history_items),
-                'data'  => $wallet_history_items,
+                'data' => $wallet_history_items,
             ]
         ];
-        if( $user->user_type == 'delivery_man' ) {
-            $earning_detail = User::select('id','name')->withTrashed()->where('id', $user->id)
+        if ($user->user_type == 'delivery_man') {
+            $earning_detail = User::select('id', 'name')->withTrashed()->where('id', $user->id)
                 ->with(['userWallet:total_amount,total_withdrawn', 'getPayment:order_id,delivery_man_commission,admin_commission'])
-                ->withCount(['deliveryManOrder as total_order',
+                ->withCount([
+                    'deliveryManOrder as total_order',
                     'getPayment as paid_order' => function ($query) {
                         $query->where('payment_status', 'paid');
                     }
@@ -495,18 +506,19 @@ class UserController extends Controller
 
             $response['earning_detail'] = new DeliveryManEarningResource($earning_detail);
 
-            $earning_list = Payment::with('order')->withTrashed()->where('payment_status','paid')
-                ->whereHas('order',function ($query) use($user) {
-                    $query->whereIn('status',['completed','cancelled'])->where('delivery_man_id', $user->id);
-                })->orderBy('id','desc')->paginate(10);
-            
+            $earning_list = Payment::with('order')->withTrashed()->where('payment_status', 'paid')
+                ->whereHas('order', function ($query) use ($user) {
+                    $query->whereIn('status', ['completed', 'cancelled'])->where('delivery_man_id', $user->id);
+                })->orderBy('id', 'desc')->paginate(10);
+
             $earning_list_items = PaymentResource::collection($earning_list);
             $response['earning_list']['pagination'] = json_pagination_response($earning_list_items);
             $response['earning_list']['data'] = $earning_list_items;
-        } else  if( $user->user_type == 'client' ) {
-            $earning_detail = User::select('id','name')->withTrashed()->where('id', $user->id)
+        } else if ($user->user_type == 'client') {
+            $earning_detail = User::select('id', 'name')->withTrashed()->where('id', $user->id)
                 ->with(['userWallet:total_amount,total_withdrawn', 'getPayment:order_id,delivery_man_commission,admin_commission'])
-                ->withCount(['deliveryManOrder as total_order',
+                ->withCount([
+                    'deliveryManOrder as total_order',
                     'getPayment as paid_order' => function ($query) {
                         $query->where('payment_status', 'paid');
                     }
@@ -518,11 +530,11 @@ class UserController extends Controller
 
             $response['earning_detail'] = new DeliveryManEarningResource($earning_detail);
 
-            $earning_list = Payment::with('order')->withTrashed()->where('payment_status','paid')
-                ->whereHas('order',function ($query) use($user) {
-                    $query->whereIn('status',['completed','cancelled'])->where('delivery_man_id', $user->id);
-                })->orderBy('id','desc')->paginate(10);
-            
+            $earning_list = Payment::with('order')->withTrashed()->where('payment_status', 'paid')
+                ->whereHas('order', function ($query) use ($user) {
+                    $query->whereIn('status', ['completed', 'cancelled'])->where('delivery_man_id', $user->id);
+                })->orderBy('id', 'desc')->paginate(10);
+
             $earning_list_items = PaymentResource::collection($earning_list);
             $response['earning_list']['pagination'] = json_pagination_response($earning_list_items);
             $response['earning_list']['data'] = $earning_list_items;
@@ -531,64 +543,62 @@ class UserController extends Controller
         return json_custom_response($response);
     }
 
-    public function changePassword(Request $request){
-        $user = User::where('id',\Auth::user()->id)->first();
+    public function changePassword(Request $request)
+    {
+        $user = User::where('id', \Auth::user()->id)->first();
 
-        if($user == "") {
+        if ($user == "") {
             $message = __('message.user_not_found');
-            return json_message_response($message,400);   
+            return json_message_response($message, 400);
         }
-           
+
         $hashedPassword = $user->password;
 
         $match = Hash::check($request->old_password, $hashedPassword);
 
         $same_exits = Hash::check($request->new_password, $hashedPassword);
-        if ($match)
-        {
-            if($same_exits){
+        if ($match) {
+            if ($same_exits) {
                 $message = __('message.old_new_pass_same');
-                return json_message_response($message,400);
+                return json_message_response($message, 400);
             }
 
-			$user->fill([
+            $user->fill([
                 'password' => Hash::make($request->new_password)
             ])->save();
-            
+
             $message = __('message.password_change');
-            return json_message_response($message,200);
-        }
-        else
-        {
+            return json_message_response($message, 200);
+        } else {
             $message = __('message.valid_password');
-            return json_message_response($message,400);
+            return json_message_response($message, 400);
         }
     }
 
     public function updateProfile(Request $request)
-    {   
+    {
         $user = \Auth::user();
-        if($request->has('id') && !empty($request->id)){
-            $user = User::where('id',$request->id)->first();
+        if ($request->has('id') && !empty($request->id)) {
+            $user = User::where('id', $request->id)->first();
         }
-        if($user == null){
-            return json_message_response(__('message.not_found_entry',['name' => __('message.client')]),400);
+        if ($user == null) {
+            return json_message_response(__('message.not_found_entry', ['name' => __('message.client')]), 400);
         }
 
         $user->fill($request->all())->update();
 
-        if(isset($request->profile_image) && $request->profile_image != null ) {
+        if (isset($request->profile_image) && $request->profile_image != null) {
             $user->clearMediaCollection('profile_image');
             $user->addMediaFromRequest('profile_image')->toMediaCollection('profile_image');
         }
 
         $user_data = User::find($user->id);
-        if($user_data->userBankAccount != null && $request->has('user_bank_account')) {
+        if ($user_data->userBankAccount != null && $request->has('user_bank_account')) {
             $user_data->userBankAccount->fill($request->user_bank_account)->update();
-        } else if( $request->has('user_bank_account') && $request->user_bank_account != null ) {
+        } else if ($request->has('user_bank_account') && $request->user_bank_account != null) {
             $user_data->userBankAccount()->create($request->user_bank_account);
         }
-        
+
         $message = __('message.updated');
         // $user_data['profile_image'] = getSingleMedia($user_data,'profile_image',null);
         unset($user_data['media']);
@@ -596,17 +606,17 @@ class UserController extends Controller
             'data' => new UserResource($user_data),
             'message' => $message
         ];
-        return json_custom_response( $response );
+        return json_custom_response($response);
     }
 
     public function logout(Request $request)
     {
         $user = Auth::user();
 
-        if($request->is('api*')){
+        if ($request->is('api*')) {
 
             $clear = request('clear');
-            if( $clear != null ) {
+            if ($clear != null) {
                 $user->$clear = null;
             }
             $user->save();
@@ -628,53 +638,49 @@ class UserController extends Controller
             ? response()->json(['message' => __($response), 'status' => true], 200)
             : response()->json(['message' => __($response), 'status' => false], 400);
     }
-    
+
     public function socialLogin(Request $request)
     {
         $input = $request->all();
 
-        $user_data = User::where('email',$input['email'])->first();
+        $user_data = User::where('email', $input['email'])->first();
 
-        if($input['login_type'] === 'mobile'){
-            $user_data = User::where('username',$input['username'])->where('login_type','mobile')->first();
+        if ($input['login_type'] === 'mobile') {
+            $user_data = User::where('username', $input['username'])->where('login_type', 'mobile')->first();
         }
 
-        if( $user_data != null ) {
-            if( !isset($user_data->login_type) || $user_data->login_type  == '' )
-            {
-                if($request->login_type === 'google')
-                {
-                    $message = __('validation.unique',['attribute' => 'email' ]);
+        if ($user_data != null) {
+            if (!isset($user_data->login_type) || $user_data->login_type == '') {
+                if ($request->login_type === 'google') {
+                    $message = __('validation.unique', ['attribute' => 'email']);
                 } else {
-                    $message = __('validation.unique',['attribute' => 'username' ]);
+                    $message = __('validation.unique', ['attribute' => 'username']);
                 }
-                return json_message_response($message,400);
+                return json_message_response($message, 400);
             }
             $message = __('message.login_success');
         } else {
 
-            if($request->login_type === 'google')
-            {
+            if ($request->login_type === 'google') {
                 $key = 'email';
                 $value = $request->email;
             } else {
                 $key = 'username';
                 $value = $request->username;
             }
-            
-            $trashed_user_data = User::where($key,$value)->whereNotNull('login_type')->withTrashed()->first();
-            
-            if ($trashed_user_data != null && $trashed_user_data->trashed())
-            {
-                if($request->login_type === 'google'){
-                    $message = __('validation.unique',['attribute' => 'email' ]);
+
+            $trashed_user_data = User::where($key, $value)->whereNotNull('login_type')->withTrashed()->first();
+
+            if ($trashed_user_data != null && $trashed_user_data->trashed()) {
+                if ($request->login_type === 'google') {
+                    $message = __('validation.unique', ['attribute' => 'email']);
                 } else {
-                    $message = __('validation.unique',['attribute' => 'username' ]);
+                    $message = __('validation.unique', ['attribute' => 'username']);
                 }
-                return json_message_response($message,400);
+                return json_message_response($message, 400);
             }
 
-            if($request->login_type === 'mobile' && $user_data == null ){
+            if ($request->login_type === 'mobile' && $user_data == null) {
                 $otp_response = [
                     'status' => true,
                     'is_user_exist' => false
@@ -683,18 +689,18 @@ class UserController extends Controller
             }
 
             $password = !empty($input['accessToken']) ? $input['accessToken'] : $input['email'];
-            
-            $input['user_type']  = "user";
+
+            $input['user_type'] = "user";
             //$input['display_name'] = $input['first_name']." ".$input['last_name'];
             $input['password'] = Hash::make($password);
             $input['user_type'] = isset($input['user_type']) ? $input['user_type'] : 'client';
             $user = User::create($input);
-    
-            $user_data = User::where('id',$user->id)->first();
-            $message = __('message.save_form',['form' => $input['user_type'] ]);
+
+            $user_data = User::where('id', $user->id)->first();
+            $message = __('message.save_form', ['form' => $input['user_type']]);
         }
         $user_data['api_token'] = $user_data->createToken('auth_token')->plainTextToken;
-        $user_data['profile_image'] = getSingleMedia($user_data,'profile_image',null);
+        $user_data['profile_image'] = getSingleMedia($user_data, 'profile_image', null);
         $response = [
             'status' => true,
             'message' => $message,
@@ -706,21 +712,21 @@ class UserController extends Controller
     public function updateUserStatus(Request $request)
     {
         $user_id = $request->id;
-        $user = User::where('id',$user_id)->first();
+        $user = User::where('id', $user_id)->first();
 
-        if($user == "") {
+        if ($user == "") {
             $message = __('message.user_not_found');
-            return json_message_response($message,400);
+            return json_message_response($message, 400);
         }
-        if($request->has('status')) {
-        $user->status = $request->status;
-    }
-    if($request->has('player_id')) {
-        $user->player_id = $request->player_id;
-    }
+        if ($request->has('status')) {
+            $user->status = $request->status;
+        }
+        if ($request->has('player_id')) {
+            $user->player_id = $request->player_id;
+        }
         $user->save();
 
-        $message = __('message.update_form',['form' => __('message.status') ]);
+        $message = __('message.update_form', ['form' => __('message.status')]);
         $response = [
             'data' => new UserResource($user),
             'message' => $message
@@ -731,8 +737,8 @@ class UserController extends Controller
     public function updateAppSetting(Request $request)
     {
         $data = $request->all();
-        AppSetting::updateOrCreate(['id' => $request->id],$data);
-        $message = __('message.save_form',['form' => __('message.app_setting') ]);
+        AppSetting::updateOrCreate(['id' => $request->id], $data);
+        $message = __('message.save_form', ['form' => __('message.app_setting')]);
         $response = [
             'data' => AppSetting::first(),
             'message' => $message
@@ -742,8 +748,8 @@ class UserController extends Controller
 
     public function getAppSetting(Request $request)
     {
-        if($request->has('id') && isset($request->id)){
-            $data = AppSetting::where('id',$request->id)->first();
+        if ($request->has('id') && isset($request->id)) {
+            $data = AppSetting::where('id', $request->id)->first();
         } else {
             $data = AppSetting::first();
         }
@@ -755,34 +761,34 @@ class UserController extends Controller
     {
         $user = User::find($request->id);
 
-        $message = __('message.msg_fail_to_delete',['item' => __('message.'.$user->user_type) ]);
-        
-        if( $user != '' ) {
+        $message = __('message.msg_fail_to_delete', ['item' => __('message.' . $user->user_type)]);
+
+        if ($user != '') {
             $user->delete();
-            $message = __('message.msg_deleted',['name' => __('message.'.$user->user_type) ]);
+            $message = __('message.msg_deleted', ['name' => __('message.' . $user->user_type)]);
         }
-        
-        if(request()->is('api/*')){
-            return json_custom_response(['message'=> $message , 'status' => true]);
+
+        if (request()->is('api/*')) {
+            return json_custom_response(['message' => $message, 'status' => true]);
         }
     }
 
     public function userAction(Request $request)
     {
         $id = $request->id;
-        $user = User::withTrashed()->where('id',$id)->first();
-        
-        $message = __('message.not_found_entry',['name' => __('message.'.$user->user_type) ]);
-        if($request->type === 'restore'){
+        $user = User::withTrashed()->where('id', $id)->first();
+
+        $message = __('message.not_found_entry', ['name' => __('message.' . $user->user_type)]);
+        if ($request->type === 'restore') {
             $user->restore();
-            $message = __('message.msg_restored',['name' => __('message.'.$user->user_type) ]);
+            $message = __('message.msg_restored', ['name' => __('message.' . $user->user_type)]);
         }
 
-        if($request->type === 'forcedelete'){
+        if ($request->type === 'forcedelete') {
             $user->forceDelete();
-            $message = __('message.msg_forcedelete',['name' => __('message.'.$user->user_type) ]);
+            $message = __('message.msg_forcedelete', ['name' => __('message.' . $user->user_type)]);
         }
 
-        return json_custom_response(['message'=> $message, 'status' => true]);
+        return json_custom_response(['message' => $message, 'status' => true]);
     }
 }

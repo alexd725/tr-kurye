@@ -1019,6 +1019,10 @@ class LanguageAf extends BaseLanguage {
       'OPMERKING: As u die bestelling voordat u die pakket kanselleer, kanselleer, sal die kansellasiekoste besnoei word. Ander is die volle lading gesny.';
 
   @override
+  String get driverRegistNote =>
+      'Not: Bilgileriniz incelendikten sonra size dönüş yapılacaktır.';
+
+  @override
   String get earningHistory => "Verdienste geskiedenis";
 
   @override

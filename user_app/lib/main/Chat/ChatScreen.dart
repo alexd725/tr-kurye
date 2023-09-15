@@ -39,20 +39,20 @@ class _ChatScreenState extends State<ChatScreen> {
   UserData sender = UserData(
     name: getStringAsync(USER_NAME),
     profileImage: getStringAsync(USER_PROFILE_PHOTO),
-    uid: '${getIntAsync(UID)}',
+    uid: getStringAsync(UID),
     playerId: getStringAsync(PLAYER_ID),
   );
 
   init() async {
     log(widget.userData!.toJson());
-    id = sender.uid!;
+    id = getStringAsync(UID);
     mIsEnterKey = getBoolAsync(IS_ENTER_KEY, defaultValue: false);
     mSelectedImage = getStringAsync(SELECTED_WALLPAPER,
         defaultValue: "assets/default_wallpaper.png");
 
     chatMessageService = ChatMessageService();
     chatMessageService.setUnReadStatusToTrue(
-        senderId: sender.uid!, receiverId: widget.userData!.id.toString());
+        senderId: sender.uid!, receiverId: widget.userData!.uid!);
     setState(() {});
   }
 
@@ -64,13 +64,13 @@ class _ChatScreenState extends State<ChatScreen> {
       }
     }
     ChatMessageModel data = ChatMessageModel();
-    data.receiverId = widget.userData!.id.toString().validate();
+    data.receiverId = widget.userData!.uid.validate();
     data.senderId = sender.uid.validate();
     data.message = messageCont.text;
     data.isMessageRead = false;
     data.createdAt = DateTime.now().millisecondsSinceEpoch;
 
-    if (widget.userData!.id.toString() == sender.uid) {
+    if (widget.userData!.uid == getStringAsync(UID)) {
       //
     }
     if (result != null) {
@@ -110,7 +110,7 @@ class _ChatScreenState extends State<ChatScreen> {
           .collection(USER_COLLECTION)
           .doc(getIntAsync(USER_ID).toString())
           .collection(CONTACT_COLLECTION)
-          .doc(widget.userData!.id.toString())
+          .doc(widget.userData!.uid)
           .update({
         'lastMessageTime': DateTime.now().millisecondsSinceEpoch
       }).catchError((e) {
@@ -118,7 +118,7 @@ class _ChatScreenState extends State<ChatScreen> {
       });
       userService.fireStore
           .collection(USER_COLLECTION)
-          .doc(widget.userData!.id.toString())
+          .doc(widget.userData!.uid)
           .collection(CONTACT_COLLECTION)
           .doc(getIntAsync(USER_ID).toString())
           .update({
@@ -131,12 +131,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log(widget.userData!.id.toString());
+    log(widget.userData!.uid);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         // title: StreamBuilder<UserData>(
-        //   stream: UserService().singleUser(widget.userData!.id.toString()),
+        //   stream: UserService().singleUser(widget.userData!.uid),
         //   builder: (context, snap) {
         //     if (snap.hasData) {
         //       return Row(
@@ -198,8 +198,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 padding: EdgeInsets.only(left: 8, top: 8, right: 8, bottom: 0),
                 physics: BouncingScrollPhysics(),
                 query: chatMessageService.chatMessagesWithPagination(
-                    currentUserId: sender.uid,
-                    receiverUserId: widget.userData!.id.toString().validate()),
+                    currentUserId: getStringAsync(UID),
+                    receiverUserId: widget.userData!.uid.validate()),
                 itemsPerPage: PER_PAGE_CHAT_COUNT,
                 shrinkWrap: true,
                 onEmpty: Offstage(),

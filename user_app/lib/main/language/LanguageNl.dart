@@ -1018,6 +1018,10 @@ class LanguageNl extends BaseLanguage {
       'OPMERKING: Als u de bestelling annuleert voordat u het pakket opneemt, worden de annuleringskosten gesneden. Termijn wordt de volledige lading gesneden.';
 
   @override
+  String get driverRegistNote =>
+      'Not: Bilgileriniz incelendikten sonra size dönüş yapılacaktır.';
+
+  @override
   String get earningHistory => "Geschiedenis verdienen";
 
   @override

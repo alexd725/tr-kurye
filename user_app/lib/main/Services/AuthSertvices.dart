@@ -25,7 +25,8 @@ class AuthServices {
   }
 
   Future<void> signUpWithEmailPassword(context,
-      {String? name,
+      {int? id,
+      String? name,
       String? email,
       String? password,
       String? mobileNumber,
@@ -67,6 +68,7 @@ class AuthServices {
           .addDocumentWithCustomId(currentUser.uid, userModel.toJson())
           .then((value) async {
         var request = {
+          "id": 0,
           "name": name,
           "username": userName,
           "user_type": userType,
@@ -237,7 +239,8 @@ class AuthServices {
   // this is for driver
 
   Future<void> signUpWithEmailPasswordDriver(context,
-      {String? idNumber,
+      {int? id,
+      String? idNumber,
       String? name,
       String? email,
       String? password,
@@ -275,6 +278,7 @@ class AuthServices {
           .addDocumentWithCustomId(currentUser.uid, userModel.toJson())
           .then((value) async {
         var request = {
+          "id": id,
           "id_no": idNumber,
           "car_or_moto": carOrMotor,
           "name": name,
@@ -287,25 +291,25 @@ class AuthServices {
           "player_id": getStringAsync(PLAYER_ID).validate(),
           "plate_number": plateNumber,
         };
-        //if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
-        appStore.setLogin(false);
-        LoginScreen().launch(context,
-            isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-        //} else {
-        //  await logInApi(request).then((res) async {
-        //    UserCitySelectScreen().launch(context,
-        //        isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-        //  }).catchError((e) {
-        //    toast(e.toString());
-        //  });
-        //}
-        //await signUpApi(request).then((res) async {
-        //
-        //}).catchError((e) {
-        //  toast(e.toString());
-        //  return;
-        //});
-        //appStore.setLoading(false);
+        await signUpApi(request).then((res) async {
+          if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
+            appStore.setLogin(false);
+            LoginScreen().launch(context,
+                isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+          } else {
+            await logInApi(request).then((res) async {
+              UserCitySelectScreen().launch(context,
+                  isNewTask: true,
+                  pageRouteAnimation: PageRouteAnimation.Slide);
+            }).catchError((e) {
+              toast(e.toString());
+            });
+          }
+        }).catchError((e) {
+          toast(e.toString());
+          return;
+        });
+        appStore.setLoading(false);
       }).catchError((e) {
         appStore.setLoading(false);
         toast(e.toString());
@@ -318,7 +322,8 @@ class AuthServices {
   // this is for corporate
 
   Future<void> signUpWithEmailPasswordCorporate(context,
-      {String? institution,
+      {int? id,
+      String? institution,
       String? password,
       String? mobileNumber,
       String? lName,
@@ -353,6 +358,7 @@ class AuthServices {
           .addDocumentWithCustomId(currentUser.uid, userModel.toJson())
           .then((value) async {
         var request = {
+          "id": id,
           "name": institution,
           "institutions": institution,
           "tax_office": taxOffice,
@@ -450,7 +456,8 @@ class AuthServices {
 
       appStore.setLoading(true);
       //Login Details to SharedPreferences
-      setValue(UID, userModel.id.validate());
+      print('userModel.uid.validate() => ${userModel.uid.validate()}');
+      setValue(UID, userModel.uid.validate());
       setValue(USER_EMAIL, userModel.email.validate());
       setValue(IS_LOGGED_IN, true);
       setValue(TAX_NUMBER, userModel.taxNumber.validate());

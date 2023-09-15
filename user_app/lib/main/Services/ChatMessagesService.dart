@@ -27,6 +27,8 @@ class ChatMessageService extends BaseService {
     if (receiverUserId.isEmpty) {
       throw ArgumentError('receiverUserId must be a non-empty string');
     }
+    print('receiverUserId => $receiverUserId');
+    print('currentUserId => $currentUserId');
     return ref!
         .doc(currentUserId)
         .collection(receiverUserId)

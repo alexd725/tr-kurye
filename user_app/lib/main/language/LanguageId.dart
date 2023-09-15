@@ -1019,6 +1019,10 @@ class LanguageId extends BaseLanguage {
       'CATATAN: Jika Anda membatalkan pesanan sebelum mengambil parsel maka biaya pembatalan akan dipotong. Lalu, biaya penuh akan dipotong.';
 
   @override
+  String get driverRegistNote =>
+      'Not: Bilgileriniz incelendikten sonra size dönüş yapılacaktır.';
+
+  @override
   String get earningHistory => "Menghasilkan Sejarah";
 
   @override

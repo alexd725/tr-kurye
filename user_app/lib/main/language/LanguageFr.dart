@@ -1033,6 +1033,10 @@ class LanguageFr extends BaseLanguage {
       'Remarque: Si vous annulez la commande avant de ramasser le colis, les frais d\'annulation seront coupés. Autrement dit, la charge complète sera coupée.';
 
   @override
+  String get driverRegistNote =>
+      'Not: Bilgileriniz incelendikten sonra size dönüş yapılacaktır.';
+
+  @override
   String get earningHistory => "Gagner l'histoire";
 
   @override

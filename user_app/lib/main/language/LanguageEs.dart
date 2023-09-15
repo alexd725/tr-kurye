@@ -1027,6 +1027,10 @@ class LanguageEs extends BaseLanguage {
       'Nota: Si cancela el pedido antes de recoger el paquete, se cortará la carga de cancelación. De lo contrario, se cortará la carga completa.';
 
   @override
+  String get driverRegistNote =>
+      'Not: Bilgileriniz incelendikten sonra size dönüş yapılacaktır.';
+
+  @override
   String get earningHistory => "Historia de ganancias";
 
   @override

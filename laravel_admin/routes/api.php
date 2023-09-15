@@ -45,7 +45,8 @@ Route::get('/getuser/{id}', [App\Http\Controllers\CreditCardController::class, '
 Route::get('/searchorders/{id}/{search}', [App\Http\Controllers\CreditCardController::class, 'searchdrivers']);
 
 
-Route::post('register', [API\UserController::class, 'register']);
+Route::post('
+', [API\UserController::class, 'register']);
 Route::post('login', [API\UserController::class, 'login']);
 Route::post('forget-password', [API\UserController::class, 'forgetPassword']);
 Route::post('social-login', [API\UserController::class, 'socialLogin']);

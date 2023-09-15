@@ -1020,6 +1020,10 @@ class LanguagePt extends BaseLanguage {
       'NOTA: Se você cancelar o pedido antes da retirada do pacote, a carga de cancelamento será cortada. Além disso, a carga completa será cortada.';
 
   @override
+  String get driverRegistNote =>
+      'Not: Bilgileriniz incelendikten sonra size dönüş yapılacaktır.';
+
+  @override
   String get earningHistory => "Ganhando história";
 
   @override

@@ -258,55 +258,50 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   getCityApiCall({String? name}) async {
     appStore.setLoading(true);
-    await getCityList(countryId: 0, name: name).then((value) async {
+    await getCityList(countryId: 0, name: name, order_type: delivery)
+        .then((value) async {
       appStore.setLoading(false);
       cityData_list.clear();
       cityData_list.addAll(value.data!);
-      vehicles_list.clear();
-      delivery_list.clear();
-      delivery_list_car.clear();
+      if (name == null) {
+        vehicles_list.clear();
+        delivery_list.clear();
+        delivery_list_car.clear();
 
-      cityData_list.forEach((element) {
-        // print(element.name);
-        // print(cityData!.name);
+        cityData_list.forEach((element) {
+          // print(element.name);
+          // print(cityData!.name);
 
-        if (element.name == cityData!.name) {
-          vehicles_list.add(element.vehicle_type);
-          if (vehicles_list.isNotEmpty) {
-            print("vehicles_list ${vehicles_list[0]}");
-            vehicle = vehicles_list[0].toString();
+          if (element.name == cityData!.name) {
+            vehicles_list.add(element.vehicle_type);
+            if (vehicles_list.isNotEmpty) {
+              print("vehicles_list ${vehicles_list[0]}");
+              vehicle = vehicles_list[0].toString();
+              setState(() {});
+            }
+          }
+          if (element.vehicle_type == "Bike" &&
+              element.name == cityData!.name) {
+            delivery_list.add(element.order_type);
+          }
+          if (element.vehicle_type != "Bike" &&
+              element.name == cityData!.name) {
+            delivery_list_car.add(element.order_type);
+            if (vehicle == "Bike") {
+              isBike = true;
+              delivery = delivery_list[0];
+            } else {
+              isBike = false;
+              delivery = delivery_list_car[0];
+            }
             setState(() {});
           }
-        }
-        if (element.vehicle_type == "Bike" && element.name == cityData!.name) {
-          delivery_list.add(element.order_type);
-        }
-        if (element.vehicle_type != "Bike" && element.name == cityData!.name) {
-          delivery_list_car.add(element.order_type);
-          if (vehicle == "Bike") {
-            isBike = true;
-            delivery = delivery_list[0];
-          } else {
-            isBike = false;
-            delivery = delivery_list_car[0];
-          }
-          setState(() {});
-        }
-
-        // if (element.vehicle_type == vehicle &&
-        //     element.name == cityData!.name &&
-        //     element.order_type == delivery) {
-        //   print(element.maxWeight);
-        //   print(element.minWeight);
-        //   maxWeight = element.maxWeight;
-        //   minWeight = element.minWeight;
-        // }
-      });
-      chargePerAddress = value.data![0].chargePerAddress != null
-          ? value.data![0].chargePerAddress
-          : 0;
-
-      await getVehicleApiCall2(cityData!.vehicle_type);
+        });
+        chargePerAddress = value.data![0].chargePerAddress != null
+            ? value.data![0].chargePerAddress
+            : 0;
+      }
+      await getVehicleApiCall2(name ?? cityData!.vehicle_type);
       setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);
@@ -605,10 +600,18 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   getVehicleApiCall2(String? vehicleType) async {
     cityData_list.forEach((element) {
+      print('cityData.name => ${element.name}');
+      print('cityData.vehicle_type => ${element.vehicle_type}');
+      print('cityData.vehicle_type => ${element.order_type}');
+      print('cityData.minWeight => ${element.minWeight}');
+      print('cityData.name => ${cityData!.name}');
+      print('cityData.vehicle_type => ${vehicleType}');
+      print('cityData.vehicle_type => ${delivery}');
       print(
           'result => ${element.name == cityData!.name && element.vehicle_type == vehicleType}');
       if (element.name == cityData!.name &&
-          element.vehicle_type == vehicleType) {
+          element.vehicle_type == vehicleType &&
+          element.order_type == delivery) {
         cityData = element;
         minWeight = cityData!.minWeight;
         maxWeight = cityData!.maxWeight;
@@ -1266,7 +1269,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     }).toList(),
                     onChanged: (value) {
                       // getVehicleApiCall();
-                      getVehicleApiCall2(value);
+
                       print("++++++++++++++++++++++++++++++++++$vehicle");
 
                       setState(() {
@@ -1282,6 +1285,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           appStore.isVehicleOrder = 1;
                           //  weightController= cityData!.minWeight as TextEditingController;
                         }
+                        getCityApiCall(name: vehicle);
                       });
                     },
                     validator: (value) {
@@ -1353,8 +1357,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                               child: Text(itemD ?? ''),
                             );
                           }).toList()),
-                    onChanged: (valueD) {
+                    onChanged: (valueD) async {
                       delivery = valueD!;
+
+                      await getCityApiCall(name: vehicle);
                       setState(() {
                         if (double.tryParse(weightController.text)! <
                                 minWeight!.toDouble() ||

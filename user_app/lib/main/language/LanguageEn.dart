@@ -1015,6 +1015,10 @@ class LanguageEn extends BaseLanguage {
       'NOTE: If you cancel the order before pickup the parcel then cancellation charge will be cut.Otherwise,full charge will be cut.';
 
   @override
+  String get driverRegistNote =>
+      'Bilgi: Bilgileriniz incelendikten sonra tarafınıza dönüş yapılacaktır.';
+
+  @override
   String get earningHistory => "Earning History";
 
   @override

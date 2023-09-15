@@ -743,7 +743,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                             launchUrl(Uri.parse(
                                                                 'tel:${orderData!.deliveryPointsList![4]['contact_number']}'));
                                                           }),
-                                                         8.width,
+                                                          8.width,
                                                           Text(
                                                               '${orderData!.deliveryPointsList![4]['contact_number']}',
                                                               style:

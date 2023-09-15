@@ -13,7 +13,7 @@ class DashboardModel {
   int? totalDeliveryMan;
   int? totalOrder;
   int? todayRegisterUser;
-  int? totalEarning;
+  double? totalEarning;
   int? totalCancelledOrder;
   int? totalCreateOrder;
   int? totalActiveOrder;

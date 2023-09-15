@@ -1020,6 +1020,10 @@ class LanguageVi extends BaseLanguage {
       'Lưu ý: Nếu bạn hủy đơn đặt hàng trước khi nhận phần, thì phí hủy sẽ bị cắt. Tuy nhiên, phí đầy đủ sẽ bị cắt.';
 
   @override
+  String get driverRegistNote =>
+      'Not: Bilgileriniz incelendikten sonra size dönüş yapılacaktır.';
+
+  @override
   String get earningHistory => "Kiếm tiền lịch sử";
 
   @override

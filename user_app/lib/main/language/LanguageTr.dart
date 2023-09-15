@@ -1017,6 +1017,10 @@ class LanguageTr extends BaseLanguage {
       'Not: Parsel almadan önce siparişi iptal ederseniz, iptal ücreti kesilir. Akıllı olarak tam şarj kesilir.';
 
   @override
+  String get driverRegistNote =>
+      'Bilgi: Bilgileriniz incelendikten sonra tarafınıza dönüş yapılacaktır.';
+
+  @override
   String get earningHistory => "Kazanma Tarihi";
 
   @override

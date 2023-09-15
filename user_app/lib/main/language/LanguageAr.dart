@@ -1008,6 +1008,10 @@ class LanguageAr extends BaseLanguage {
       'ملاحظة: إذا قمت بإلغاء الطلب قبل التقاط الطرود ، فسيتم قطع رسوم الإلغاء. وإلا فسيتم قطع الشحن الكامل.';
 
   @override
+  String get driverRegistNote =>
+      'Not: Bilgileriniz incelendikten sonra size dönüş yapılacaktır.';
+
+  @override
   String get earningHistory => "كسب التاريخ";
 
   @override

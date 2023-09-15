@@ -1024,6 +1024,10 @@ class LanguageDe extends BaseLanguage {
       'HINWEIS: Wenn Sie die Bestellung vor dem Abholung des Pakets stornieren, wird die Stornierungsgebühr gekürzt.';
 
   @override
+  String get driverRegistNote =>
+      'Not: Bilgileriniz incelendikten sonra size dönüş yapılacaktır.';
+
+  @override
   String get earningHistory => "Geschichte verdienen";
 
   @override

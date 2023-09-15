@@ -436,10 +436,10 @@ Future<CountryDetailModel> getCountryDetail(int id) async {
 }
 
 Future<CityListModel> getCityList(
-    {required int countryId, String? name}) async {
+    {required int countryId, String? name, String? order_type}) async {
   return CityListModel.fromJson(await handleResponse(await buildHttpResponse(
-      name != null
-          ? 'city-list?country_id=$countryId&name=$name&per_page=-1'
+      name != null && name.isNotEmpty
+          ? 'city-list?country_id=$countryId&vehicle_type=$name&order_type=$order_type&per_page=-1'
           : 'city-list?country_id=$countryId&per_page=-1',
       method: HttpMethod.GET)));
 }
