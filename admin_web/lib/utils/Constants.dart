@@ -5,6 +5,8 @@ const currencyCodeDefault = 'INR';
 const mBaseUrl = "http://192.168.1.108:8000/api/";
 // const mBaseUrl = "http://10.10.18.72:8000/api/";
 
+const googleMapAPIKey = 'AIzaSyDQDmiPg45vvSyOfOO2euQSiqOeNGjiFXo';
+
 const mOneSignalAppId = 'ADD_YOUR_ONE_SIGNAL_APP_ID';
 const mOneSignalRestKey = 'ADD_YOUR_ONE_SIGNAL_REST_KEY';
 const mOneSignalChannelId = 'ADD_YOUR_ONE_SIGNAL_CHANNEL_ID';

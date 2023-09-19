@@ -259,9 +259,9 @@ class SendPackageFragmentState extends State<SendPackageFragment> {
     });
   }
 
-  getTotalAmount() {
-    totalDistance = calculateDistance(pickLat.toDouble(), pickLong.toDouble(),
-        deliverLat.toDouble(), deliverLong.toDouble());
+  getTotalAmount() async {
+    totalDistance = await calculateDistance(pickLat.toDouble(),
+        pickLong.toDouble(), deliverLat.toDouble(), deliverLong.toDouble());
     totalAmount = 0;
     weightCharge = 0;
     distanceCharge = 0;
@@ -283,6 +283,9 @@ class SendPackageFragmentState extends State<SendPackageFragment> {
           .toStringAsFixed(digitAfterDecimal)
           .toDouble();
     }
+
+    print('totalDistance => ${totalDistance}');
+    print('distanceCharge => ${distanceCharge}');
 
     /// total amount
     totalAmount = cityData!.fixedCharges! + weightCharge + distanceCharge;
@@ -1595,7 +1598,7 @@ class SendPackageFragmentState extends State<SendPackageFragment> {
                                             ),
                                           16.width,
                                           InkWell(
-                                            onTap: () {
+                                            onTap: () async {
                                               FocusScope.of(context)
                                                   .requestFocus(
                                                       new FocusNode());
@@ -1653,9 +1656,9 @@ class SendPackageFragmentState extends State<SendPackageFragment> {
                                                     return toast(language
                                                         .pickup_deliver_validation_msg);
                                                   selectedTabIndex++;
-                                                  if (selectedTabIndex == 3) {
-                                                    getTotalAmount();
-                                                  }
+                                                  //if (selectedTabIndex == 3) {
+                                                  await getTotalAmount();
+                                                  //}
                                                   setState(() {});
                                                 }
                                               } else {

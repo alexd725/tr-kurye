@@ -8,7 +8,7 @@ const mCodeCanyonURL = 'ADD_YOUR_PURCHASE_URL';
 const mBaseUrl = "http://192.168.1.108:8000/api/";
 // const mBaseUrl = "http://10.10.18.72:8000/api/";
 
-const mTestMode = true;
+const mTestMode = false;
 
 const googleMapAPIKey = 'AIzaSyDQDmiPg45vvSyOfOO2euQSiqOeNGjiFXo';
 const mOneSignalAppId = 'ADD_YOUR_ONE_SIGNAL_APP_ID';

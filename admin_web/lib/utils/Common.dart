@@ -1,3 +1,7 @@
+import 'dart:core';
+import 'dart:convert';
+import '../models/CalculateDistanceModel.dart';
+import 'package:http/http.dart' as http;
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -35,15 +39,21 @@ getBodyWidth(BuildContext context) {
 }
 
 double getTableWidth(context) {
-  return ResponsiveWidget.isLargeScreen(context) ? (getBodyWidth(context) - 40) * 0.5 : getBodyWidth(context) - 16;
+  return ResponsiveWidget.isLargeScreen(context)
+      ? (getBodyWidth(context) - 40) * 0.5
+      : getBodyWidth(context) - 16;
 }
 
 double getWalletTableWidth(context) {
-  return ResponsiveWidget.isLargeScreen(context) ? (getBodyWidth(context) - 40) * 0.8 : getBodyWidth(context) - 16;
+  return ResponsiveWidget.isLargeScreen(context)
+      ? (getBodyWidth(context) - 40) * 0.8
+      : getBodyWidth(context) - 16;
 }
 
 double getDetailWidth(context) {
-  return ResponsiveWidget.isLargeScreen(context) ? (getBodyWidth(context) - 40) * 0.2 : getBodyWidth(context) - 16;
+  return ResponsiveWidget.isLargeScreen(context)
+      ? (getBodyWidth(context) - 40) * 0.2
+      : getBodyWidth(context) - 16;
 }
 
 double? getTableHeight(context) {
@@ -55,7 +65,8 @@ Widget commonButton(String title, Function() onTap, {double? width}) {
     width: width,
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(defaultRadius)),
         elevation: 0,
         padding: EdgeInsets.symmetric(vertical: 20),
         backgroundColor: primaryColor,
@@ -74,13 +85,26 @@ containerDecoration() {
   return BoxDecoration(
     borderRadius: BorderRadius.circular(defaultRadius),
     color: appStore.isDarkMode ? scaffoldColorDark : Colors.white,
-    border: Border.all(color: appStore.isDarkMode ? Colors.white12 : viewLineColor, width: 1.5),
+    border: Border.all(
+        color: appStore.isDarkMode ? Colors.white12 : viewLineColor,
+        width: 1.5),
   );
 }
 
-Widget commonCachedNetworkImage(String? url, {double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment, bool usePlaceholderIfUrlEmpty = true, double? radius}) {
+Widget commonCachedNetworkImage(String? url,
+    {double? height,
+    double? width,
+    BoxFit? fit,
+    AlignmentGeometry? alignment,
+    bool usePlaceholderIfUrlEmpty = true,
+    double? radius}) {
   if (url == null || url.isEmpty) {
-    return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+    return placeHolderWidget(
+        height: height,
+        width: width,
+        fit: fit,
+        alignment: alignment,
+        radius: radius);
   } else if (url.validate().startsWith('http')) {
     return CachedNetworkImage(
       imageUrl: url!,
@@ -89,20 +113,43 @@ Widget commonCachedNetworkImage(String? url, {double? height, double? width, Box
       fit: fit,
       alignment: alignment as Alignment? ?? Alignment.center,
       errorWidget: (_, s, d) {
-        return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+        return placeHolderWidget(
+            height: height,
+            width: width,
+            fit: fit,
+            alignment: alignment,
+            radius: radius);
       },
       placeholder: (_, s) {
         if (!usePlaceholderIfUrlEmpty) return SizedBox();
-        return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+        return placeHolderWidget(
+            height: height,
+            width: width,
+            fit: fit,
+            alignment: alignment,
+            radius: radius);
       },
     );
   } else {
-    return Image.network(url!, height: height, width: width, fit: fit, alignment: alignment ?? Alignment.center);
+    return Image.network(url!,
+        height: height,
+        width: width,
+        fit: fit,
+        alignment: alignment ?? Alignment.center);
   }
 }
 
-Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment, double? radius}) {
-  return Image.asset('assets/placeholder.jpg', height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center);
+Widget placeHolderWidget(
+    {double? height,
+    double? width,
+    BoxFit? fit,
+    AlignmentGeometry? alignment,
+    double? radius}) {
+  return Image.asset('assets/placeholder.jpg',
+      height: height,
+      width: width,
+      fit: fit ?? BoxFit.cover,
+      alignment: alignment ?? Alignment.center);
 }
 
 Widget informationWidget(String title, String value) {
@@ -127,7 +174,9 @@ Widget addButton(String title, Function() onTap) {
   return InkWell(
     child: Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(color: primaryColor, borderRadius: BorderRadius.circular(defaultRadius)),
+      decoration: BoxDecoration(
+          color: primaryColor,
+          borderRadius: BorderRadius.circular(defaultRadius)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -147,7 +196,10 @@ Widget dialogSecondaryButton(String title, Function() onTap) {
     height: 40,
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius), side: BorderSide(color: appStore.isDarkMode ? Colors.white12 : viewLineColor)),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(defaultRadius),
+              side: BorderSide(
+                  color: appStore.isDarkMode ? Colors.white12 : viewLineColor)),
           elevation: 0,
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent),
@@ -163,7 +215,8 @@ Widget dialogPrimaryButton(String title, Function() onTap, {Color? color}) {
     height: 40,
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(defaultRadius)),
         elevation: 0,
         backgroundColor: color ?? primaryColor,
       ),
@@ -174,11 +227,13 @@ Widget dialogPrimaryButton(String title, Function() onTap, {Color? color}) {
 }
 
 Widget loaderWidget() {
-  return Center(child: Lottie.asset('assets/loader.json', width: 70, height: 70));
+  return Center(
+      child: Lottie.asset('assets/loader.json', width: 70, height: 70));
 }
 
 Widget emptyWidget() {
-  return Center(child: Lottie.asset('assets/no_data.json', width: 250, height: 250));
+  return Center(
+      child: Lottie.asset('assets/no_data.json', width: 250, height: 250));
 }
 
 String printDate(String date) {
@@ -232,10 +287,12 @@ String notificationTypeIcon({String? type}) {
   return icon;
 }
 
-Future<void> logOutData({required BuildContext context, Function? onAccept}) async {
+Future<void> logOutData(
+    {required BuildContext context, Function? onAccept}) async {
   showDialog<void>(
     context: context,
-    barrierDismissible: false, // false = user must tap button, true = tap outside dialog
+    barrierDismissible:
+        false, // false = user must tap button, true = tap outside dialog
     builder: (BuildContext dialogContext) {
       return AlertDialog(
         actionsPadding: EdgeInsets.all(16),
@@ -247,18 +304,25 @@ Future<void> logOutData({required BuildContext context, Function? onAccept}) asy
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    decoration: BoxDecoration(color: primaryColor.withOpacity(0.2), shape: BoxShape.circle),
+                    decoration: BoxDecoration(
+                        color: primaryColor.withOpacity(0.2),
+                        shape: BoxShape.circle),
                     padding: EdgeInsets.all(16),
                     child: Icon(Icons.clear, color: primaryColor),
                   ),
                   SizedBox(height: 30),
-                  Text(language.are_you_sure, style: primaryTextStyle(size: 24)),
+                  Text(language.are_you_sure,
+                      style: primaryTextStyle(size: 24)),
                   SizedBox(height: 16),
-                  Text(language.do_you_want_to_logout_from_the_app, style: boldTextStyle(), textAlign: TextAlign.center),
+                  Text(language.do_you_want_to_logout_from_the_app,
+                      style: boldTextStyle(), textAlign: TextAlign.center),
                   SizedBox(height: 16),
                 ],
               ),
-              Observer(builder: (context) => Visibility(visible: appStore.isLoading, child: Positioned.fill(child: loaderWidget()))),
+              Observer(
+                  builder: (context) => Visibility(
+                      visible: appStore.isLoading,
+                      child: Positioned.fill(child: loaderWidget()))),
             ],
           ),
         ),
@@ -293,9 +357,13 @@ Color statusColor(String status) {
   return color;
 }
 
-double countExtraCharge({required num totalAmount, required String chargesType, required num charges}) {
+double countExtraCharge(
+    {required num totalAmount,
+    required String chargesType,
+    required num charges}) {
   if (chargesType == CHARGE_TYPE_PERCENTAGE) {
-    return double.parse((totalAmount * charges * 0.01).toStringAsFixed(digitAfterDecimal));
+    return double.parse(
+        (totalAmount * charges * 0.01).toStringAsFixed(digitAfterDecimal));
   } else {
     return double.parse(charges.toStringAsFixed(digitAfterDecimal));
   }
@@ -322,16 +390,27 @@ Widget backButton(BuildContext context, {bool? value}) {
   );
 }
 
-Widget scheduleOptionWidget({required BuildContext context, required bool isSelected, required String imagePath, required String title, required Function() onTap}) {
+Widget scheduleOptionWidget(
+    {required BuildContext context,
+    required bool isSelected,
+    required String imagePath,
+    required String title,
+    required Function() onTap}) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
       padding: EdgeInsets.all(24),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: isSelected ? primaryColor : Theme.of(context).dividerColor), color: Theme.of(context).cardColor),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(defaultRadius),
+          border: Border.all(
+              color:
+                  isSelected ? primaryColor : Theme.of(context).dividerColor),
+          color: Theme.of(context).cardColor),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ImageIcon(AssetImage(imagePath), size: 20, color: isSelected ? primaryColor : Colors.grey),
+          ImageIcon(AssetImage(imagePath),
+              size: 20, color: isSelected ? primaryColor : Colors.grey),
           SizedBox(width: 16),
           Text(title, style: boldTextStyle()),
         ],
@@ -340,10 +419,27 @@ Widget scheduleOptionWidget({required BuildContext context, required bool isSele
   );
 }
 
-double calculateDistance(lat1, lon1, lat2, lon2) {
-  var p = 0.017453292519943295;
-  var a = 0.5 - cos((lat2 - lat1) * p) / 2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
-  return double.tryParse((12742 * asin(sqrt(a))).toStringAsFixed(digitAfterDecimal))!;
+Future calculateDistance(lat1, lon1, lat2, lon2) async {
+  var res = await http.get(Uri.parse(
+      'https://maps.googleapis.com/maps/api/distancematrix/json?destinations=$lat2,$lon2&origins=$lat1,$lon1&key=$googleMapAPIKey'));
+  CalculateDistanceModel distanceModel =
+      CalculateDistanceModel.fromJson(jsonDecode(res.body));
+  if (distanceModel.status == "OK") {
+    if (distanceModel.rows!.first.elements!.first.status == "OK") {
+      if (distanceModel.rows!.first.elements!.first.distance != null) {
+        return (distanceModel.rows!.first.elements!.first.distance!.value
+                    .validate() /
+                1000)
+            .toStringAsFixed(digitAfterDecimal)
+            .toDouble();
+      }
+    } else {
+      throw distanceModel.rows!.first.elements!.first.status.validate();
+    }
+  } else {
+    throw distanceModel.errorMsg.validate();
+  }
+  return 0;
 }
 
 String paymentStatus(String paymentStatus) {
@@ -373,9 +469,11 @@ String paymentType(String paymentType) {
     return language.razorpay;
   } else if (paymentType.toLowerCase() == PAYMENT_TYPE_PAYSTACK.toLowerCase()) {
     return language.pay_stack;
-  } else if (paymentType.toLowerCase() == PAYMENT_TYPE_FLUTTERWAVE.toLowerCase()) {
+  } else if (paymentType.toLowerCase() ==
+      PAYMENT_TYPE_FLUTTERWAVE.toLowerCase()) {
     return language.flutter_wave;
-  } else if (paymentType.toLowerCase() == PAYMENT_TYPE_MERCADOPAGO.toLowerCase()) {
+  } else if (paymentType.toLowerCase() ==
+      PAYMENT_TYPE_MERCADOPAGO.toLowerCase()) {
     return language.mercado_pago;
   } else if (paymentType.toLowerCase() == PAYMENT_TYPE_PAYPAL.toLowerCase()) {
     return language.paypal;
@@ -383,7 +481,8 @@ String paymentType(String paymentType) {
     return language.paytabs;
   } else if (paymentType.toLowerCase() == PAYMENT_TYPE_PAYTM.toLowerCase()) {
     return language.paytm;
-  } else if (paymentType.toLowerCase() == PAYMENT_TYPE_MYFATOORAH.toLowerCase()) {
+  } else if (paymentType.toLowerCase() ==
+      PAYMENT_TYPE_MYFATOORAH.toLowerCase()) {
     return language.my_fatoorah;
   } else if (paymentType.toLowerCase() == PAYMENT_TYPE_CASH.toLowerCase()) {
     return language.cash;
@@ -424,7 +523,9 @@ Future<void> saveFcmTokenId() async {
 }
 
 String printAmount(num amount) {
-  return appStore.currencyPosition == CURRENCY_POSITION_LEFT ? '${appStore.currencySymbol} ${amount.toStringAsFixed(digitAfterDecimal)}' : '${amount.toStringAsFixed(digitAfterDecimal)} ${appStore.currencySymbol}';
+  return appStore.currencyPosition == CURRENCY_POSITION_LEFT
+      ? '${appStore.currencySymbol} ${amount.toStringAsFixed(digitAfterDecimal)}'
+      : '${amount.toStringAsFixed(digitAfterDecimal)} ${appStore.currencySymbol}';
 }
 
 String dayTranslate(String day) {
@@ -466,14 +567,22 @@ Color withdrawStatusColor(String mStatus) {
 }
 
 double mCommonPadding(BuildContext context) {
-  return ResponsiveWidget.isLessMediumScreen(context) ? context.width() * 0.02 : context.width() * 0.13;
+  return ResponsiveWidget.isLessMediumScreen(context)
+      ? context.width() * 0.02
+      : context.width() * 0.13;
 }
 
 double mCommonPadding1(BuildContext context) {
   return context.width() * 0.05;
 }
 
-InputDecoration commonInputDecoration({Color? fillColor, String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? prefixIcon, Widget? suffix}) {
+InputDecoration commonInputDecoration(
+    {Color? fillColor,
+    String? hintText,
+    IconData? suffixIcon,
+    Function()? suffixOnTap,
+    Widget? prefixIcon,
+    Widget? suffix}) {
   return InputDecoration(
     prefixIcon: prefixIcon,
     contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -482,11 +591,23 @@ InputDecoration commonInputDecoration({Color? fillColor, String? hintText, IconD
     hintStyle: secondaryTextStyle(),
     fillColor: Colors.grey.withOpacity(0.15),
     counterText: '',
-    suffixIcon: suffixIcon != null ? GestureDetector(child: Icon(suffixIcon, color: Colors.grey, size: 22), onTap: suffixOnTap) : null,
-    enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none), borderRadius: BorderRadius.circular(defaultRadius)),
-    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: primaryColor), borderRadius: BorderRadius.circular(defaultRadius)),
-    errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
-    focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
+    suffixIcon: suffixIcon != null
+        ? GestureDetector(
+            child: Icon(suffixIcon, color: Colors.grey, size: 22),
+            onTap: suffixOnTap)
+        : null,
+    enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(style: BorderStyle.none),
+        borderRadius: BorderRadius.circular(defaultRadius)),
+    focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: primaryColor),
+        borderRadius: BorderRadius.circular(defaultRadius)),
+    errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+        borderRadius: BorderRadius.circular(defaultRadius)),
+    focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+        borderRadius: BorderRadius.circular(defaultRadius)),
     suffixIconColor: textSecondaryColorGlobal,
     prefixIconColor: textSecondaryColorGlobal,
     hoverColor: fillColor ?? editTextBackgroundColor,
@@ -494,21 +615,32 @@ InputDecoration commonInputDecoration({Color? fillColor, String? hintText, IconD
   );
 }
 
-Widget clientScheduleOptionWidget(BuildContext context, bool isSelected, IconData imagePath, String title) {
+Widget clientScheduleOptionWidget(
+    BuildContext context, bool isSelected, IconData imagePath, String title) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-    decoration: boxDecorationWithRoundedCorners(border: Border.all(color: isSelected ? primaryColor : borderColor), backgroundColor: context.cardColor),
+    decoration: boxDecorationWithRoundedCorners(
+        border: Border.all(color: isSelected ? primaryColor : borderColor),
+        backgroundColor: context.cardColor),
     child: Row(
       children: [
-        Icon(imagePath, size: 20, color: isSelected ? primaryColor : textPrimaryColorGlobal),
+        Icon(imagePath,
+            size: 20,
+            color: isSelected ? primaryColor : textPrimaryColorGlobal),
         8.width,
-        Text(title, style: boldTextStyle(color: isSelected ? primaryColor : textPrimaryColorGlobal)).paddingTop(2).expand(),
+        Text(title,
+                style: boldTextStyle(
+                    color: isSelected ? primaryColor : textPrimaryColorGlobal))
+            .paddingTop(2)
+            .expand(),
       ],
     ),
   );
 }
 
-Widget outlineActionIcon(IconData icon, Color color, String message, Function() onTap, {String? title}) {
+Widget outlineActionIcon(
+    IconData icon, Color color, String message, Function() onTap,
+    {String? title}) {
   return GestureDetector(
     child: Tooltip(
       message: message,
@@ -516,13 +648,17 @@ Widget outlineActionIcon(IconData icon, Color color, String message, Function() 
         cursor: SystemMouseCursors.click,
         child: Container(
           padding: EdgeInsets.all(4),
-          decoration: BoxDecoration(color: color.withOpacity(0.2), borderRadius: BorderRadius.circular(8), border: Border.all(color: color)),
+          decoration: BoxDecoration(
+              color: color.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: color)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon, color: color, size: 16),
               if (!title.isEmptyOrNull) 4.width,
-              if (!title.isEmptyOrNull) Text(title.validate(), style: boldTextStyle(color: color)),
+              if (!title.isEmptyOrNull)
+                Text(title.validate(), style: boldTextStyle(color: color)),
               if (!title.isEmptyOrNull) 4.width,
             ],
           ),
@@ -534,7 +670,8 @@ Widget outlineActionIcon(IconData icon, Color color, String message, Function() 
 }
 
 Future<void> launchUrlWidget(String url, {bool forceWebView = false}) async {
-  await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication).catchError((e) {
+  await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication)
+      .catchError((e) {
     log(e);
   });
 }
@@ -543,13 +680,23 @@ Widget mHeading(String value) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(value, style: boldTextStyle(size: 35, letterSpacing: 1.5, weight: FontWeight.w500)),
+      Text(value,
+          style: boldTextStyle(
+              size: 35, letterSpacing: 1.5, weight: FontWeight.w500)),
       8.height,
       Row(
         children: [
-          Container(width: 90, height: 4, decoration: boxDecorationWithRoundedCorners(borderRadius: radius(8), backgroundColor: primaryColor)),
+          Container(
+              width: 90,
+              height: 4,
+              decoration: boxDecorationWithRoundedCorners(
+                  borderRadius: radius(8), backgroundColor: primaryColor)),
           8.width,
-          Container(width: 25, height: 4, decoration: boxDecorationWithRoundedCorners(borderRadius: radius(8), backgroundColor: primaryColor))
+          Container(
+              width: 25,
+              height: 4,
+              decoration: boxDecorationWithRoundedCorners(
+                  borderRadius: radius(8), backgroundColor: primaryColor))
         ],
       ),
       20.height,
@@ -580,25 +727,37 @@ socialWidget({bool? isAbout = false}) {
         onTap: () {
           launchUrlWidget(builderResponse.facebookUrl.validate());
         },
-        child: Icon(FontAwesome.facebook_f, size: 24, color: isAbout.validate() ? textSecondaryColorGlobal : Colors.white),
+        child: Icon(FontAwesome.facebook_f,
+            size: 24,
+            color:
+                isAbout.validate() ? textSecondaryColorGlobal : Colors.white),
       ).visible(builderResponse.facebookUrl.validate().isNotEmpty),
       InkWell(
         onTap: () {
           launchUrlWidget(builderResponse.twitterUrl.validate());
         },
-        child: Icon(AntDesign.twitter, size: 24, color: isAbout.validate() ? textSecondaryColorGlobal : Colors.white),
+        child: Icon(AntDesign.twitter,
+            size: 24,
+            color:
+                isAbout.validate() ? textSecondaryColorGlobal : Colors.white),
       ).visible(builderResponse.twitterUrl.validate().isNotEmpty),
       InkWell(
         onTap: () {
           launchUrlWidget(builderResponse.linkedinUrl.validate());
         },
-        child: Icon(Entypo.linkedin, size: 24, color: isAbout.validate() ? textSecondaryColorGlobal : Colors.white),
+        child: Icon(Entypo.linkedin,
+            size: 24,
+            color:
+                isAbout.validate() ? textSecondaryColorGlobal : Colors.white),
       ).visible(builderResponse.linkedinUrl.validate().isNotEmpty),
       InkWell(
         onTap: () {
           launchUrlWidget(builderResponse.instagramUrl.validate());
         },
-        child: Icon(AntDesign.instagram, size: 24, color: isAbout.validate() ? textSecondaryColorGlobal : Colors.white),
+        child: Icon(AntDesign.instagram,
+            size: 24,
+            color:
+                isAbout.validate() ? textSecondaryColorGlobal : Colors.white),
       ).visible(builderResponse.instagramUrl.validate().isNotEmpty),
     ],
   );
@@ -631,7 +790,8 @@ cashConfirmDialog() {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(language.balLessOrderCreateCash, style: primaryTextStyle(size: 16), textAlign: TextAlign.center),
+            Text(language.balLessOrderCreateCash,
+                style: primaryTextStyle(size: 16), textAlign: TextAlign.center),
             30.height,
             appButton(getContext, title: language.ok, onCall: () {
               finish(getContext);
@@ -643,9 +803,13 @@ cashConfirmDialog() {
   );
 }
 
-bool get isClientLogin => appStore.isLoggedIn && getStringAsync(USER_TYPE) == CLIENT;
+bool get isClientLogin =>
+    appStore.isLoggedIn && getStringAsync(USER_TYPE) == CLIENT;
 
-bool get isAdminLogin => appStore.isLoggedIn && (getStringAsync(USER_TYPE) == ADMIN || getStringAsync(USER_TYPE) == DEMO_ADMIN);
+bool get isAdminLogin =>
+    appStore.isLoggedIn &&
+    (getStringAsync(USER_TYPE) == ADMIN ||
+        getStringAsync(USER_TYPE) == DEMO_ADMIN);
 
 String documentData(String name) {
   if (name == PENDING) {

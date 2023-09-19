@@ -277,8 +277,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     });
   }
 
-  getTotalAmount() {
-    totalDistance = calculateDistance(
+  getTotalAmount() async {
+    totalDistance = await calculateDistance(
         double.tryParse(pickLat!),
         double.tryParse(pickLong!),
         double.tryParse(deliverLat!),
@@ -304,6 +304,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
     /// total amount
     totalAmount = cityData!.fixedCharges! + weightCharge + distanceCharge;
+
+    print('totalDistance => ${totalDistance}');
+    print('totalAmount => ${totalAmount}');
 
     /// calculate extra charges
     cityData!.extraCharges!.forEach((element) {
@@ -666,7 +669,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             if (difference.inMinutes > 0)
               return toast(language.pickup_deliver_validation_msg);
             extraChargesList();
-            getTotalAmount();
+            await getTotalAmount();
             showDialog(
                 context: context,
                 builder: (context) => CreateOrderConfirmationDialog(

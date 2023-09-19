@@ -113,7 +113,8 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               ],
             )
           ],
-        ).visible(widget.distanceCharge != 0),
+        ),
+        //.visible(widget.distanceCharge != 0),
         Column(
           children: [
             8.height,
@@ -135,7 +136,8 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               ],
             ),
           ],
-        ).visible(widget.carryPackagesCharge != 0),
+        ),
+        //.visible(widget.carryPackagesCharge != 0),
         Column(
           children: [
             SizedBox(height: 8),
@@ -159,7 +161,8 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               ],
             )
           ],
-        ).visible(widget.weightCharge != 0),
+        ),
+        //.visible(widget.weightCharge != 0),
         Align(
           alignment: Alignment.bottomRight,
           child: Column(
@@ -170,8 +173,9 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                   style: primaryTextStyle()),
             ],
           ),
-        ).visible((widget.weightCharge != 0 || widget.distanceCharge != 0) &&
-            extraList.length != 0),
+        ),
+        //.visible((widget.weightCharge != 0 || widget.distanceCharge != 0) &&
+          //  extraList.length != 0),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -201,7 +205,8 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               );
             }).toList()),
           ],
-        ).visible(extraList.length != 0),
+        ),
+        //.visible(extraList.length != 0),
         16.height,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

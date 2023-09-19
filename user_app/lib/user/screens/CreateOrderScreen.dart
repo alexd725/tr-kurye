@@ -652,23 +652,69 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 //   }
 
   //++++++++++++++++++++++++++++++++++++++
-  getTotalAmount() {
-    if (paymentCollectFrom == "on_another_delivery2") {
-      totalDistance = calculateDistance(pickLat.toDouble(), pickLong.toDouble(),
-          anotherDeliver2Lat.toDouble(), anotherDeliver2Long.toDouble());
-    } else if (paymentCollectFrom == "on_another_delivery3") {
-      totalDistance = calculateDistance(pickLat.toDouble(), pickLong.toDouble(),
-          anotherDeliver3Lat.toDouble(), anotherDeliver3Long.toDouble());
-    } else if (paymentCollectFrom == "on_another_delivery4") {
-      totalDistance = calculateDistance(pickLat.toDouble(), pickLong.toDouble(),
-          anotherDeliver4Lat.toDouble(), anotherDeliver4Long.toDouble());
-    } else if (paymentCollectFrom == "on_another_delivery5") {
-      totalDistance = calculateDistance(pickLat.toDouble(), pickLong.toDouble(),
-          anotherDeliver5Lat.toDouble(), anotherDeliver5Long.toDouble());
-    } else {
-      totalDistance = calculateDistance(pickLat.toDouble(), pickLong.toDouble(),
-          deliverLat.toDouble(), deliverLong.toDouble());
-    }
+  getTotalAmount() async {
+    //if (paymentCollectFrom == PAYMENT_ON_ANOTHER_DELIVERY2) {
+    //  totalDistance = await calculateDistance(
+    //      pickLat.toDouble(),
+    //      pickLong.toDouble(),
+    //      anotherDeliver2Lat.toDouble(),
+    //      anotherDeliver2Long.toDouble());
+    //} else if (paymentCollectFrom == PAYMENT_ON_ANOTHER_DELIVERY3) {
+    //  totalDistance = await calculateDistance(
+    //      pickLat.toDouble(),
+    //      pickLong.toDouble(),
+    //      anotherDeliver2Lat.toDouble(),
+    //      anotherDeliver2Long.toDouble());
+    //  totalDistance += await calculateDistance(
+    //      anotherDeliver2Lat.toDouble(),
+    //      anotherDeliver2Long.toDouble(),
+    //      anotherDeliver3Lat.toDouble(),
+    //      anotherDeliver3Long.toDouble());
+    //} else if (paymentCollectFrom == PAYMENT_ON_ANOTHER_DELIVERY4) {
+    //  totalDistance = await calculateDistance(
+    //      pickLat.toDouble(),
+    //      pickLong.toDouble(),
+    //      anotherDeliver2Lat.toDouble(),
+    //      anotherDeliver2Long.toDouble());
+    //  totalDistance += await calculateDistance(
+    //      anotherDeliver2Lat.toDouble(),
+    //      anotherDeliver2Long.toDouble(),
+    //      anotherDeliver3Lat.toDouble(),
+    //      anotherDeliver3Long.toDouble());
+    //  totalDistance += await calculateDistance(
+    //      anotherDeliver3Lat.toDouble(),
+    //      anotherDeliver3Long.toDouble(),
+    //      anotherDeliver4Lat.toDouble(),
+    //      anotherDeliver4Long.toDouble());
+    //} else if (paymentCollectFrom == PAYMENT_ON_ANOTHER_DELIVERY5) {
+    totalDistance = await calculateDistance(pickLat.toDouble(),
+        pickLong.toDouble(), deliverLat.toDouble(), deliverLong.toDouble());
+    totalDistance += await calculateDistance(
+        pickLat.toDouble(),
+        pickLong.toDouble(),
+        anotherDeliver2Lat.toDouble(),
+        anotherDeliver2Long.toDouble());
+    totalDistance += await calculateDistance(
+        anotherDeliver2Lat.toDouble(),
+        anotherDeliver2Long.toDouble(),
+        anotherDeliver3Lat.toDouble(),
+        anotherDeliver3Long.toDouble());
+    totalDistance += await calculateDistance(
+        anotherDeliver3Lat.toDouble(),
+        anotherDeliver3Long.toDouble(),
+        anotherDeliver4Lat.toDouble(),
+        anotherDeliver4Long.toDouble());
+    totalDistance += await calculateDistance(
+        anotherDeliver4Lat.toDouble(),
+        anotherDeliver4Long.toDouble(),
+        anotherDeliver5Lat.toDouble(),
+        anotherDeliver5Long.toDouble());
+    //} else {
+
+    //}
+
+    print('totalDistanc => $totalDistance');
+
     totalAmount = 0;
     weightCharge = 0;
     distanceCharge = 0;
@@ -690,6 +736,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           .toStringAsFixed(digitAfterDecimal)
           .toDouble();
     }
+
+    print(
+        'totalDistance > cityData!.minDistance! => ${totalDistance > cityData!.minDistance!}');
+    print('distanceCharge => ${distanceCharge}');
 
     /// total amount
     totalAmount = cityData!.fixedCharges! + weightCharge + distanceCharge;
@@ -2498,11 +2548,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           minLines: 3,
         ),
         SizedBox(height: 50.0),
-        commonButton('Add Another Address', () {
+        commonButton('Add Another Address', () async {
           if (_formKey.currentState!.validate()) {
-            if (calculateDistance(pickLat.toDouble(), pickLong.toDouble(),
-                    deliverLat.toDouble(), deliverLong.toDouble()) <
-                cityData!.minDistance!) {
+            var distance = await calculateDistance(
+                pickLat.toDouble(),
+                pickLong.toDouble(),
+                deliverLat.toDouble(),
+                deliverLong.toDouble());
+            if (distance < cityData!.minDistance!) {
               errorDialog(context, "Warning",
                   "Delivery Address should be greater than ${cityData!.minDistance!}, for delivery criteria!",
                   neutralButtonText: "OK");
@@ -2533,7 +2586,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (!mTestMode) if (deliverLat == null || deliverLong == null)
+            if (!mTestMode) if (anotherDeliver2Lat == null ||
+                anotherDeliver2Long == null)
               return language.pleaseSelectValidAddress;
             return null;
           },
@@ -2548,8 +2602,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   onPick: (address) {
                     anotherDeliverAddress2Cont.text =
                         address.placeAddress ?? "";
-                    deliverLat = address.latitude.toString();
-                    deliverLong = address.longitude.toString();
+                    anotherDeliver2Lat = address.latitude.toString();
+                    anotherDeliver2Long = address.longitude.toString();
                     /*onChanged: (val) async {
         deliverMsg = '';
         deliverLat = null;
@@ -2797,14 +2851,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           minLines: 3,
         ),
         SizedBox(height: 50.0),
-        commonButton('Add Another Address', () {
+        commonButton('Add Another Address', () async {
           if (_formKey.currentState!.validate()) {
-            if (calculateDistance(
-                    pickLat.toDouble(),
-                    pickLong.toDouble(),
-                    anotherDeliver2Lat.toDouble(),
-                    anotherDeliver2Long.toDouble()) <
-                cityData!.minDistance!) {
+            var distance = await calculateDistance(
+                pickLat.toDouble(),
+                pickLong.toDouble(),
+                anotherDeliver2Lat.toDouble(),
+                anotherDeliver2Long.toDouble());
+            if (distance < cityData!.minDistance!) {
               errorDialog(context, "Warning",
                   "Delivery Address should be greater than ${cityData!.minDistance!}, for delivery criteria!",
                   neutralButtonText: "OK");
@@ -2836,7 +2890,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (!mTestMode) if (deliverLat == null || deliverLong == null)
+            if (!mTestMode) if (anotherDeliver3Lat == null ||
+                anotherDeliver3Long == null)
               return language.pleaseSelectValidAddress;
             return null;
           },
@@ -2851,8 +2906,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   onPick: (address) {
                     anotherDeliverAddress3Cont.text =
                         address.placeAddress ?? "";
-                    deliverLat = address.latitude.toString();
-                    deliverLong = address.longitude.toString();
+                    anotherDeliver3Lat = address.latitude.toString();
+                    anotherDeliver3Long = address.longitude.toString();
                     /*onChanged: (val) async {
         deliverMsg = '';
         deliverLat = null;
@@ -3031,14 +3086,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           minLines: 3,
         ),
         SizedBox(height: 50.0),
-        commonButton('Add Another Address', () {
+        commonButton('Add Another Address', () async {
           if (_formKey.currentState!.validate()) {
-            if (calculateDistance(
-                    pickLat.toDouble(),
-                    pickLong.toDouble(),
-                    anotherDeliver3Lat.toDouble(),
-                    anotherDeliver3Long.toDouble()) <
-                cityData!.minDistance!) {
+            var distance = await calculateDistance(
+                pickLat.toDouble(),
+                pickLong.toDouble(),
+                anotherDeliver3Lat.toDouble(),
+                anotherDeliver3Long.toDouble());
+            if (distance < cityData!.minDistance!) {
               errorDialog(context, "Warning",
                   "Delivery Address should be greater than ${cityData!.minDistance!}, for delivery criteria!",
                   neutralButtonText: "OK");
@@ -3070,7 +3125,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (!mTestMode) if (deliverLat == null || deliverLong == null)
+            if (!mTestMode) if (anotherDeliver4Lat == null ||
+                anotherDeliver4Long == null)
               return language.pleaseSelectValidAddress;
             return null;
           },
@@ -3085,8 +3141,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   onPick: (address) {
                     anotherDeliverAddress4Cont.text =
                         address.placeAddress ?? "";
-                    deliverLat = address.latitude.toString();
-                    deliverLong = address.longitude.toString();
+                    anotherDeliver4Lat = address.latitude.toString();
+                    anotherDeliver4Long = address.longitude.toString();
                     /*onChanged: (val) async {
         deliverMsg = '';
         deliverLat = null;
@@ -3265,14 +3321,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           minLines: 3,
         ),
         SizedBox(height: 50.0),
-        commonButton('Add Another Address', () {
+        commonButton('Add Another Address', () async {
           if (_formKey.currentState!.validate()) {
-            if (calculateDistance(
-                    pickLat.toDouble(),
-                    pickLong.toDouble(),
-                    anotherDeliver4Lat.toDouble(),
-                    anotherDeliver4Long.toDouble()) <
-                cityData!.minDistance!) {
+            var distance = await calculateDistance(
+                pickLat.toDouble(),
+                pickLong.toDouble(),
+                anotherDeliver4Lat.toDouble(),
+                anotherDeliver4Long.toDouble());
+            if (distance < cityData!.minDistance!) {
               errorDialog(context, "Warning",
                   "Delivery Address should be greater than ${cityData!.minDistance!}, for delivery criteria!",
                   neutralButtonText: "OK");
@@ -3304,7 +3360,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (!mTestMode) if (deliverLat == null || deliverLong == null)
+            if (!mTestMode) if (anotherDeliver5Lat == null ||
+                anotherDeliver5Long == null)
               return language.pleaseSelectValidAddress;
             return null;
           },
@@ -3319,8 +3376,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   onPick: (address) {
                     anotherDeliverAddress5Cont.text =
                         address.placeAddress ?? "";
-                    deliverLat = address.latitude.toString();
-                    deliverLong = address.longitude.toString();
+                    anotherDeliver5Lat = address.latitude.toString();
+                    anotherDeliver5Long = address.longitude.toString();
                     /*onChanged: (val) async {
         deliverMsg = '';
         deliverLat = null;
@@ -4023,12 +4080,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     if (difference.inMinutes > 0)
                       return toast(language.pickupDeliverValidationMsg);
                     if (selectedTabIndex == 2) {
-                      if (calculateDistance(
-                              pickLat.toDouble(),
-                              pickLong.toDouble(),
-                              deliverLat.toDouble(),
-                              deliverLong.toDouble()) <
-                          cityData!.minDistance!) {
+                      var distance = await calculateDistance(
+                          pickLat.toDouble(),
+                          pickLong.toDouble(),
+                          deliverLat.toDouble(),
+                          deliverLong.toDouble());
+                      if (distance < cityData!.minDistance!) {
                         errorDialog(context, "Warning",
                             "Delivery Address should be greater than ${cityData!.minDistance!}, for delivery criteria!",
                             neutralButtonText: "OK");
@@ -4036,12 +4093,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         selectedTabIndex = 7;
                       }
                     } else if (selectedTabIndex == 3) {
-                      if (calculateDistance(
-                              pickLat.toDouble(),
-                              pickLong.toDouble(),
-                              anotherDeliver2Lat.toDouble(),
-                              anotherDeliver2Long.toDouble()) <
-                          cityData!.minDistance!) {
+                      var distance = await calculateDistance(
+                          pickLat.toDouble(),
+                          pickLong.toDouble(),
+                          anotherDeliver2Lat.toDouble(),
+                          anotherDeliver2Long.toDouble());
+                      if (distance < cityData!.minDistance!) {
                         errorDialog(context, "Warning",
                             "Delivery Address should be greater than ${cityData!.minDistance!}, for delivery criteria!",
                             neutralButtonText: "OK");
@@ -4049,12 +4106,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         selectedTabIndex = 7;
                       }
                     } else if (selectedTabIndex == 4) {
-                      if (calculateDistance(
-                              pickLat.toDouble(),
-                              pickLong.toDouble(),
-                              anotherDeliver3Lat.toDouble(),
-                              anotherDeliver3Long.toDouble()) <
-                          cityData!.minDistance!) {
+                      var distance = await calculateDistance(
+                          pickLat.toDouble(),
+                          pickLong.toDouble(),
+                          anotherDeliver3Lat.toDouble(),
+                          anotherDeliver3Long.toDouble());
+                      if (distance < cityData!.minDistance!) {
                         errorDialog(context, "Warning",
                             "Delivery Address should be greater than ${cityData!.minDistance!}, for delivery criteria!",
                             neutralButtonText: "OK");
@@ -4063,12 +4120,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         selectedTabIndex = 7;
                       }
                     } else if (selectedTabIndex == 5) {
-                      if (calculateDistance(
-                              pickLat.toDouble(),
-                              pickLong.toDouble(),
-                              anotherDeliver4Lat.toDouble(),
-                              anotherDeliver4Long.toDouble()) <
-                          cityData!.minDistance!) {
+                      var distance = await calculateDistance(
+                          pickLat.toDouble(),
+                          pickLong.toDouble(),
+                          anotherDeliver4Lat.toDouble(),
+                          anotherDeliver4Long.toDouble());
+                      if (distance < cityData!.minDistance!) {
                         errorDialog(context, "Warning",
                             "Delivery Address should be greater than ${cityData!.minDistance!}, for delivery criteria!",
                             neutralButtonText: "OK");
@@ -4076,12 +4133,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         selectedTabIndex = 7;
                       }
                     } else if (selectedTabIndex == 6) {
-                      if (calculateDistance(
-                              pickLat.toDouble(),
-                              pickLong.toDouble(),
-                              anotherDeliver5Lat.toDouble(),
-                              anotherDeliver5Long.toDouble()) <
-                          cityData!.minDistance!) {
+                      var distance = await calculateDistance(
+                          pickLat.toDouble(),
+                          pickLong.toDouble(),
+                          anotherDeliver5Lat.toDouble(),
+                          anotherDeliver5Long.toDouble());
+                      if (distance < cityData!.minDistance!) {
                         errorDialog(context, "Warning",
                             "Delivery Address should be greater than ${cityData!.minDistance!}, for delivery criteria!",
                             neutralButtonText: "OK");
@@ -4091,9 +4148,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     } else {
                       selectedTabIndex++;
                     }
-                    if (selectedTabIndex == 7) {
-                      getTotalAmount();
-                    }
+                    //if (selectedTabIndex == 7) {
+                    await getTotalAmount();
+                    //}
                     setState(() {});
                   }
                 } else {

@@ -59,7 +59,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
   showAgreeDialog() {
     return showInDialog(
       context,
-      contentPadding: EdgeInsets.all(16),
+      contentPadding: EdgeInsets.only(top: 10, bottom: 10),
       barrierDismissible: false,
       builder: (p0) {
         return AgreeDialog(

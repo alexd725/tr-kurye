@@ -410,8 +410,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     });
   }
 
-  getTotalAmount() {
-    totalDistance = calculateDistance(
+  getTotalAmount() async {  
+    totalDistance = await calculateDistance(
         double.tryParse(pickLat!),
         double.tryParse(pickLong!),
         double.tryParse(deliverLat!),

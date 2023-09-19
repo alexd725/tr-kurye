@@ -1,5 +1,6 @@
 import 'dart:core';
 import 'dart:math';
+import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,9 @@ import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+
+import '../models/CalculateDistanceModel.dart';
+import 'package:http/http.dart' as http;
 
 import '../../main.dart';
 import 'Colors.dart';
@@ -176,13 +180,54 @@ String printDate(String date) {
       DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
 }
 
-double calculateDistance(lat1, lon1, lat2, lon2) {
+Future calculateDistance(lat1, lon1, lat2, lon2) async {
+  print('lat1, lon1, lat2, lon2 => ${lat1}, ${lon1}, ${lat2}, ${lon2}');
   if (mTestMode) return 1000.0;
-  var p = 0.017453292519943295;
-  var a = 0.5 -
-      cos((lat2 - lat1) * p) / 2 +
-      cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
-  return (12742 * asin(sqrt(a))).toStringAsFixed(digitAfterDecimal).toDouble();
+
+  var res = await http.get(Uri.parse(
+      'https://maps.googleapis.com/maps/api/distancematrix/json?destinations=$lat2,$lon2&origins=$lat1,$lon1&key=$googleMapAPIKey'));
+  CalculateDistanceModel distanceModel =
+      CalculateDistanceModel.fromJson(jsonDecode(res.body));
+  if (distanceModel.status == "OK") {
+    if (distanceModel.rows.validate().first.elements.validate().first.status ==
+        "OK") {
+      if (distanceModel.rows
+              .validate()
+              .first
+              .elements
+              .validate()
+              .first
+              .distance !=
+          null) {
+        return (distanceModel.rows
+                    .validate()
+                    .first
+                    .elements
+                    .validate()
+                    .first
+                    .distance!
+                    .value
+                    .validate() /
+                1000)
+            .toStringAsFixed(digitAfterDecimal)
+            .toDouble();
+      }
+    } else {
+      return 0;
+      //throw distanceModel.rows
+      //    .validate()
+      //    .first
+      //    .elements
+      //    .validate()
+      //    .first
+      //    .status
+      //    .validate();
+    }
+  } else {
+    return 0;
+    //throw distanceModel.errorMsg.validate();
+  }
+  return 0;
 }
 
 Widget loaderWidget() {

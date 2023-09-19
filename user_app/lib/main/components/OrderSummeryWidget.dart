@@ -88,20 +88,20 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
             Text('${printAmount(fixedCharges)}', style: primaryTextStyle()),
           ],
         ),
-       // if (widget.onAnotherCharges != 0)
+        // if (widget.onAnotherCharges != 0)
 
-         if( widget.onAnotherCharges != null && widget.onAnotherCharges != 0) ...[
-          8.height,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Another Location Charges", style: primaryTextStyle()),
-              16.width,
-              Text('${printAmount(widget.onAnotherCharges!)}',
-                  style: primaryTextStyle()),
-            ],
-          ),
-        ],
+        //if( widget.onAnotherCharges != null && widget.onAnotherCharges != 0) ...[
+        8.height,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Another Location Charges", style: primaryTextStyle()),
+            16.width,
+            Text('${printAmount(widget.onAnotherCharges!)}',
+                style: primaryTextStyle()),
+          ],
+        ),
+        //],
         Column(
           children: [
             8.height,
@@ -126,27 +126,29 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               ],
             )
           ],
-        ).visible(widget.distanceCharge != 0),
-        if (widget.carryPackagesCharge != null) ...[
-          Column(
-            children: [
-              8.height,
-              Row(
-                children: [
-                  Text("Carry Packages", style: primaryTextStyle()),
-                  4.width,
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [],
-                  ).expand(),
-                  16.width,
-                  Text('${printAmount(widget.carryPackagesCharge!)}',
-                      style: primaryTextStyle()),
-                ],
-              )
-            ],
-          ).visible(widget.distanceCharge != 0),
-        ],
+        ),
+        //.visible(widget.distanceCharge != 0),
+        //if (widget.carryPackagesCharge != null) ...[
+        Column(
+          children: [
+            8.height,
+            Row(
+              children: [
+                Text("Carry Packages", style: primaryTextStyle()),
+                4.width,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [],
+                ).expand(),
+                16.width,
+                Text('${printAmount(widget.carryPackagesCharge!)}',
+                    style: primaryTextStyle()),
+              ],
+            )
+          ],
+        ),
+        //.visible(widget.distanceCharge != 0),
+        //],
         Column(
           children: [
             8.height,
@@ -168,7 +170,8 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               ],
             ),
           ],
-        ).visible(widget.weightCharge != 0),
+        ),
+        //.visible(widget.weightCharge != 0),
         Align(
           alignment: Alignment.bottomRight,
           child: Column(
@@ -179,8 +182,9 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                   style: primaryTextStyle()),
             ],
           ),
-        ).visible((widget.weightCharge != 0 || widget.distanceCharge != 0) &&
-            extraList.length != 0),
+        ),
+        //.visible((widget.weightCharge != 0 || widget.distanceCharge != 0) &&
+        //extraList.length != 0),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -210,7 +214,8 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               );
             }).toList()),
           ],
-        ).visible(extraList.length != 0),
+        ),
+        //.visible(extraList.length != 0),
         16.height,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

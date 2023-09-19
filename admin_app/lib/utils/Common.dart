@@ -1,3 +1,5 @@
+import 'dart:core';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
@@ -17,6 +19,8 @@ import 'package:mightydelivery_admin_app/utils/Extensions/StringExtensions.dart'
 import 'package:lottie/lottie.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'Constants.dart';
+import '../models/CalculateDistanceModel.dart';
+import 'package:http/http.dart' as http;
 import 'Extensions/app_common.dart';
 
 getMenuWidth() {
@@ -679,13 +683,26 @@ Widget scheduleOptionWidget(
   );
 }
 
-double calculateDistance(lat1, lon1, lat2, lon2) {
-  var p = 0.017453292519943295;
-  var a = 0.5 -
-      cos((lat2 - lat1) * p) / 2 +
-      cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
-  return double.tryParse(
-      (12742 * asin(sqrt(a))).toStringAsFixed(digitAfterDecimal))!;
+Future calculateDistance(lat1, lon1, lat2, lon2) async {
+  print('lat1, lon1, lat2, lon2 => ${lat1}, ${lon1}, ${lat2}, ${lon2}');
+  var res = await http.get(Uri.parse(
+      'https://maps.googleapis.com/maps/api/distancematrix/json?destinations=$lat2,$lon2&origins=$lat1,$lon1&key=$googleMapAPIKey'));
+  CalculateDistanceModel distanceModel =
+      CalculateDistanceModel.fromJson(jsonDecode(res.body));
+  if (distanceModel.status == "OK") {
+    if (distanceModel.rows!.first.elements!.first.status == "OK") {
+      if (distanceModel.rows!.first.elements!.first.distance != null) {
+        return double.parse(
+            (distanceModel.rows!.first.elements!.first.distance!.value! / 1000)
+                .toStringAsFixed(digitAfterDecimal));
+      }
+    } else {
+      throw distanceModel.rows!.first.elements!.first.status.validate();
+    }
+  } else {
+    throw distanceModel.errorMsg.validate();
+  }
+  return 0;
 }
 
 String paymentStatus(String paymentStatus) {
