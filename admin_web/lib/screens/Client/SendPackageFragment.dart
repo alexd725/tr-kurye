@@ -262,6 +262,8 @@ class SendPackageFragmentState extends State<SendPackageFragment> {
   getTotalAmount() async {
     totalDistance = await calculateDistance(pickLat.toDouble(),
         pickLong.toDouble(), deliverLat.toDouble(), deliverLong.toDouble());
+    print('=========================');
+    print(totalDistance);
     totalAmount = 0;
     weightCharge = 0;
     distanceCharge = 0;
@@ -1603,8 +1605,10 @@ class SendPackageFragmentState extends State<SendPackageFragment> {
                                                   .requestFocus(
                                                       new FocusNode());
                                               if (selectedTabIndex != 3) {
+                                                print('=========1=========');
                                                 if (_formKey.currentState!
                                                     .validate()) {
+                                                  print('=========2=========');
                                                   Duration difference =
                                                       Duration();
                                                   Duration
@@ -1647,18 +1651,19 @@ class SendPackageFragmentState extends State<SendPackageFragment> {
                                                         DateTime.now().difference(
                                                             pickFromDateTime!);
                                                   }
+                                                  print('=========4=========');
                                                   if (differenceCurrentTime
                                                           .inMinutes >
                                                       0)
                                                     return toast(language
                                                         .pickup_current_validation_msg);
+                                                  print('=========5=========');
                                                   if (difference.inMinutes > 0)
                                                     return toast(language
                                                         .pickup_deliver_validation_msg);
                                                   selectedTabIndex++;
-                                                  //if (selectedTabIndex == 3) {
+                                                  print('=========6=========');
                                                   await getTotalAmount();
-                                                  //}
                                                   setState(() {});
                                                 }
                                               } else {

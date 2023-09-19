@@ -420,13 +420,16 @@ Widget scheduleOptionWidget(
 }
 
 Future calculateDistance(lat1, lon1, lat2, lon2) async {
+  print('-------1-------');
   var res = await http.get(Uri.parse(
       'https://maps.googleapis.com/maps/api/distancematrix/json?destinations=$lat2,$lon2&origins=$lat1,$lon1&key=$googleMapAPIKey'));
+  print('-------2-------');
   CalculateDistanceModel distanceModel =
       CalculateDistanceModel.fromJson(jsonDecode(res.body));
   if (distanceModel.status == "OK") {
     if (distanceModel.rows!.first.elements!.first.status == "OK") {
       if (distanceModel.rows!.first.elements!.first.distance != null) {
+        print('-------6-------');
         return (distanceModel.rows!.first.elements!.first.distance!.value
                     .validate() /
                 1000)
@@ -434,11 +437,14 @@ Future calculateDistance(lat1, lon1, lat2, lon2) async {
             .toDouble();
       }
     } else {
+      print('-------3-------');
       throw distanceModel.rows!.first.elements!.first.status.validate();
     }
   } else {
+    print('-------4-------');
     throw distanceModel.errorMsg.validate();
   }
+  print('-------5-------');
   return 0;
 }
 
