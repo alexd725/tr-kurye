@@ -685,22 +685,35 @@ Widget scheduleOptionWidget(
 
 Future calculateDistance(lat1, lon1, lat2, lon2) async {
   print('lat1, lon1, lat2, lon2 => ${lat1}, ${lon1}, ${lat2}, ${lon2}');
+  print('========1========');
   var res = await http.get(Uri.parse(
       'https://maps.googleapis.com/maps/api/distancematrix/json?destinations=$lat2,$lon2&origins=$lat1,$lon1&key=$googleMapAPIKey'));
+  print(res.body);
   CalculateDistanceModel distanceModel =
       CalculateDistanceModel.fromJson(jsonDecode(res.body));
+  print('========distanceModel======');
+  print(distanceModel);
   if (distanceModel.status == "OK") {
+    print('========3========');
     if (distanceModel.rows!.first.elements!.first.status == "OK") {
+      print('========4========');
       if (distanceModel.rows!.first.elements!.first.distance != null) {
+        print('========5========');
+        print(
+            (distanceModel.rows!.first.elements!.first.distance!.value! / 1000)
+                .toStringAsFixed(digitAfterDecimal));
         return double.parse(
             (distanceModel.rows!.first.elements!.first.distance!.value! / 1000)
                 .toStringAsFixed(digitAfterDecimal));
       }
     } else {
-      throw distanceModel.rows!.first.elements!.first.status.validate();
+      print('========6========');
+      return 0;
+      // throw distanceModel.rows!.first.elements!.first.status.validate();
     }
   } else {
-    throw distanceModel.errorMsg.validate();
+    return 0;
+    // throw distanceModel.errorMsg.validate();
   }
   return 0;
 }

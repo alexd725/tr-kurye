@@ -173,50 +173,50 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
             ),
           ],
         ),
-        // if ((widget.weightCharge != 0 || widget.distanceCharge != 0) &&
-        //     extraList.length != 0)
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Column(
+        if ((widget.weightCharge != 0 || widget.distanceCharge != 0) &&
+            extraList.length != 0)
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Column(
+              children: [
+                SizedBox(height: 8),
+                Text(
+                    '${printAmount(double.parse((fixedCharges + widget.distanceCharge + widget.weightCharge).toStringAsFixed(digitAfterDecimal)))}',
+                    style: primaryTextStyle()),
+              ],
+            ),
+          ),
+        if (extraList.length != 0)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 16),
+              Text(language.extra_charges, style: boldTextStyle()),
               SizedBox(height: 8),
-              Text(
-                  '${printAmount(double.parse((fixedCharges + widget.distanceCharge + widget.weightCharge).toStringAsFixed(digitAfterDecimal)))}',
-                  style: primaryTextStyle()),
+              Column(
+                  children: List.generate(extraList.length, (index) {
+                ExtraChargeRequestModel mData = extraList.elementAt(index);
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    children: [
+                      Text(mData.key!.replaceAll("_", " "),
+                          style: primaryTextStyle()),
+                      SizedBox(width: 4),
+                      Expanded(
+                          child: Text(
+                              '(${mData.valueType == CHARGE_TYPE_PERCENTAGE ? '${mData.value}%' : '${printAmount(mData.value ?? 0)}'})',
+                              style: secondaryTextStyle())),
+                      SizedBox(width: 16),
+                      Text(
+                          '${printAmount(countExtraCharge(totalAmount: (fixedCharges + widget.weightCharge + widget.distanceCharge), chargesType: mData.valueType!, charges: mData.value!))}',
+                          style: primaryTextStyle()),
+                    ],
+                  ),
+                );
+              }).toList()),
             ],
           ),
-        ),
-        // if (extraList.length != 0)
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 16),
-            Text(language.extra_charges, style: boldTextStyle()),
-            SizedBox(height: 8),
-            Column(
-                children: List.generate(extraList.length, (index) {
-              ExtraChargeRequestModel mData = extraList.elementAt(index);
-              return Padding(
-                padding: EdgeInsets.only(bottom: 8),
-                child: Row(
-                  children: [
-                    Text(mData.key!.replaceAll("_", " "),
-                        style: primaryTextStyle()),
-                    SizedBox(width: 4),
-                    Expanded(
-                        child: Text(
-                            '(${mData.valueType == CHARGE_TYPE_PERCENTAGE ? '${mData.value}%' : '${printAmount(mData.value ?? 0)}'})',
-                            style: secondaryTextStyle())),
-                    SizedBox(width: 16),
-                    Text(
-                        '${printAmount(countExtraCharge(totalAmount: (fixedCharges + widget.weightCharge + widget.distanceCharge), chargesType: mData.valueType!, charges: mData.value!))}',
-                        style: primaryTextStyle()),
-                  ],
-                ),
-              );
-            }).toList()),
-          ],
-        ),
         SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

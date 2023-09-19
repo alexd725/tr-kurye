@@ -690,8 +690,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     totalDistance = await calculateDistance(pickLat.toDouble(),
         pickLong.toDouble(), deliverLat.toDouble(), deliverLong.toDouble());
     totalDistance += await calculateDistance(
-        pickLat.toDouble(),
-        pickLong.toDouble(),
+        deliverLat.toDouble(),
+        deliverLong.toDouble(),
         anotherDeliver2Lat.toDouble(),
         anotherDeliver2Long.toDouble());
     totalDistance += await calculateDistance(

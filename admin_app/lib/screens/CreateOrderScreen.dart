@@ -410,12 +410,37 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     });
   }
 
-  getTotalAmount() async {  
-    totalDistance = await calculateDistance(
-        double.tryParse(pickLat!),
-        double.tryParse(pickLong!),
-        double.tryParse(deliverLat!),
-        double.tryParse(deliverLong!));
+  getTotalAmount() async {
+    try {
+      totalDistance = await calculateDistance(
+          double.tryParse(pickLat!),
+          double.tryParse(pickLong!),
+          double.tryParse(deliverLat!),
+          double.tryParse(deliverLong!));
+      totalDistance += await calculateDistance(
+          double.tryParse(deliverLat!),
+          double.tryParse(deliverLong!),
+          double.tryParse(anotherDeliver2Lat!),
+          double.tryParse(anotherDeliver2Long!));
+      totalDistance += await calculateDistance(
+          double.tryParse(anotherDeliver2Lat!),
+          double.tryParse(anotherDeliver2Long!),
+          double.tryParse(anotherDeliver3Lat!),
+          double.tryParse(anotherDeliver3Long!));
+      totalDistance += await calculateDistance(
+          double.tryParse(anotherDeliver3Lat!),
+          double.tryParse(anotherDeliver3Long!),
+          double.tryParse(anotherDeliver4Lat!),
+          double.tryParse(anotherDeliver4Long!));
+      totalDistance += await calculateDistance(
+          double.tryParse(anotherDeliver4Lat!),
+          double.tryParse(anotherDeliver4Long!),
+          double.tryParse(anotherDeliver5Lat!),
+          double.tryParse(anotherDeliver5Long!));
+    } catch (e) {}
+
+    print('totalDistanc => $totalDistance');
+
     totalAmount = 0;
     weightCharge = 0;
     distanceCharge = 0;
@@ -1084,6 +1109,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       selectedCity = null;
                       cityList.clear();
                       selectedCountry = value!;
+                      countryList.forEach((element) {
+                        if (element.id == value) {
+                          countryData = element;
+                        }
+                      });
                     });
 
                     getCityApiCall();
@@ -2050,8 +2080,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   onPick: (address) {
                     anotherDeliverAddress2Cont.text =
                         address.placeAddress ?? "";
-                    deliverLat = address.latitude.toString();
-                    deliverLong = address.longitude.toString();
+                    anotherDeliver2Lat = address.latitude.toString();
+                    anotherDeliver2Long = address.longitude.toString();
                     /*onChanged: (val) async {
         deliverMsg = '';
         deliverLat = null;
@@ -2385,7 +2415,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (deliverLat == null || deliverLong == null)
+            if (anotherDeliver2Lat == null || anotherDeliver2Long == null)
               return language.pleaseSelectValidAddress;
             return null;
           },
@@ -2400,8 +2430,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   onPick: (address) {
                     anotherDeliverAddress3Cont.text =
                         address.placeAddress ?? "";
-                    deliverLat = address.latitude.toString();
-                    deliverLong = address.longitude.toString();
+                    anotherDeliver3Lat = address.latitude.toString();
+                    anotherDeliver3Long = address.longitude.toString();
                     /*onChanged: (val) async {
         deliverMsg = '';
         deliverLat = null;
@@ -2736,7 +2766,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (deliverLat == null || deliverLong == null)
+            if (anotherDeliver3Lat == null || anotherDeliver3Long == null)
               return language.pleaseSelectValidAddress;
             return null;
           },
@@ -2751,8 +2781,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   onPick: (address) {
                     anotherDeliverAddress4Cont.text =
                         address.placeAddress ?? "";
-                    deliverLat = address.latitude.toString();
-                    deliverLong = address.longitude.toString();
+                    anotherDeliver4Lat = address.latitude.toString();
+                    anotherDeliver4Long = address.longitude.toString();
                     /*onChanged: (val) async {
         deliverMsg = '';
         deliverLat = null;
@@ -3086,7 +3116,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if (deliverLat == null || deliverLong == null)
+            if (anotherDeliver4Lat == null || anotherDeliver4Lat == null)
               return language.pleaseSelectValidAddress;
             return null;
           },
@@ -3101,8 +3131,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   onPick: (address) {
                     anotherDeliverAddress5Cont.text =
                         address.placeAddress ?? "";
-                    deliverLat = address.latitude.toString();
-                    deliverLong = address.longitude.toString();
+                    anotherDeliver5Lat = address.latitude.toString();
+                    anotherDeliver5Long = address.longitude.toString();
                     /*onChanged: (val) async {
         deliverMsg = '';
         deliverLat = null;
@@ -3887,21 +3917,61 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         if (difference.inMinutes > 0)
                           return toast(language.pickupDeliverValidationMsg);
                         if (selectedTabIndex == 2) {
+                          anotherDeliverAddress2Cont.text = '';
+                          anotherDeliver2PhoneCont.text = '';
+                          anotherDeliver2Lat = null;
+                          anotherDeliver2Long = null;
+                          anotherDeliverAddress3Cont.text = '';
+                          anotherDeliver3PhoneCont.text = '';
+                          anotherDeliver3Lat = null;
+                          anotherDeliver3Long = null;
+                          anotherDeliverAddress4Cont.text = '';
+                          anotherDeliver4PhoneCont.text = '';
+                          anotherDeliver4Lat = null;
+                          anotherDeliver4Long = null;
+                          anotherDeliverAddress5Cont.text = '';
+                          anotherDeliver5PhoneCont.text = '';
+                          anotherDeliver5Lat = null;
+                          anotherDeliver5Long = null;
                           selectedTabIndex = 7;
                         } else if (selectedTabIndex == 3) {
                           selectedTabIndex = 7;
+                          anotherDeliverAddress3Cont.text = '';
+                          anotherDeliver3PhoneCont.text = '';
+                          anotherDeliver3Lat = null;
+                          anotherDeliver3Long = null;
+                          anotherDeliverAddress4Cont.text = '';
+                          anotherDeliver4PhoneCont.text = '';
+                          anotherDeliver4Lat = null;
+                          anotherDeliver4Long = null;
+                          anotherDeliverAddress5Cont.text = '';
+                          anotherDeliver5PhoneCont.text = '';
+                          anotherDeliver5Lat = null;
+                          anotherDeliver5Long = null;
                         } else if (selectedTabIndex == 4) {
                           selectedTabIndex = 7;
+                          anotherDeliverAddress4Cont.text = '';
+                          anotherDeliver4PhoneCont.text = '';
+                          anotherDeliver4Lat = null;
+                          anotherDeliver4Long = null;
+                          anotherDeliverAddress5Cont.text = '';
+                          anotherDeliver5PhoneCont.text = '';
+                          anotherDeliver5Lat = null;
+                          anotherDeliver5Long = null;
                         } else if (selectedTabIndex == 5) {
                           selectedTabIndex = 7;
+                          anotherDeliverAddress5Cont.text = '';
+                          anotherDeliver5PhoneCont.text = '';
+                          anotherDeliver5Lat = null;
+                          anotherDeliver5Long = null;
                         } else if (selectedTabIndex == 6) {
                           selectedTabIndex = 7;
                         } else {
                           selectedTabIndex++;
                         }
                         if (selectedTabIndex == 7) {
-                          extraChargesList();
-                          getTotalAmount();
+                          await extraChargesList();
+                          await getTotalAmount();
                         }
                         setState(() {});
                       }
