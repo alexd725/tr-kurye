@@ -11,7 +11,6 @@ import '../utils/Extensions/network_utils.dart';
 import '../utils/Extensions/shared_pref.dart';
 import 'RestApis.dart';
 
-
 Map<String, String> buildHeaderTokens() {
   Map<String, String> header = {
     HttpHeaders.contentTypeHeader: 'application/json; charset=utf-8',
@@ -22,7 +21,8 @@ Map<String, String> buildHeaderTokens() {
   };
 
   if (appStore.isLoggedIn) {
-    header.putIfAbsent(HttpHeaders.authorizationHeader, () => 'Bearer ${getStringAsync('TOKEN')}');
+    header.putIfAbsent(HttpHeaders.authorizationHeader,
+        () => 'Bearer ${getStringAsync('TOKEN')}');
   }
   log(jsonEncode(header));
   return header;
@@ -37,7 +37,8 @@ Uri buildBaseUrl(String endPoint) {
   return url;
 }
 
-Future<Response> buildHttpResponse(String endPoint, {HttpMethod method = HttpMethod.GET, Map? request}) async {
+Future<Response> buildHttpResponse(String endPoint,
+    {HttpMethod method = HttpMethod.GET, Map? request}) async {
   if (await isNetworkAvailable()) {
     var headers = buildHeaderTokens();
     Uri url = buildBaseUrl(endPoint);
@@ -48,13 +49,18 @@ Future<Response> buildHttpResponse(String endPoint, {HttpMethod method = HttpMet
       if (method == HttpMethod.POST) {
         log('Request: $request');
 
-        response = await http.post(url, body: jsonEncode(request), headers: headers).timeout(Duration(seconds: 20), onTimeout: () => throw 'Timeout');
+        response = await http
+            .post(url, body: jsonEncode(request), headers: headers)
+            .timeout(Duration(seconds: 20), onTimeout: () => throw 'Timeout');
       } else if (method == HttpMethod.DELETE) {
-        response = await delete(url, headers: headers).timeout(Duration(seconds: 20), onTimeout: () => throw 'Timeout');
+        response = await delete(url, headers: headers)
+            .timeout(Duration(seconds: 20), onTimeout: () => throw 'Timeout');
       } else if (method == HttpMethod.PUT) {
-        response = await put(url, body: jsonEncode(request), headers: headers).timeout(Duration(seconds: 20), onTimeout: () => throw 'Timeout');
+        response = await put(url, body: jsonEncode(request), headers: headers)
+            .timeout(Duration(seconds: 20), onTimeout: () => throw 'Timeout');
       } else {
-        response = await get(url, headers: headers).timeout(Duration(seconds: 20), onTimeout: () => throw 'Timeout');
+        response = await get(url, headers: headers)
+            .timeout(Duration(seconds: 20), onTimeout: () => throw 'Timeout');
       }
 
       log('Response ($method): ${url.toString()} ${response.statusCode} ${response.body}');

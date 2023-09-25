@@ -5,7 +5,7 @@ const mHelpAndSupport = 'ADD_YOUR_HELP_AND_SUPPORT_URL';
 const mContactPref = 'ADD_YOUR_CONTACT_PREFERENCE';
 const mCodeCanyonURL = 'ADD_YOUR_PURCHASE_URL';
 
-const mBaseUrl = "http://192.168.1.108:8000/api/";
+const mBaseUrl = "http://set.nastorex.com/api/";
 // const mBaseUrl = "http://10.10.18.72:8000/api/";
 
 const mTestMode = false;

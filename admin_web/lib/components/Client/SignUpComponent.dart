@@ -56,6 +56,7 @@ class SignUpComponentState extends State<SignUpComponent> {
         finish(context);
         appStore.setLoading(true);
         var request = {
+          "id": '0',
           "name": nameController.text,
           "username": userNameController.text,
           "user_type": CLIENT,

@@ -1,7 +1,7 @@
 class CalculateDistanceModel {
   List<String>? destinationAddresses;
   List<String>? originAddresses;
-  List<RowItem>? rows;
+  List<Row>? rows;
   String? status;
   String? errorMsg;
 
@@ -21,7 +21,7 @@ class CalculateDistanceModel {
           ? new List<String>.from(json['origin_addresses'])
           : null,
       rows: json['rows'] != null
-          ? (json['rows'] as List).map((i) => RowItem.fromJson(i)).toList()
+          ? (json['rows'] as List).map((i) => Row.fromJson(i)).toList()
           : null,
       status: json['status'],
       errorMsg: json['error_message'],
@@ -47,13 +47,13 @@ class CalculateDistanceModel {
   }
 }
 
-class RowItem {
+class Row {
   List<Element>? elements;
 
-  RowItem({this.elements});
+  Row({this.elements});
 
-  factory RowItem.fromJson(Map<String, dynamic> json) {
-    return RowItem(
+  factory Row.fromJson(Map<String, dynamic> json) {
+    return Row(
       elements: json['elements'] != null
           ? (json['elements'] as List).map((i) => Element.fromJson(i)).toList()
           : null,
@@ -68,6 +68,7 @@ class RowItem {
     return data;
   }
 }
+
 
 class Element {
   Distance? distance;

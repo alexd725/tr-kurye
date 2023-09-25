@@ -175,7 +175,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
           ),
         ),
         //.visible((widget.weightCharge != 0 || widget.distanceCharge != 0) &&
-          //  extraList.length != 0),
+        //  extraList.length != 0),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

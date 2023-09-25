@@ -1,8 +1,9 @@
 import 'dart:core';
-import 'dart:convert';
-import '../models/CalculateDistanceModel.dart';
-import 'package:http/http.dart' as http;
+import 'dart:io';
 import 'dart:math';
+import 'dart:convert';
+import '../models/CalculateDistanceModel.dart' as Calc;
+import 'package:http/http.dart' as http;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +16,13 @@ import '../utils/Extensions/bool_extensions.dart';
 import '../utils/Extensions/constants.dart';
 import '../utils/Extensions/context_extensions.dart';
 import '../utils/Extensions/int_extensions.dart';
+import '../utils/Extensions/list_extensions.dart';
 import '../utils/Extensions/shared_pref.dart';
 import '../utils/Extensions/widget_extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../main.dart';
 import '../network/RestApis.dart';
+//import '../network/NetworkUtils.dart' as nutils;
 import '../utils/Colors.dart';
 import 'ResponsiveWidget.dart';
 import 'package:lottie/lottie.dart';
@@ -420,31 +423,47 @@ Widget scheduleOptionWidget(
 }
 
 Future calculateDistance(lat1, lon1, lat2, lon2) async {
-  print('-------1-------');
   var res = await http.get(Uri.parse(
       'https://maps.googleapis.com/maps/api/distancematrix/json?destinations=$lat2,$lon2&origins=$lat1,$lon1&key=$googleMapAPIKey'));
-  print('-------2-------');
-  CalculateDistanceModel distanceModel =
-      CalculateDistanceModel.fromJson(jsonDecode(res.body));
+  Calc.CalculateDistanceModel distanceModel =
+      Calc.CalculateDistanceModel.fromJson(jsonDecode(res.body));
   if (distanceModel.status == "OK") {
-    if (distanceModel.rows!.first.elements!.first.status == "OK") {
-      if (distanceModel.rows!.first.elements!.first.distance != null) {
-        print('-------6-------');
-        return (distanceModel.rows!.first.elements!.first.distance!.value
+    if (distanceModel.rows.validate().first.elements.validate().first.status ==
+        "OK") {
+      if (distanceModel.rows
+              .validate()
+              .first
+              .elements
+              .validate()
+              .first
+              .distance !=
+          null) {
+        return (distanceModel.rows
+                    .validate()
+                    .first
+                    .elements
+                    .validate()
+                    .first
+                    .distance!
+                    .value
                     .validate() /
                 1000)
             .toStringAsFixed(digitAfterDecimal)
             .toDouble();
       }
     } else {
-      print('-------3-------');
-      throw distanceModel.rows!.first.elements!.first.status.validate();
+      throw distanceModel.rows
+          .validate()
+          .first
+          .elements
+          .validate()
+          .first
+          .status
+          .validate();
     }
   } else {
-    print('-------4-------');
     throw distanceModel.errorMsg.validate();
   }
-  print('-------5-------');
   return 0;
 }
 

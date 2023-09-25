@@ -71,7 +71,14 @@ class AddUserDialogState extends State<AddUserDialog> {
     Navigator.pop(context);
     appStore.setLoading(true);
     if (isUpdate) {
-      await updateProfile(id: widget.userData!.id, name: nameController.text, userName: usernameController.text, userEmail: emailController.text, contactNumber: '$countryCode ${contactNumberController.text.trim()}').then((value) {
+      await updateProfile(
+              id: widget.userData!.id,
+              name: nameController.text,
+              userName: usernameController.text,
+              userEmail: emailController.text,
+              contactNumber:
+                  '$countryCode ${contactNumberController.text.trim()}')
+          .then((value) {
         appStore.setLoading(false);
         widget.onUpdate?.call();
         toast(language.userUpdated);
@@ -81,6 +88,7 @@ class AddUserDialogState extends State<AddUserDialog> {
       });
     } else {
       var request = {
+        "id": '0',
         "name": nameController.text,
         "username": usernameController.text,
         "user_type": widget.userType,
@@ -126,7 +134,9 @@ class AddUserDialogState extends State<AddUserDialog> {
     if (widget.userType == CLIENT) {
       return isUpdate ? language.editUser : language.addUser;
     } else {
-      return isUpdate ? language.editDeliveryPerson : language.addDeliveryPerson;
+      return isUpdate
+          ? language.editDeliveryPerson
+          : language.addDeliveryPerson;
     }
   }
 
@@ -178,7 +188,8 @@ class AddUserDialogState extends State<AddUserDialog> {
                                 nextFocus: usernameFocus,
                                 decoration: commonInputDecoration(),
                                 onTap: () {
-                                  if (isUpdate) toast(language.youCannotChangeEmailId);
+                                  if (isUpdate)
+                                    toast(language.youCannotChangeEmailId);
                                 },
                               ),
                             ],
@@ -189,7 +200,8 @@ class AddUserDialogState extends State<AddUserDialog> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(language.username, style: primaryTextStyle()),
+                              Text(language.username,
+                                  style: primaryTextStyle()),
                               SizedBox(height: 8),
                               AppTextField(
                                 readOnly: isUpdate,
@@ -199,7 +211,8 @@ class AddUserDialogState extends State<AddUserDialog> {
                                 nextFocus: nameFocus,
                                 decoration: commonInputDecoration(),
                                 onTap: () {
-                                  if (isUpdate) toast(language.youCannotChangeUsername);
+                                  if (isUpdate)
+                                    toast(language.youCannotChangeUsername);
                                 },
                               ),
                             ],
@@ -220,9 +233,11 @@ class AddUserDialogState extends State<AddUserDialog> {
                                 controller: nameController,
                                 textFieldType: TextFieldType.NAME,
                                 focus: nameFocus,
-                                nextFocus: isUpdate ? contactFocus : passwordFocus,
+                                nextFocus:
+                                    isUpdate ? contactFocus : passwordFocus,
                                 decoration: commonInputDecoration(),
-                                errorThisFieldRequired: language.field_required_msg,
+                                errorThisFieldRequired:
+                                    language.field_required_msg,
                               ),
                             ],
                           ),
@@ -234,7 +249,8 @@ class AddUserDialogState extends State<AddUserDialog> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(language.password, style: primaryTextStyle()),
+                                  Text(language.password,
+                                      style: primaryTextStyle()),
                                   SizedBox(height: 8),
                                   AppTextField(
                                     controller: passwordController,
@@ -269,13 +285,19 @@ class AddUserDialogState extends State<AddUserDialog> {
                                 showOnlyCountryWhenClosed: false,
                                 alignLeft: false,
                                 textStyle: primaryTextStyle(),
-                                dialogBackgroundColor: Theme.of(context).cardColor,
+                                dialogBackgroundColor:
+                                    Theme.of(context).cardColor,
                                 barrierColor: Colors.black12,
                                 dialogTextStyle: primaryTextStyle(),
                                 searchDecoration: InputDecoration(
                                   iconColor: Theme.of(context).dividerColor,
-                                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: primaryColor)),
+                                  enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color:
+                                              Theme.of(context).dividerColor)),
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: primaryColor)),
                                 ),
                                 searchStyle: primaryTextStyle(),
                                 onInit: (c) {
@@ -285,14 +307,17 @@ class AddUserDialogState extends State<AddUserDialog> {
                                   countryCode = c.dialCode!;
                                 },
                               ),
-                              VerticalDivider(color: Colors.grey.withOpacity(0.5)),
+                              VerticalDivider(
+                                  color: Colors.grey.withOpacity(0.5)),
                             ],
                           ),
                         ),
                       ),
                       validator: (s) {
                         if (s!.trim().isEmpty) return errorThisFieldRequired;
-                        if (s.trim().length < minContactLength || s.trim().length > maxContactLength) return language.contact_length_validation;
+                        if (s.trim().length < minContactLength ||
+                            s.trim().length > maxContactLength)
+                          return language.contact_length_validation;
                         return null;
                       },
                       inputFormatters: [
@@ -303,7 +328,10 @@ class AddUserDialogState extends State<AddUserDialog> {
                 ),
               ),
             ),
-            Observer(builder: (_) => Visibility(visible: appStore.isLoading, child: Positioned.fill(child: loaderWidget()))),
+            Observer(
+                builder: (_) => Visibility(
+                    visible: appStore.isLoading,
+                    child: Positioned.fill(child: loaderWidget()))),
           ],
         ),
       ),

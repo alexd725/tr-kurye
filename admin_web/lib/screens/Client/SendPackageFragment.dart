@@ -260,8 +260,11 @@ class SendPackageFragmentState extends State<SendPackageFragment> {
   }
 
   getTotalAmount() async {
-    totalDistance = await calculateDistance(pickLat.toDouble(),
-        pickLong.toDouble(), deliverLat.toDouble(), deliverLong.toDouble());
+    totalDistance = await calculateDistance(
+        double.tryParse(pickLat!),
+        double.tryParse(pickLong!),
+        double.tryParse(deliverLat!),
+        double.tryParse(deliverLong!));
     print('=========================');
     print(totalDistance);
     totalAmount = 0;
