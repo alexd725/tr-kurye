@@ -117,36 +117,59 @@ class TrackingScreenState extends State<TrackingScreen> {
         }
       }).toList();
 
-      //setPolyLines(orderLat: orderLatLong);
+      setPolyLines(orderLat: orderLatLong);
       if (controller != null) {
         onMapCreated(controller!);
       }
       setState(() {});
     });
 
-    //orderLatLong = LatLng(widget.latLng!.latitude, widget.latLng!.longitude);
+    orderLatLong = LatLng(widget.latLng!.latitude, widget.latLng!.longitude);
   }
 
   Future<void> setPolyLines({required LatLng orderLat}) async {
     _polylines.clear();
     polylineCoordinates.clear();
-    var result = await polylinePoints.getRouteBetweenCoordinates(
-      googleMapAPIKey,
-      PointLatLng(sourceLocation!.latitude, sourceLocation!.longitude),
-      PointLatLng(orderLat.latitude, orderLat.longitude),
-    );
-    if (result.points.isNotEmpty) {
-      result.points.forEach((element) {
-        polylineCoordinates.add(LatLng(element.latitude, element.longitude));
-      });
-      _polylines.add(Polyline(
-        visible: true,
-        width: 5,
-        polylineId: PolylineId('poly'),
-        color: Color.fromARGB(255, 40, 122, 198),
-        points: polylineCoordinates,
-      ));
-      setState(() {});
+
+    List<PointLatLng> pins = List.empty();
+
+    pins.add(PointLatLng(sourceLocation!.latitude, sourceLocation!.longitude));
+
+    widget.order.map((e) {
+      if (e.status == ORDER_ACCEPTED) {
+        pins.add(PointLatLng(e.pickupPoint!.latitude.toDouble(),
+            e.pickupPoint!.longitude.toDouble()));
+      } else {
+        List<dynamic> deliveryPointsList = e.deliveryPointsList ?? [];
+        if (deliveryPointsList.isNotEmpty) {
+          deliveryPointsList.asMap().forEach((index, deliveryPoint) {
+            pins.add(PointLatLng(
+                double.tryParse(deliveryPoint['latitude'].toString())!,
+                double.tryParse(deliveryPoint['latitude'].toString())!));
+          });
+        }
+      }
+    }).toList();
+
+    for (var i = 0; i < pins.length - 1; i++) {
+      var result = await polylinePoints.getRouteBetweenCoordinates(
+        googleMapAPIKey,
+        pins[i],
+        pins[i + 1],
+      );
+      if (result.points.isNotEmpty) {
+        result.points.forEach((element) {
+          polylineCoordinates.add(LatLng(element.latitude, element.longitude));
+        });
+        _polylines.add(Polyline(
+          visible: true,
+          width: 5,
+          polylineId: PolylineId('poly'),
+          color: Color.fromARGB(255, 40, 122, 198),
+          points: polylineCoordinates,
+        ));
+        setState(() {});
+      }
     }
   }
 
