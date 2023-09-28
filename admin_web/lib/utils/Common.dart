@@ -22,7 +22,7 @@ import '../utils/Extensions/widget_extensions.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../main.dart';
 import '../network/RestApis.dart';
-//import '../network/NetworkUtils.dart' as nutils;
+import '../network/NetworkUtils.dart' as nutils;
 import '../utils/Colors.dart';
 import 'ResponsiveWidget.dart';
 import 'package:lottie/lottie.dart';
@@ -423,8 +423,13 @@ Widget scheduleOptionWidget(
 }
 
 Future calculateDistance(lat1, lon1, lat2, lon2) async {
-  var res = await http.get(Uri.parse(
-      'https://maps.googleapis.com/maps/api/distancematrix/json?destinations=$lat2,$lon2&origins=$lat1,$lon1&key=$googleMapAPIKey'));
+  var res = await http.get(
+      Uri.parse(
+          'https://maps.googleapis.com/maps/api/distancematrix/json?destinations=$lat2,$lon2&origins=$lat1,$lon1&key=$googleMapAPIKey'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'https://localhost:59926',
+        'Access-Control-Allow-Origin': '*',
+      });
   Calc.CalculateDistanceModel distanceModel =
       Calc.CalculateDistanceModel.fromJson(jsonDecode(res.body));
   if (distanceModel.status == "OK") {

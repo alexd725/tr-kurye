@@ -304,7 +304,6 @@ class PickupPoint {
 //   }
 // }
 
-
 class OrderData {
   int? id;
   int? clientId;
@@ -357,53 +356,53 @@ class OrderData {
 
   OrderData(
       {this.id,
-        this.clientId,
-        this.clientName,
-        this.date,
-        this.pickupPoint,
-        this.deliveryPoint,
-        this.countryId,
-        this.countryName,
-        this.cityId,
-        this.cityName,
-        this.vehicle_type,
-        this.order_type,
-        this.parcelType,
-        this.totalWeight,
-        this.totalDistance,
-        this.pickupDatetime,
-        this.deliveryDatetime,
-        this.parentOrderId,
-        this.status,
-        this.paymentId,
-        this.paymentType,
-        this.paymentStatus,
-        this.paymentCollectFrom,
-        this.deliveryManId,
-        this.deliveryManName,
-        this.fixedCharges,
-        this.extraCharges,
-        this.totalAmount,
-        this.reason,
-        this.pickupConfirmByClient,
-        this.pickupConfirmByDeliveryMan,
-        this.pickupTimeSignature,
-        this.deliveryTimeSignature,
-        this.deletedAt,
-        this.returnOrderId,
-        this.weightCharge,
-        this.distanceCharge,
-        this.totalParcel,
-        this.autoAssign,
-        this.cancelledDeliverManIds,
-        this.vehicleId,
-        this.vehicleData,
-        this.vehicleImage,
-        this.deliveryPointsList,
-        this.chargePerAddress,
-        this.carryPackagesCharge,
-        this.courierWillCarry,
-        this.deliveryReceiverName});
+      this.clientId,
+      this.clientName,
+      this.date,
+      this.pickupPoint,
+      this.deliveryPoint,
+      this.countryId,
+      this.countryName,
+      this.cityId,
+      this.cityName,
+      this.vehicle_type,
+      this.order_type,
+      this.parcelType,
+      this.totalWeight,
+      this.totalDistance,
+      this.pickupDatetime,
+      this.deliveryDatetime,
+      this.parentOrderId,
+      this.status,
+      this.paymentId,
+      this.paymentType,
+      this.paymentStatus,
+      this.paymentCollectFrom,
+      this.deliveryManId,
+      this.deliveryManName,
+      this.fixedCharges,
+      this.extraCharges,
+      this.totalAmount,
+      this.reason,
+      this.pickupConfirmByClient,
+      this.pickupConfirmByDeliveryMan,
+      this.pickupTimeSignature,
+      this.deliveryTimeSignature,
+      this.deletedAt,
+      this.returnOrderId,
+      this.weightCharge,
+      this.distanceCharge,
+      this.totalParcel,
+      this.autoAssign,
+      this.cancelledDeliverManIds,
+      this.vehicleId,
+      this.vehicleData,
+      this.vehicleImage,
+      this.deliveryPointsList,
+      this.chargePerAddress,
+      this.carryPackagesCharge,
+      this.courierWillCarry,
+      this.deliveryReceiverName});
 
   OrderData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -448,7 +447,7 @@ class OrderData {
     returnOrderId = json['return_order_id'];
     weightCharge = json['weight_charge'];
     distanceCharge = json['distance_charge'];
-    totalParcel = json['total_parcel'];
+    totalParcel = num.tryParse(json['total_parcel'].toString());
     autoAssign = json['auto_assign'];
     cancelledDeliverManIds = json['cancelled_delivery_man_ids'];
     vehicleId = json['vehicle_id'];
@@ -459,8 +458,9 @@ class OrderData {
     deliveryPointsList = json['delivery_point'];
     chargePerAddress = json['charge_per_address'];
     carryPackagesCharge = json['carry_packages_charge'];
-    courierWillCarry = json['courier_will_carry'];
-    deliveryReceiverName = json['delivery_receiver_name'];
+    if (json['courier_will_carry'] != null)
+      courierWillCarry = int.parse(json['courier_will_carry']);
+    deliveryReceiverName = '${json['delivery_receiver_name']}';
   }
 
   Map<String, dynamic> toJson() {

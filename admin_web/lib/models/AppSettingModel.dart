@@ -78,7 +78,7 @@ class AppSettingModel {
       currencyCode: json['currency_code'],
       currencyPosition: json['currency_position'],
       isVehicleInOrder: json['is_vehicle_in_order'],
-      carryPackagesCharge: json['carry_packages_charge'],
+      carryPackagesCharge: num.tryParse(json['carry_packages_charge']),
     );
   }
 

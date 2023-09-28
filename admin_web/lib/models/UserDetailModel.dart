@@ -6,13 +6,24 @@ class UserDetailModel {
   EarningDetail? earningDetail;
   EarningList? earningList;
 
-  UserDetailModel({this.userDataModel, this.walletHistory, this.earningDetail, this.earningList});
+  UserDetailModel(
+      {this.userDataModel,
+      this.walletHistory,
+      this.earningDetail,
+      this.earningList});
 
   UserDetailModel.fromJson(Map<String, dynamic> json) {
-    userDataModel = json['data'] != null ? new UserModel.fromJson(json['data']) : null;
-    walletHistory = json['wallet_history'] != null ? new WalletHistory.fromJson(json['wallet_history']) : null;
-    earningDetail = json['earning_detail'] != null ? new EarningDetail.fromJson(json['earning_detail']) : null;
-    earningList = json['earning_list'] != null ? new EarningList.fromJson(json['earning_list']) : null;
+    userDataModel =
+        json['data'] != null ? new UserModel.fromJson(json['data']) : null;
+    walletHistory = json['wallet_history'] != null
+        ? new WalletHistory.fromJson(json['wallet_history'])
+        : null;
+    earningDetail = json['earning_detail'] != null
+        ? new EarningDetail.fromJson(json['earning_detail'])
+        : null;
+    earningList = json['earning_list'] != null
+        ? new EarningList.fromJson(json['earning_list'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -112,7 +123,9 @@ class UserDataModel {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
-    userBankAccount = json['user_bank_account'] != null ? new UserBankAccount.fromJson(json['user_bank_account']) : null;
+    userBankAccount = json['user_bank_account'] != null
+        ? new UserBankAccount.fromJson(json['user_bank_account'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -159,7 +172,16 @@ class UserBankAccount {
   String? updatedAt;
   String? deletedAt;
 
-  UserBankAccount({this.id, this.userId, this.bankName, this.bankCode, this.accountHolderName, this.accountNumber, this.createdAt, this.updatedAt, this.deletedAt});
+  UserBankAccount(
+      {this.id,
+      this.userId,
+      this.bankName,
+      this.bankCode,
+      this.accountHolderName,
+      this.accountNumber,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt});
 
   UserBankAccount.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -195,7 +217,9 @@ class WalletHistory {
   WalletHistory({this.pagination, this.walletDataModel});
 
   WalletHistory.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null ? new Pagination.fromJson(json['pagination']) : null;
+    pagination = json['pagination'] != null
+        ? new Pagination.fromJson(json['pagination'])
+        : null;
     // if (json['data'] != null) {
     //   walletDataModel = <WalletDataModel>[];
     //   json['data'].forEach((v) {
@@ -203,7 +227,11 @@ class WalletHistory {
     //   });
     // }
 
-      walletDataModel= json['data'] != null ? (json['data'] as List).map((i) => WalletDataModel.fromJson(i)).toList() : null;
+    walletDataModel = json['data'] != null
+        ? (json['data'] as List)
+            .map((i) => WalletDataModel.fromJson(i))
+            .toList()
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -224,7 +252,8 @@ class Pagination {
   int? currentPage;
   int? totalPages;
 
-  Pagination({this.totalItems, this.perPage, this.currentPage, this.totalPages});
+  Pagination(
+      {this.totalItems, this.perPage, this.currentPage, this.totalPages});
 
   Pagination.fromJson(Map<String, dynamic> json) {
     totalItems = json['total_items'];
@@ -347,17 +376,29 @@ class EarningDetail {
   int? totalOrder;
   int? paidOrder;
 
-  EarningDetail({this.id, this.name, this.walletBalance, this.totalWithdrawn, this.adminCommission, this.deliveryManCommission, this.totalOrder, this.paidOrder});
+  EarningDetail(
+      {this.id,
+      this.name,
+      this.walletBalance,
+      this.totalWithdrawn,
+      this.adminCommission,
+      this.deliveryManCommission,
+      this.totalOrder,
+      this.paidOrder});
 
   EarningDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    walletBalance = json['wallet_balance'];
-    totalWithdrawn = json['total_withdrawn'];
-    adminCommission = json['admin_commission'];
-    deliveryManCommission = json['delivery_man_commission'];
-    totalOrder = json['total_order'];
-    paidOrder = json['paid_order'];
+    if (json['wallet_balance'] != null)
+      walletBalance = num.tryParse(json['wallet_balance']);
+    if (json['total_withdrawn'] != null)
+      totalWithdrawn = num.tryParse(json['total_withdrawn']);
+    if (json['admin_commission'] != null)
+      adminCommission = num.tryParse(json['admin_commission']);
+    if (json['delivery_man_commission'] != null)
+      deliveryManCommission = num.tryParse(json['delivery_man_commission']);
+    totalOrder = int.tryParse(json['total_order']);
+    paidOrder = int.tryParse(json['paid_order']);
   }
 
   Map<String, dynamic> toJson() {
@@ -381,7 +422,9 @@ class EarningList {
   EarningList({this.pagination, this.earningDataModel});
 
   EarningList.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null ? new Pagination.fromJson(json['pagination']) : null;
+    pagination = json['pagination'] != null
+        ? new Pagination.fromJson(json['pagination'])
+        : null;
     if (json['data'] != null) {
       earningDataModel = <EarningDataModel>[];
       json['data'].forEach((v) {
@@ -389,8 +432,7 @@ class EarningList {
       });
     }
 
-
-   //earningDataModel= json['data'] != null ? (json['data'] as List).map((i) => EarningDataModel.fromJson(i)).toList() : null;
+    //earningDataModel= json['data'] != null ? (json['data'] as List).map((i) => EarningDataModel.fromJson(i)).toList() : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -460,7 +502,7 @@ class EarningDataModel {
     paymentType = json['payment_type'];
     txnId = json['txn_id'];
     paymentStatus = json['payment_status'];
-  //  transactionDetail = json['transaction_detail'] != null ? new TransactionDetail.fromJson(json['transaction_detail']) : null;
+    //  transactionDetail = json['transaction_detail'] != null ? new TransactionDetail.fromJson(json['transaction_detail']) : null;
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];

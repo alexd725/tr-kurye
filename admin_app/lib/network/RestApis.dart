@@ -36,7 +36,7 @@ import 'package:mightydelivery_admin_app/utils/Extensions/app_common.dart';
 import '../main.dart';
 import '../models/AutoCompletePlaceListModel.dart';
 import '../models/PlaceIdDetailModel.dart';
-import '../utils/Extensions/shared_pref.dart';
+//import '../utils/Extensions/shared_pref.dart';
 
 Future<LoginResponse> signUpApi(Map request) async {
   Response response = await buildHttpResponse('register',

@@ -315,6 +315,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   Future<void> init() async {
     minWeight = 1;
     maxWeight = 1;
+    print('getAppSettingApiCall');
     await getAppSettingApiCall();
     log('CITY_ID =====> ${getIntAsync(CITY_ID)}');
     await getCityDetailApiCall(getIntAsync(CITY_ID));
@@ -764,7 +765,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       totalChargePerAddress = 0;
     }
 
-    num? totalCarryPackagesCharge = isCarry == true ? carryPackagesCharge : 0;
+    num? totalCarryPackagesCharge = isCarry == true ? (carryPackagesCharge != null ? carryPackagesCharge : 0) : 0;
     print("totalCarryPackagesCharge $totalCarryPackagesCharge");
 
     /// All Charges
@@ -3784,7 +3785,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           distanceCharge: distanceCharge,
           weightCharge: weightCharge,
           totalAmount: totalAmount,
-          carryPackagesCharge: isCarry == true ? carryPackagesCharge : 0,
+          carryPackagesCharge: isCarry == true ? (carryPackagesCharge != null ? carryPackagesCharge : 0) : 0,
           // onAnotherCharges: paymentCollectFrom != "on_delivery" ? 50 : 0,
           onAnotherCharges: anotherDeliverAddress5Cont.text.isNotEmpty
               ? chargePerAddress! * 4
@@ -4147,6 +4148,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       }
                     } else {
                       selectedTabIndex++;
+                      print('selectedTabIndex => ${selectedTabIndex}');
                     }
                     //if (selectedTabIndex == 7) {
                     await getTotalAmount();

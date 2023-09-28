@@ -128,27 +128,27 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
           ],
         ),
         //.visible(widget.distanceCharge != 0),
-        //if (widget.carryPackagesCharge != null) ...[
-        Column(
-          children: [
-            8.height,
-            Row(
-              children: [
-                Text("Carry Packages", style: primaryTextStyle()),
-                4.width,
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [],
-                ).expand(),
-                16.width,
-                Text('${printAmount(widget.carryPackagesCharge!)}',
-                    style: primaryTextStyle()),
-              ],
-            )
-          ],
-        ),
-        //.visible(widget.distanceCharge != 0),
-        //],
+        if (widget.carryPackagesCharge != null) ...[
+          Column(
+            children: [
+              8.height,
+              Row(
+                children: [
+                  Text("Carry Packages", style: primaryTextStyle()),
+                  4.width,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [],
+                  ).expand(),
+                  16.width,
+                  Text('${printAmount(widget.carryPackagesCharge!)}',
+                      style: primaryTextStyle()),
+                ],
+              )
+            ],
+          ),
+          //.visible(widget.distanceCharge != 0),
+        ],
         Column(
           children: [
             8.height,

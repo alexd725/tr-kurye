@@ -73,6 +73,7 @@ class AppSettingScreenState extends State<AppSettingScreen> {
       currencySymbol = value.currency;
       selectedCurrencyPosition =
           value.currencyPosition ?? CURRENCY_POSITION_LEFT;
+          print('cary pakcage charge => ${value.carryPackagesCharge.toString()}');
       chargeController.text = value.carryPackagesCharge.toString();
       appStore.isShowVehicle = value.isVehicleInOrder!;
       appStore.setLoading(false);

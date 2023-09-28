@@ -42,10 +42,11 @@ class WalletScreenState extends State<WalletScreen> {
   }
 
   init() async {
-    getBankDetail();
-    getWalletData();
+    await getBankDetail();
+    await getWalletData();
     scrollController.addListener(() {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
         if (currentPage < totalPage) {
           appStore.setLoading(true);
           currentPage++;
@@ -71,7 +72,9 @@ class WalletScreenState extends State<WalletScreen> {
 
       currentPage = value.pagination!.currentPage!;
       totalPage = value.pagination!.totalPages!;
-      if(value.walletBalance!=null) totalAmount = value.walletBalance!.totalAmount ?? 0;
+      print('walltebalance => ${value.walletBalance}');
+      if (value.walletBalance != null)
+        totalAmount = value.walletBalance!.totalAmount ?? 0;
       if (currentPage == 1) {
         walletData.clear();
       }
@@ -91,9 +94,9 @@ class WalletScreenState extends State<WalletScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         appStore.availableBal = totalAmount;
-        finish(context,true);
+        finish(context, true);
         return false;
       },
       child: Scaffold(
@@ -108,7 +111,8 @@ class WalletScreenState extends State<WalletScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
+                      decoration: boxDecorationWithRoundedCorners(
+                          backgroundColor: colorPrimary),
                       padding: EdgeInsets.all(16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,9 +120,13 @@ class WalletScreenState extends State<WalletScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(language.availableBalance, style: primaryTextStyle(size: 16, color: white.withOpacity(0.7))),
+                              Text(language.availableBalance,
+                                  style: primaryTextStyle(
+                                      size: 16, color: white.withOpacity(0.7))),
                               6.height,
-                              Text('${printAmount(totalAmount)}', style: boldTextStyle(size: 22, color: Colors.white)),
+                              Text('${printAmount(totalAmount)}',
+                                  style: boldTextStyle(
+                                      size: 22, color: Colors.white)),
                             ],
                           ),
                           commonButton(language.addMoney, () {
@@ -128,18 +136,23 @@ class WalletScreenState extends State<WalletScreen> {
                                 return Dialog(
                                   insetPadding: EdgeInsets.all(16),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text(language.addMoney, style: boldTextStyle(size: 18)),
+                                      Text(language.addMoney,
+                                          style: boldTextStyle(size: 18)),
                                       Divider(),
                                       16.height,
-                                      Text(language.amount, style: primaryTextStyle()),
+                                      Text(language.amount,
+                                          style: primaryTextStyle()),
                                       8.height,
                                       AppTextField(
                                         controller: amountCont,
                                         textFieldType: TextFieldType.PHONE,
-                                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.digitsOnly
+                                        ],
                                         decoration: commonInputDecoration(),
                                       ),
                                       16.height,
@@ -148,7 +161,8 @@ class WalletScreenState extends State<WalletScreen> {
                                         () async {
                                           Navigator.pop(context);
                                           bool? res = await PaymentScreen(
-                                            totalAmount: amountCont.text.toDouble(),
+                                            totalAmount:
+                                                amountCont.text.toDouble(),
                                             isWallet: true,
                                           ).launch(context);
                                           if (res == true) {
@@ -163,7 +177,7 @@ class WalletScreenState extends State<WalletScreen> {
                                 );
                               },
                             );
-                          }, color:  context.cardColor, textColor: colorPrimary)
+                          }, color: context.cardColor, textColor: colorPrimary)
                         ],
                       ),
                     ),
@@ -178,26 +192,43 @@ class WalletScreenState extends State<WalletScreen> {
                         return Container(
                           margin: EdgeInsets.only(bottom: 16),
                           padding: EdgeInsets.all(8),
-                          decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt(),backgroundColor: context.cardColor,shadowColor: appStore.isDarkMode ? Colors.transparent : null),
+                          decoration: boxDecorationRoundedWithShadow(
+                              defaultRadius.toInt(),
+                              backgroundColor: context.cardColor,
+                              shadowColor: appStore.isDarkMode
+                                  ? Colors.transparent
+                                  : null),
                           child: Row(
                             children: [
                               Container(
-                                decoration: boxDecorationWithRoundedCorners(backgroundColor: Colors.grey.withOpacity(0.2)),
+                                decoration: boxDecorationWithRoundedCorners(
+                                    backgroundColor:
+                                        Colors.grey.withOpacity(0.2)),
                                 padding: EdgeInsets.all(6),
-                                child: Icon(data.type == CREDIT ? Icons.add : Icons.remove, color: colorPrimary),
+                                child: Icon(
+                                    data.type == CREDIT
+                                        ? Icons.add
+                                        : Icons.remove,
+                                    color: colorPrimary),
                               ),
                               10.width,
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(transactionType(data.transactionType!), style: boldTextStyle(size: 16)),
+                                    Text(transactionType(data.transactionType!),
+                                        style: boldTextStyle(size: 16)),
                                     SizedBox(height: 8),
-                                    Text(printDate(data.createdAt.validate()), style: secondaryTextStyle(size: 12)),
+                                    Text(printDate(data.createdAt.validate()),
+                                        style: secondaryTextStyle(size: 12)),
                                   ],
                                 ),
                               ),
-                              Text('${printAmount(data.amount)}', style: secondaryTextStyle(color:data.type == CREDIT? Colors.green:Colors.red))
+                              Text('${printAmount(data.amount)}',
+                                  style: secondaryTextStyle(
+                                      color: data.type == CREDIT
+                                          ? Colors.green
+                                          : Colors.red))
                             ],
                           ),
                         );
@@ -207,7 +238,9 @@ class WalletScreenState extends State<WalletScreen> {
                 ),
               ),
             ),
-            Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
+            Observer(
+                builder: (context) =>
+                    loaderWidget().visible(appStore.isLoading)),
           ],
         ),
         bottomNavigationBar: Padding(

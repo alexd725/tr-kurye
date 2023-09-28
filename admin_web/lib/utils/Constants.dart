@@ -6,7 +6,7 @@ const mBaseUrl = "http://set.nastorex.com/api/";
 // const mBaseUrl = "http://10.10.18.72:8000/api/";
 
 //const googleMapAPIKey = 'AIzaSyDSuWnySIID12v1kFgh8vbgRDe3pjxx2yY';
-const googleMapAPIKey = 'AIzaSyDSuWnySIID12v1kFgh8vbgRDe3pjxx2yY';
+const googleMapAPIKey = 'AIzaSyBTt5x5yfUoSRBjmV5KCAHx1E7VwQ5zpN8';
 const mOneSignalAppId = 'ADD_YOUR_ONE_SIGNAL_APP_ID';
 const mOneSignalRestKey = 'ADD_YOUR_ONE_SIGNAL_REST_KEY';
 const mOneSignalChannelId = 'ADD_YOUR_ONE_SIGNAL_CHANNEL_ID';

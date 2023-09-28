@@ -150,7 +150,7 @@ class UserWalletModel {
     totalAmount = json['total_amount'];
     onlineReceived = json['online_received'];
     collectedCash = json['collected_cash'];
-    manualReceived = json['manual_received'];
+    manualReceived = int.tryParse(json['manual_received']);
     totalWithdrawn = json['total_withdrawn'];
     currency = json['currency'];
     createdAt = json['created_at'];

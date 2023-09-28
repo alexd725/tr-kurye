@@ -82,32 +82,47 @@ class TrackingScreenState extends State<TrackingScreen> {
 
       markers.add(deliveryBoy);
       widget.order.map((e) {
-        markers.add(
-          Marker(
-            markerId: MarkerId('Destination'),
-            position: e.status == ORDER_ACCEPTED
-                ? LatLng(e.pickupPoint!.latitude.toDouble(),
-                    e.pickupPoint!.longitude.toDouble())
-                : LatLng(e.deliveryPoint!.latitude.toDouble(),
-                    e.deliveryPoint!.longitude.toDouble()),
-            infoWindow: InfoWindow(
-                title: e.status == ORDER_ACCEPTED
-                    ? e.pickupPoint!.address
-                    : e.deliveryPoint!.address),
-            icon: BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueOrange),
-          ),
-        );
+        if (e.status == ORDER_ACCEPTED) {
+          markers.add(
+            Marker(
+              markerId: MarkerId('Destination'),
+              position: LatLng(e.pickupPoint!.latitude.toDouble(),
+                  e.pickupPoint!.longitude.toDouble()),
+              infoWindow: InfoWindow(title: e.pickupPoint!.address),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                  BitmapDescriptor.hueOrange),
+            ),
+          );
+        } else {
+          List<dynamic> deliveryPointsList = e.deliveryPointsList ?? [];
+          if (deliveryPointsList.isNotEmpty) {
+            deliveryPointsList.asMap().forEach((index, deliveryPoint) {
+              print('latitude ${deliveryPoint['latitude']}');
+              print('longitude ${deliveryPoint['longitude']}');
+              print('address ${deliveryPoint['address']}');
+              markers.add(
+                Marker(
+                  markerId: MarkerId('Destination $index'),
+                  position: LatLng(
+                      deliveryPoint['latitude'], deliveryPoint['longitude']),
+                  infoWindow: InfoWindow(title: deliveryPoint['address']),
+                  icon: BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueOrange),
+                ),
+              );
+            });
+          }
+        }
       }).toList();
 
-      setPolyLines(orderLat: orderLatLong);
+      //setPolyLines(orderLat: orderLatLong);
       if (controller != null) {
         onMapCreated(controller!);
       }
       setState(() {});
     });
 
-    orderLatLong = LatLng(widget.latLng!.latitude, widget.latLng!.longitude);
+    //orderLatLong = LatLng(widget.latLng!.latitude, widget.latLng!.longitude);
   }
 
   Future<void> setPolyLines({required LatLng orderLat}) async {
