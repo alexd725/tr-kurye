@@ -97,6 +97,7 @@ class TrackingScreenState extends State<TrackingScreen> {
           List<dynamic> deliveryPointsList = e.deliveryPointsList ?? [];
           if (deliveryPointsList.isNotEmpty) {
             deliveryPointsList.asMap().forEach((index, deliveryPoint) {
+              print('--------------herer-----------------------');
               print('latitude ${deliveryPoint['latitude']}');
               print('longitude ${deliveryPoint['longitude']}');
               print('address ${deliveryPoint['address']}');
@@ -104,7 +105,8 @@ class TrackingScreenState extends State<TrackingScreen> {
                 Marker(
                   markerId: MarkerId('Destination $index'),
                   position: LatLng(
-                      deliveryPoint['latitude'], deliveryPoint['longitude']),
+                      double.tryParse(deliveryPoint['latitude'].toString())!,
+                      double.tryParse(deliveryPoint['latitude'].toString())!),
                   infoWindow: InfoWindow(title: deliveryPoint['address']),
                   icon: BitmapDescriptor.defaultMarkerWithHue(
                       BitmapDescriptor.hueOrange),

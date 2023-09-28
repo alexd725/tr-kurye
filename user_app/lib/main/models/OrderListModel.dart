@@ -458,8 +458,9 @@ class OrderData {
     deliveryPointsList = json['delivery_point'];
     chargePerAddress = json['charge_per_address'];
     carryPackagesCharge = json['carry_packages_charge'];
-    if (json['courier_will_carry'] != null)
-      courierWillCarry = int.parse(json['courier_will_carry']);
+    if (json['courier_will_carry'] != null &&
+        json['courier_will_carry'].toString().isNotEmpty)
+      courierWillCarry = int.tryParse(json['courier_will_carry'].toString());
     deliveryReceiverName = '${json['delivery_receiver_name']}';
   }
 
